@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Schedule</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="school_schedule.html" class="active">School</a>
+            <a href="room_schedule.html">Rooms</a>
+            <a href="barbershop_schedule.html">Barbershop</a>
+        </nav>
+
+        <header>
+            <h1>School Timetable</h1>
+            <p class="subtitle">View schedules for Teachers, Students, and Classes</p>
+        </header>
+
+        <div class="card">
+            <div class="controls">
+                <select id="view-type" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                    <option value="student">Student View</option>
+                    <option value="teacher">Teacher View</option>
+                    <option value="class">Class View</option>
+                </select>
+                
+                <select id="target-select" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                    <option>Grade 10A</option>
+                    <option>Grade 10B</option>
+                    <option>Grade 11A</option>
+                </select>
+
+                <input type="week" style="padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border-color);">
+                
+                <button>Update View</button>
+            </div>
+
+            <div class="schedule-grid">
+                <!-- Header Row -->
+                <div class="grid-header">Time</div>
+                <div class="grid-header">Monday</div>
+                <div class="grid-header">Tuesday</div>
+                <div class="grid-header">Wednesday</div>
+                <div class="grid-header">Thursday</div>
+                <div class="grid-header">Friday</div>
+
+                <!-- 08:00 - 09:00 -->
+                <div class="time-slot">08:00 - 09:00</div>
+                <div class="grid-cell">
+                    <div class="event">
+                        <div class="event-title">Mathematics</div>
+                        <div class="event-meta">Room 101 • Mr. Smith</div>
+                    </div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell">
+                    <div class="event">
+                        <div class="event-title">Physics</div>
+                        <div class="event-meta">Lab 2 • Ms. Johnson</div>
+                    </div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell">
+                    <div class="event">
+                        <div class="event-title">History</div>
+                        <div class="event-meta">Room 204 • Mr. Brown</div>
+                    </div>
+                </div>
+
+                <!-- 09:00 - 10:00 -->
+                <div class="time-slot">09:00 - 10:00</div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell">
+                    <div class="event">
+                        <div class="event-title">English</div>
+                        <div class="event-meta">Room 105 • Mrs. Davis</div>
+                    </div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell">
+                    <div class="event">
+                        <div class="event-title">Chemistry</div>
+                        <div class="event-meta">Lab 1 • Mr. Wilson</div>
+                    </div>
+                </div>
+                <div class="grid-cell"></div>
+
+                 <!-- 10:00 - 11:00 -->
+                 <div class="time-slot">10:00 - 11:00</div>
+                 <div class="grid-cell">
+                     <div class="event">
+                         <div class="event-title">Biology</div>
+                         <div class="event-meta">Lab 3 • Ms. Clark</div>
+                     </div>
+                 </div>
+                 <div class="grid-cell"></div>
+                 <div class="grid-cell">
+                     <div class="event">
+                         <div class="event-title">Geography</div>
+                         <div class="event-meta">Room 202 • Mr. White</div>
+                     </div>
+                 </div>
+                 <div class="grid-cell"></div>
+                 <div class="grid-cell">
+                     <div class="event">
+                         <div class="event-title">Art</div>
+                         <div class="event-meta">Studio • Ms. Green</div>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
