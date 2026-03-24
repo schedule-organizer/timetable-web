@@ -26,6 +26,12 @@ cmake-build-*/
 **/AugmentWebviewStateStore.xml
 **/*Augment*
 
+# BMAD Method (npx bmad-method install)
+_bmad/
+_bmad-output/
+.agents/
+.claude/
+
 # Sublime Text
 *.sublime-project
 *.sublime-workspace

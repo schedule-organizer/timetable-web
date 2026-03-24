@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow Moderator Flow</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="board">
+      <section class="app-toolbar">
+        <div class="toolbar-left">
+          <button class="icon-btn" type="button" aria-label="Back">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Undo">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 6H4v4" /><path d="M4 10c1.8-3.3 6.1-4.5 9.4-2.7 1.8 1 3 2.8 3.3 4.8" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Save">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Open">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 6h5l2 2h7v8H3z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Flow board">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h5v4H4zM11 5h5v4h-5zM7.5 11h5v4h-5z" /><path d="M9 7h2M12.5 9v2M7.5 9v2" /></svg>
+          </button>
+        </div>
+        <div class="toolbar-center">
+          <span class="toolbar-title">Moderator flow board</span>
+        </div>
+        <div class="toolbar-right">
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4a3 3 0 0 1 3 3v2.5c0 1 .4 2 1.1 2.7L15 13H5l.9-.8A3.8 3.8 0 0 0 7 9.5V7a3 3 0 0 1 3-3Z" /><path d="M8.5 15a1.5 1.5 0 0 0 3 0" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="User">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3" /><path d="M4.5 16c1.2-2.4 3-3.5 5.5-3.5S14.3 13.6 15.5 16" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <header class="board-head">
+        <div>
+          <div class="eyebrow">Moderator Flow</div>
+          <h1>Class timetable workflow</h1>
+          <p>
+            Figma-style flow board for the moderator's hardest path: inspect one class, spot missing teachers,
+            assign or pin manually, then rerun the engine around those locked decisions.
+          </p>
+        </div>
+        <div class="board-meta">
+          <div><strong>Goal</strong><span>One practical working flow</span></div>
+          <div><strong>Focus</strong><span>Missed teacher visibility + slot actions</span></div>
+          <div><strong>Current scope</strong><span>Single-class scheduling workspace</span></div>
+        </div>
+      </header>
+
+      <section class="flow-strip">
+        <div class="flow-step active">1. Review class + missing teachers</div>
+        <div class="flow-step">2. Assign or pin manually</div>
+        <div class="flow-step">3. Run engine around pinned slots</div>
+        <div class="flow-step">4. Validate result</div>
+      </section>
+
+      <section class="jump-links">
+        <a class="jump-link" href="./lesson-actions-weekly-view.html">Open lesson actions from weekly view</a>
+        <a class="jump-link" href="./engine-start-state.html">Open engine start state</a>
+        <a class="jump-link" href="./engine-runtime-progress.html">Open engine runtime progress</a>
+        <a class="jump-link" href="./view-switcher-class.html">Open view switcher to class view</a>
+        <a class="jump-link" href="./view-switcher-teacher.html">Open view switcher to teacher view</a>
+        <a class="jump-link" href="./view-switcher-room.html">Open view switcher to room view</a>
+        <a class="jump-link" href="./view-switcher-subject.html">Open view switcher to subject view</a>
+        <a class="jump-link" href="./cover-needed-state.html">Open cover needed state</a>
+        <a class="jump-link" href="./action-assign-teacher.html">Open interactive action flow</a>
+        <a class="jump-link" href="./action-assign-teacher-dialog.html">Open dialog-based action flow</a>
+        <a class="jump-link" href="./weekly-class-overview.html">Open weekly class overview flow</a>
+      </section>
+
+      <section class="artboard-grid">
+        <article class="artboard">
+          <div class="artboard-top">
+            <strong>Frame 1</strong>
+            <span>Review current class timetable</span>
+          </div>
+          <div class="workspace">
+            <aside class="left-panel">
+              <div class="panel-title">Classes</div>
+              <div class="entity-list">
+                <button class="entity active"><span class="swatch c1"></span><span>8A</span><span>32</span></button>
+                <button class="entity"><span class="swatch c2"></span><span>8B</span><span>31</span></button>
+                <button class="entity"><span class="swatch c3"></span><span>8C</span><span>30</span></button>
+                <button class="entity"><span class="swatch c4"></span><span>9A</span><span>29</span></button>
+                <button class="entity"><span class="swatch c5"></span><span>9B</span><span>30</span></button>
+              </div>
+            </aside>
+
+            <section class="center-panel">
+              <div class="mini-toolbar">
+                <span class="pill">Classes</span>
+                <span class="pill active">8A</span>
+                <span class="pill">Colour: Subject</span>
+              </div>
+
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>P1</th>
+                    <td><div class="slot math">Math<br /><span>M. Petrosyan</span></div></td>
+                    <td><div class="slot history">History<br /><span>A. Mkrtchyan</span></div></td>
+                    <td><div class="slot free">Free</div></td>
+                    <td><div class="slot biology">Biology<br /><span>N. Gevorgyan</span></div></td>
+                    <td><div class="slot english">English<br /><span>S. Davtyan</span></div></td>
+                  </tr>
+                  <tr>
+                    <th>P2</th>
+                    <td><div class="slot chemistry">Chemistry<br /><span class="danger">Teacher missing</span></div></td>
+                    <td><div class="slot math pinned">Math<br /><span>M. Petrosyan</span></div></td>
+                    <td><div class="slot physics">Physics<br /><span>H. Minasyan</span></div></td>
+                    <td><div class="slot free">Free</div></td>
+                    <td><div class="slot music">Music<br /><span>T. Hovsepyan</span></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <aside class="right-panel">
+              <div class="panel-title">Missing teachers for class 8A</div>
+              <div class="alert-card">
+                <strong>1 unresolved lesson</strong>
+                <span>Chemistry on Monday P2 has no assigned teacher yet.</span>
+              </div>
+              <div class="teacher-list">
+                <div class="teacher-row"><span>Chemistry</span><span class="danger">Unassigned</span></div>
+                <div class="teacher-row"><span>Math</span><span>Assigned</span></div>
+                <div class="teacher-row"><span>Biology</span><span>Assigned</span></div>
+                <div class="teacher-row"><span>English</span><span>Assigned</span></div>
+              </div>
+            </aside>
+          </div>
+          <div class="caption">
+            Moderator first sees the current timetable and a dedicated “missing teachers for this class” list.
+          </div>
+        </article>
+
+        <article class="artboard">
+          <div class="artboard-top">
+            <strong>Frame 2</strong>
+            <span>Assign teacher and pin slot</span>
+          </div>
+          <div class="workspace single-sheet">
+            <section class="center-panel full">
+              <div class="mini-toolbar">
+                <span class="pill">Assignment mode</span>
+                <span class="pill active">8A · Mon P2 · Chemistry</span>
+                <span class="pill">Teacher not selected</span>
+              </div>
+
+              <div class="assignment-strip">
+                <div class="assignment-meta">
+                  <strong>Unresolved slot</strong>
+                  <span>Class 8A</span>
+                  <span>Chemistry</span>
+                  <span>Monday Period 2</span>
+                  <span class="danger">Teacher missing</span>
+                </div>
+                <div class="assignment-meta">
+                  <strong>Need from candidate</strong>
+                  <span>Chemistry qualified</span>
+                  <span>Free on Mon P2</span>
+                  <span>Acceptable load</span>
+                  <span>Lab-compatible</span>
+                </div>
+                <div class="assignment-meta compact-actions">
+                  <strong>Decision</strong>
+                  <button class="action primary">Assign selected teacher</button>
+                  <button class="action">Assign and pin slot</button>
+                </div>
+              </div>
+
+              <table class="candidate-table">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>Teacher</th>
+                    <th>Qualification</th>
+                    <th>Mon P2</th>
+                    <th>Weekly load</th>
+                    <th>Room fit</th>
+                    <th>Comment</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="row-selected">
+                    <td><span class="radio selected"></span></td>
+                    <td>L. Arakelyan</td>
+                    <td>Exact Chemistry</td>
+                    <td class="ok">Free</td>
+                    <td>18 / 24</td>
+                    <td>Lab 1 and Lab 2</td>
+                    <td>Best fit</td>
+                    <td><button class="row-action">Use</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="radio"></span></td>
+                    <td>D. Sargsyan</td>
+                    <td>General Science</td>
+                    <td class="ok">Free</td>
+                    <td>22 / 24</td>
+                    <td>Lab 1 only</td>
+                    <td>Cover only</td>
+                    <td><button class="row-action">Use</button></td>
+                  </tr>
+                  <tr>
+                    <td><span class="radio"></span></td>
+                    <td>M. Harutyunyan</td>
+                    <td>Chemistry</td>
+                    <td class="warn">Busy P1-P2 block</td>
+                    <td>23 / 24</td>
+                    <td>Lab 2</td>
+                    <td>Possible conflict</td>
+                    <td><button class="row-action">Use</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="bottom-summary">
+                <div class="summary-cell">
+                  <label>Selected teacher</label>
+                  <span>L. Arakelyan</span>
+                </div>
+                <div class="summary-cell">
+                  <label>Availability</label>
+                  <span>Free on Mon P2</span>
+                </div>
+                <div class="summary-cell">
+                  <label>Impact</label>
+                  <span>No new hard conflict expected</span>
+                </div>
+                <div class="summary-cell actions">
+                  <button class="action">View full teacher timetable</button>
+                  <button class="action">Cancel</button>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="caption">
+            Frame 2 is a single assignment sheet: unresolved slot context, candidate comparison, and commit actions all on one surface.
+          </div>
+        </article>
+
+        <article class="artboard">
+          <div class="artboard-top">
+            <strong>Frame 3</strong>
+            <span>Run engine around manual decisions</span>
+          </div>
+          <div class="workspace narrow-right">
+            <section class="center-panel full">
+              <div class="mini-toolbar">
+                <span class="pill">Pinned lessons</span>
+                <span class="pill active">2 in class 8A</span>
+                <span class="pill">Balanced sensitivity</span>
+              </div>
+
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>P2</th>
+                    <td><div class="slot chemistry pinned">Chemistry<br /><span>L. Arakelyan · pinned</span></div></td>
+                    <td><div class="slot math pinned">Math<br /><span>M. Petrosyan · pinned</span></div></td>
+                    <td><div class="slot physics">Physics<br /><span>H. Minasyan</span></div></td>
+                    <td><div class="slot free">Free</div></td>
+                    <td><div class="slot music">Music<br /><span>T. Hovsepyan</span></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <aside class="right-panel">
+              <div class="panel-title">Engine</div>
+              <div class="detail-card">
+                <label>Pinned lessons</label>
+                <span>2</span>
+                <label>Hard conflicts</label>
+                <span class="danger">1</span>
+                <label>Score</label>
+                <span>74</span>
+              </div>
+              <div class="action-stack">
+                <button class="action primary">Run engine around pinned slots</button>
+                <button class="action">Open constraints</button>
+              </div>
+            </aside>
+          </div>
+          <div class="caption">
+            Manual decisions are locked first; the engine works around them instead of discarding them.
+          </div>
+        </article>
+
+        <article class="artboard">
+          <div class="artboard-top">
+            <strong>Frame 4</strong>
+            <span>Validate output</span>
+          </div>
+          <div class="workspace narrow-right">
+            <section class="center-panel full">
+              <div class="mini-toolbar">
+                <span class="pill">Result</span>
+                <span class="pill active">8A stable</span>
+                <span class="pill">Conflicts cleared</span>
+              </div>
+
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>Mon</th>
+                    <th>Tue</th>
+                    <th>Wed</th>
+                    <th>Thu</th>
+                    <th>Fri</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>P2</th>
+                    <td><div class="slot chemistry pinned">Chemistry<br /><span>L. Arakelyan · pinned</span></div></td>
+                    <td><div class="slot math pinned">Math<br /><span>M. Petrosyan · pinned</span></div></td>
+                    <td><div class="slot physics">Physics<br /><span>H. Minasyan</span></div></td>
+                    <td><div class="slot geography">Geography<br /><span>R. Khachatryan</span></div></td>
+                    <td><div class="slot music">Music<br /><span>T. Hovsepyan</span></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </section>
+
+            <aside class="right-panel">
+              <div class="panel-title">Validation</div>
+              <div class="teacher-list">
+                <div class="teacher-row"><span>Missing teachers</span><span>0</span></div>
+                <div class="teacher-row"><span>Hard conflicts</span><span>0</span></div>
+                <div class="teacher-row"><span>Pinned lessons kept</span><span>2 / 2</span></div>
+                <div class="teacher-row"><span>Score</span><span>81</span></div>
+              </div>
+            </aside>
+          </div>
+          <div class="caption">
+            Final check is operational: did the unresolved teacher get assigned, did pinned decisions survive, and is the class stable?
+          </div>
+        </article>
+      </section>
+
+      <footer class="app-footerbar">
+        <div class="footer-left">
+          <span class="footer-chip">4 target flows</span>
+          <span class="footer-chip">Moderator focus</span>
+          <span class="footer-chip">Weekly action workspace</span>
+        </div>
+        <div class="footer-center">
+          <button class="icon-btn large" type="button" aria-label="Run">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.5 15 10l-8 4.5z" /></svg>
+          </button>
+        </div>
+        <div class="footer-right">
+          <button class="icon-btn" type="button" aria-label="Edit">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 13 7.8-7.8 2 2L7 15H5z" /><path d="M11.5 5.7 13 4.2l2.8 2.8-1.5 1.5" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Pin">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4h6l-1.5 4 2.5 2v1H6v-1l2.5-2z" /><path d="M10 11v5" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Add">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </body>
+</html>

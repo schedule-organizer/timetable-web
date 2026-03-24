@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow Moderator Timetable</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn">☰</button>
+          <div class="entity-tabs">
+            <button class="tab active">Classes</button>
+            <button class="tab">Teachers</button>
+            <button class="tab">Rooms</button>
+            <button class="tab">Subjects</button>
+            <button class="tab">Activities</button>
+          </div>
+        </div>
+
+        <div class="topbar-center">
+          <div class="scope-pill">Term 2</div>
+          <div class="scope-pill active">8A</div>
+          <div class="scope-pill">Master draft</div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="toolbar-btn">Filter</button>
+          <button class="toolbar-btn">Colour: Subject</button>
+          <button class="toolbar-btn">Quick config</button>
+          <button class="toolbar-btn">Conflicts</button>
+          <button class="toolbar-btn primary">Run engine</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="left-panel">
+          <div class="panel-toolbar">
+            <input class="search" type="text" value="Search class" />
+          </div>
+
+          <div class="list-head">
+            <span>Classes</span>
+            <span>50</span>
+          </div>
+
+          <div class="entity-list">
+            <button class="entity-row active"><span class="swatch c1"></span><span>8A</span><span class="meta">32</span></button>
+            <button class="entity-row"><span class="swatch c2"></span><span>8B</span><span class="meta">31</span></button>
+            <button class="entity-row"><span class="swatch c3"></span><span>8C</span><span class="meta">30</span></button>
+            <button class="entity-row"><span class="swatch c4"></span><span>9A</span><span class="meta">29</span></button>
+            <button class="entity-row"><span class="swatch c5"></span><span>9B</span><span class="meta">30</span></button>
+            <button class="entity-row"><span class="swatch c6"></span><span>9C</span><span class="meta">30</span></button>
+            <button class="entity-row"><span class="swatch c1"></span><span>10A</span><span class="meta">28</span></button>
+            <button class="entity-row"><span class="swatch c2"></span><span>10B</span><span class="meta">29</span></button>
+            <button class="entity-row"><span class="swatch c3"></span><span>10C</span><span class="meta">30</span></button>
+            <button class="entity-row"><span class="swatch c4"></span><span>11A</span><span class="meta">27</span></button>
+            <button class="entity-row"><span class="swatch c5"></span><span>11B</span><span class="meta">27</span></button>
+            <button class="entity-row"><span class="swatch c6"></span><span>11C</span><span class="meta">28</span></button>
+          </div>
+        </aside>
+
+        <section class="table-area">
+          <div class="table-toolbar">
+            <div class="table-title">
+              <strong>Class 8A timetable</strong>
+              <span>Table-first working view. One selected class, slot actions on the right, no decorative summary blocks.</span>
+            </div>
+
+            <div class="table-actions">
+              <button class="toolbar-btn">Find empty slots</button>
+              <button class="toolbar-btn">Pinned only</button>
+              <button class="toolbar-btn">Teacher load</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="timetable">
+              <thead>
+                <tr>
+                  <th class="time-col">Period</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="time-col">P1<br /><span>08:20</span></th>
+                  <td><div class="slot math selected"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                  <td><div class="slot history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="slot biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                  <td><div class="slot english"><strong>English</strong><span>S. Davtyan</span><span>R305</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P2<br /><span>09:10</span></th>
+                  <td><div class="slot chemistry"><strong>Chemistry</strong><span>L. Arakelyan</span><span>Lab 1</span></div></td>
+                  <td><div class="slot math pinned"><strong>Math</strong><span>M. Petrosyan</span><span>R204 · pinned</span></div></td>
+                  <td><div class="slot physics"><strong>Physics</strong><span>H. Minasyan</span><span>Lab 3</span></div></td>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="slot music"><strong>Music</strong><span>T. Hovsepyan</span><span>R111</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P3<br /><span>10:15</span></th>
+                  <td><div class="slot literature"><strong>Literature</strong><span>L. Mkrtchyan</span><span>R202</span></div></td>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="slot conflict"><strong>Physics</strong><span>Teacher double-booked</span><span>Lab 3</span></div></td>
+                  <td><div class="slot biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                  <td><div class="slot history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P4<br /><span>11:05</span></th>
+                  <td><div class="slot lab"><strong>Lab</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                  <td><div class="slot math"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                  <td><div class="slot physics"><strong>Physics</strong><span>H. Minasyan</span><span>Lab 3</span></div></td>
+                  <td><div class="slot cover"><strong>Chemistry</strong><span>Cover: D. Sargsyan</span><span>Lab 1</span></div></td>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P5<br /><span>12:10</span></th>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="slot english"><strong>English</strong><span>S. Davtyan</span><span>R305</span></div></td>
+                  <td><div class="slot geography"><strong>Geography</strong><span>R. Khachatryan</span><span>R208</span></div></td>
+                  <td><div class="slot chemistry"><strong>Chemistry</strong><span>L. Arakelyan</span><span>Lab 1</span></div></td>
+                  <td><div class="slot arts"><strong>Arts</strong><span>K. Shahbazyan</span><span>Studio</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P6<br /><span>13:00</span></th>
+                  <td><div class="slot history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+                  <td><div class="slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="slot math"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                  <td><div class="slot physics"><strong>Physics</strong><span>H. Minasyan</span><span>Lab 3</span></div></td>
+                  <td><div class="slot lab"><strong>Lab</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="right-panel">
+          <div class="action-block">
+            <div class="block-head">
+              <strong>Selected slot</strong>
+              <span>Tue · P2</span>
+            </div>
+            <div class="detail-grid">
+              <div><label>Class</label><span>8A</span></div>
+              <div><label>Subject</label><span>Math</span></div>
+              <div><label>Teacher</label><span>M. Petrosyan</span></div>
+              <div><label>Room</label><span>R204</span></div>
+            </div>
+          </div>
+
+          <div class="action-block">
+            <div class="block-head">
+              <strong>Manual actions</strong>
+            </div>
+            <div class="action-list">
+              <button class="action-btn primary">Pin teacher to slot</button>
+              <button class="action-btn">Move lesson</button>
+              <button class="action-btn">Swap with another slot</button>
+              <button class="action-btn">Change room</button>
+              <button class="action-btn">Mark forbidden</button>
+              <button class="action-btn">Undo last action</button>
+            </div>
+          </div>
+
+          <div class="action-block">
+            <div class="block-head">
+              <strong>Engine</strong>
+            </div>
+            <div class="detail-grid engine-grid">
+              <div><label>Sensitivity</label><span>Balanced</span></div>
+              <div><label>Hard conflicts</label><span class="danger-text">3</span></div>
+              <div><label>Pinned lessons</label><span>18</span></div>
+              <div><label>Last score</label><span>74</span></div>
+            </div>
+            <div class="action-list compact">
+              <button class="action-btn primary">Run engine around pinned slots</button>
+              <button class="action-btn">Open constraints drawer</button>
+            </div>
+          </div>
+
+          <div class="action-block">
+            <div class="block-head">
+              <strong>Legend</strong>
+            </div>
+            <div class="legend-list">
+              <div><span class="legend-dot math-dot"></span><span>Math / exact sciences</span></div>
+              <div><span class="legend-dot biology-dot"></span><span>Science / lab</span></div>
+              <div><span class="legend-dot history-dot"></span><span>Humanities</span></div>
+              <div><span class="legend-dot conflict-dot"></span><span>Conflict</span></div>
+              <div><span class="legend-dot cover-dot"></span><span>Cover</span></div>
+              <div><span class="legend-dot pinned-dot"></span><span>Pinned</span></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+  </body>
+</html>
