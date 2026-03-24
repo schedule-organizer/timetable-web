@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Subject Detail</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./subject-management.html" aria-label="Back to subject management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Subject detail">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v8H4z" /><path d="M7 4v4M13 4v4" /></svg>
+          </button>
+          <a class="icon-btn" href="./subject-edit.html" aria-label="Edit subject">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16h4" /><path d="M12.2 4.8 15.2 7.8 7.5 15.5 4.5 16l.5-3Z" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Subject detail</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Save changes">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Subject workflow</strong>
+            <span class="pill">Profile</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./subject-management.html"><span>Subject management</span><span>List</span></a>
+            <a class="config-item" href="./subject-add.html"><span>Add subject</span><span>Create</span></a>
+            <a class="config-item" href="./subject-edit.html"><span>Edit subject</span><span>Update</span></a>
+            <button class="config-item active" type="button"><span>Subject detail</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="detail-hero">
+            <div class="detail-avatar">M</div>
+            <div class="detail-meta">
+              <div class="eyebrow">Epic 3 / RES-13</div>
+              <h1>Mathematics</h1>
+              <div class="teacher-tags">
+                <span class="status-chip active">SUB-01</span>
+                <span class="status-chip active">Active</span>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">Difficulty 4</span>
+                <span class="pill">Weekly periods 5</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Profile</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Code</span><span>SUB-01</span></div>
+                <div class="mini-preview-row"><span>Difficulty</span><span>4</span></div>
+                <div class="mini-preview-row"><span>Color</span><span>#4a78d3</span></div>
+                <div class="mini-preview-row"><span>Status</span><span>Active</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Load</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Weekly periods</span><span>5</span></div>
+                <div class="mini-preview-row"><span>Spread</span><span>Even spread</span></div>
+                <div class="mini-preview-row"><span>Used by</span><span>Timetable grid and assignments</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Profile complete</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./subject-management.html">Back to list</a>
+              <a class="action-btn" href="./subject-edit.html">Edit subject</a>
+              <button class="action-btn primary" type="button">Save profile</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Detail</span>
+          </div>
+          <div class="preview-card">
+            <label>Profile</label>
+            <strong>Code, difficulty, color, and load</strong>
+            <span>Keep this page focused on the subject record itself.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

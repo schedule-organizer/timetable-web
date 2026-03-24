@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Subject Management</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Subject management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v8H4z" /><path d="M7 4v4M13 4v4" /></svg>
+          </button>
+          <a class="icon-btn" href="./subject-add.html" aria-label="Add subject">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Subject management</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter subjects">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Refresh list">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6V4l2 2-2 2" /><path d="M15 14v2l-2-2 2-2" /><path d="M5.5 10a4.5 4.5 0 0 1 8.4-2.4" /><path d="M14.5 10a4.5 4.5 0 0 1-8.4 2.4" /></svg>
+          </button>
+          <a class="icon-btn" href="./subject-add.html" aria-label="Create subject">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Subject workflow</strong>
+            <span class="pill">RES-13</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item active" type="button"><span>Subject management</span><span>Current</span></button>
+            <a class="config-item" href="./subject-add.html"><span>Add subject</span><span>Create</span></a>
+            <a class="config-item" href="./subject-edit.html"><span>Edit subject</span><span>Update</span></a>
+            <a class="config-item" href="./subject-detail.html"><span>Subject detail</span><span>Profile</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-13</div>
+            <h1>Subject list and management actions</h1>
+            <p>
+              Browse subjects, inspect the code and difficulty, and use the color dot to scan the roster quickly.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Subject list</label>
+              <div class="subject-table">
+                <div class="subject-table-head">
+                  <span>Name</span>
+                  <span>Code</span>
+                  <span>Difficulty</span>
+                  <span>Color</span>
+                </div>
+                <div class="subject-table-row active">
+                  <div class="subject-name">Mathematics</div>
+                  <span>SUB-01</span>
+                  <span>4</span>
+                  <span class="teacher-color"><span class="subject-dot" style="background:#4a78d3"></span></span>
+                </div>
+                <div class="subject-table-row">
+                  <div class="subject-name">Biology</div>
+                  <span>SUB-02</span>
+                  <span>5</span>
+                  <span class="teacher-color"><span class="subject-dot" style="background:#2c9e78"></span></span>
+                </div>
+                <div class="subject-table-row">
+                  <div class="subject-name">History</div>
+                  <span>SUB-03</span>
+                  <span>3</span>
+                  <span class="teacher-color"><span class="subject-dot" style="background:#d38a36"></span></span>
+                </div>
+                <div class="subject-table-row">
+                  <div class="subject-name">English</div>
+                  <span>SUB-04</span>
+                  <span>4</span>
+                  <span class="teacher-color"><span class="subject-dot" style="background:#7d63c7"></span></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Quick controls</label>
+              <div class="pill-row">
+                <span class="pill active">Add subject</span>
+                <span class="pill">Deactivate</span>
+                <span class="pill">Export list</span>
+              </div>
+              <div class="setting-row">
+                <label>Search</label>
+                <div class="setting-input">Name, code, or difficulty</div>
+              </div>
+              <div class="setting-row">
+                <label>Filters</label>
+                <div class="setting-input">Active, inactive, high difficulty</div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Capacity snapshot</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Active subjects</span><span>18</span></div>
+                <div class="mini-preview-row"><span>Inactive</span><span>2</span></div>
+                <div class="mini-preview-row"><span>High difficulty</span><span>5</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">20 subjects</span>
+              <span class="pill">RES-13</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./index.html">Back</a>
+              <a class="action-btn" href="./subject-add.html">Add subject</a>
+              <button class="action-btn primary" type="button">Save list</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">List</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Create or edit subject records</strong>
+            <span>Keep the list focused on the subject code, difficulty, and color dot.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Add Subject</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./subject-management.html" aria-label="Back to subject management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Add subject">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Add subject</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Save subject">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Subject workflow</strong>
+            <span class="pill">Create</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./subject-management.html"><span>Subject management</span><span>List</span></a>
+            <button class="config-item active" type="button"><span>Add subject</span><span>Current</span></button>
+            <a class="config-item" href="./subject-edit.html"><span>Edit subject</span><span>Update</span></a>
+            <a class="config-item" href="./subject-detail.html"><span>Subject detail</span><span>Profile</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-13</div>
+            <h1>Create a new subject</h1>
+            <p>Keep the form focused on the values the timetable actually needs: name, code, difficulty, color, and status.</p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Subject identity</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Name</label>
+                  <input class="setting-input" type="text" value="Physics" />
+                </div>
+                <div class="setting-row">
+                  <label>Subject code</label>
+                  <input class="setting-input" type="text" value="SUB-05" />
+                </div>
+                <div class="setting-row">
+                  <label>Difficulty</label>
+                  <select class="setting-input">
+                    <option>1</option>
+                    <option>2</option>
+                    <option selected>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Color</label>
+                  <input class="setting-input" type="color" value="#2c9e78" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Load settings</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Weekly periods</label>
+                  <input class="setting-input" type="text" value="4" />
+                </div>
+                <div class="setting-row">
+                  <label>Spread</label>
+                  <select class="setting-input">
+                    <option selected>Even spread</option>
+                    <option>Clustered</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Notes</label>
+                <input class="setting-input" type="text" value="Used for science timetable planning" />
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">New subject</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./subject-management.html">Cancel</a>
+              <button class="action-btn" type="button">Reset form</button>
+              <button class="action-btn primary" type="button">Create subject</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Create</span>
+          </div>
+          <div class="preview-card">
+            <label>Minimum data</label>
+            <strong>Name, code, difficulty, color, and status</strong>
+            <span>That is enough to place the subject in the timetable and in the list.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
