@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Labels Configuration</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Terminology">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v10H4z" /><path d="M7 8h6M7 11h4" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Reset defaults">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8 6H4v4" /><path d="M4 10c1.8-3.3 6.1-4.5 9.4-2.7 1.8 1 3 2.8 3.3 4.8" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Labels configuration</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Preview changes">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 10s2.8-4.5 7.5-4.5S17.5 10 17.5 10s-2.8 4.5-7.5 4.5S2.5 10 2.5 10Z" /><circle cx="10" cy="10" r="2.5" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Save labels">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Configuration map</strong>
+            <span class="pill">Labels</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item" type="button"><span>Institution basics</span><span>Done</span></button>
+            <button class="config-item active" type="button"><span>Terminology</span><span>Current</span></button>
+            <button class="config-item" type="button"><span>Difficulty scale</span><span>Next</span></button>
+            <button class="config-item" type="button"><span>Room types</span><span>Next</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 2 / CONFIG-06</div>
+            <h1>Terminology and labels</h1>
+            <p>
+              Define the words the product uses everywhere, then preview how those words replace the default
+              timetable vocabulary in the UI.
+            </p>
+          </div>
+
+          <div class="label-editor">
+            <div class="label-compare">
+              <article class="label-column">
+                <strong>Default labels</strong>
+                <span>What the product uses if an institution has not customized a term.</span>
+                <div class="label-row">
+                  <strong>Class</strong>
+                  <div class="label-input">Class</div>
+                </div>
+                <div class="label-row">
+                  <strong>Period</strong>
+                  <div class="label-input">Period</div>
+                </div>
+                <div class="label-row">
+                  <strong>Subject</strong>
+                  <div class="label-input">Subject</div>
+                </div>
+                <div class="label-row">
+                  <strong>Room</strong>
+                  <div class="label-input">Room</div>
+                </div>
+                <div class="label-row">
+                  <strong>Teacher</strong>
+                  <div class="label-input">Teacher</div>
+                </div>
+              </article>
+
+              <article class="label-column">
+                <strong>Institution overrides</strong>
+                <span>Customize the labels used across all workflows and reports.</span>
+                <div class="label-row">
+                  <strong>Class</strong>
+                  <div class="label-input">Section</div>
+                </div>
+                <div class="label-row">
+                  <strong>Period</strong>
+                  <div class="label-input">Lesson block</div>
+                </div>
+                <div class="label-row">
+                  <strong>Subject</strong>
+                  <div class="label-input">Course</div>
+                </div>
+                <div class="label-row">
+                  <strong>Room</strong>
+                  <div class="label-input">Space</div>
+                </div>
+                <div class="label-row">
+                  <strong>Teacher</strong>
+                  <div class="label-input">Instructor</div>
+                </div>
+              </article>
+            </div>
+
+            <article class="setting-card">
+              <label>Live preview</label>
+              <div class="label-preview-grid">
+                <div class="label-preview-chip"><strong>Section</strong><span>8A, 8B, 8C</span></div>
+                <div class="label-preview-chip"><strong>Lesson block</strong><span>07:45 - 08:30</span></div>
+                <div class="label-preview-chip"><strong>Course</strong><span>Mathematics, Biology</span></div>
+                <div class="label-preview-chip"><strong>Instructor</strong><span>M. Petrosyan</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Validation and behavior</label>
+              <div class="pill-row">
+                <span class="pill active">Changes apply immediately</span>
+                <span class="pill">Empty labels fall back to default</span>
+                <span class="pill">Used in i18n merge</span>
+              </div>
+              <div class="setting-row">
+                <label>Note</label>
+                <div class="setting-input">Keep terminology simple and familiar for the whole institution.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">4 overrides set</span>
+              <span class="pill">Affects all pages</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./institution-settings.html">Back</a>
+              <button class="action-btn" type="button">Reset labels</button>
+              <button class="action-btn primary" type="button">Save labels</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Shared text</span>
+          </div>
+          <div class="preview-card">
+            <label>Next page</label>
+            <strong>Academic years and terms</strong>
+            <span>Once labels are stable, move to the time structure pages so the app knows how to label periods and terms consistently.</span>
+          </div>
+          <div class="preview-card">
+            <label>Why now</label>
+            <strong>All workflows reuse labels</strong>
+            <span>Timetable, reports, notifications, and admin pages should all inherit the same vocabulary.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

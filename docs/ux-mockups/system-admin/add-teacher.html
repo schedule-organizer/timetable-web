@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Add Teacher</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./teachers-view.html" aria-label="Back to teachers view">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Add teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /><path d="M6.8 7.8a3.2 3.2 0 1 1 6.4 0 3.2 3.2 0 0 1-6.4 0Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Invite teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M14 5h2v2" /><path d="M16 5 11 10" /><path d="M4 15c1.1-2.5 3.1-3.9 5.5-3.9S14.9 12.5 16 15" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Add teacher</strong>
+        </div>
+        <div class="topbar-right">
+          <a class="icon-btn" href="./teachers-view.html" aria-label="Open teachers list">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v2H4zM4 10h12v2H4zM4 14h12v2H4z" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Save new teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Teacher workflow</strong>
+            <span class="pill">Create</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./teachers-view.html"><span>Teachers view</span><span>List</span></a>
+            <button class="config-item active" type="button"><span>Add teacher</span><span>Current</span></button>
+            <a class="config-item" href="./edit-teacher.html"><span>Edit teacher</span><span>Update</span></a>
+            <a class="config-item" href="./teacher-detail.html"><span>Teacher detail</span><span>Profile</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-12</div>
+            <h1>Create a new teacher</h1>
+            <p>
+              Capture the teacher's identity, code, color, and status at creation time so the timetable can use the
+              record immediately.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Teacher identity</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>First name</label>
+                  <input class="setting-input" type="text" value="Anahit" />
+                </div>
+                <div class="setting-row">
+                  <label>Last name</label>
+                  <input class="setting-input" type="text" value="Hakobyan" />
+                </div>
+                <div class="setting-row">
+                  <label>Teacher code / number</label>
+                  <input class="setting-input" type="text" value="T-063" />
+                </div>
+                <div class="setting-row">
+                  <label>Display initials</label>
+                  <input class="setting-input" type="text" value="AH" />
+                </div>
+                <div class="setting-row">
+                  <label>Color</label>
+                  <input class="setting-input" type="color" value="#d38a36" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Assignment details</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Primary subject</label>
+                  <input class="setting-input" type="text" value="English" />
+                </div>
+                <div class="setting-row">
+                  <label>Max weekly load</label>
+                  <input class="setting-input" type="text" value="18 lessons" />
+                </div>
+                <div class="setting-row">
+                  <label>Email</label>
+                  <input class="setting-input" type="email" value="anahit.hakobyan@school.edu" />
+                </div>
+                <div class="setting-row">
+                  <label>Phone</label>
+                  <input class="setting-input" type="text" value="+374 10 000000" />
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Availability notes</label>
+                <textarea class="setting-input" rows="4">Can teach afternoons and cover one exam block per week.</textarea>
+              </div>
+            </article>
+
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">New teacher</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./teachers-view.html">Cancel</a>
+              <button class="action-btn" type="button">Reset form</button>
+              <button class="action-btn primary" type="button">Create teacher</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Create</span>
+          </div>
+          <div class="preview-card">
+            <label>Minimum data</label>
+            <strong>Code, color, and status are required</strong>
+            <span>Keep the form focused on what we can store and use in the timetable.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

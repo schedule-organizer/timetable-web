@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Teachers View</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Teachers view">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.8a3.2 3.2 0 1 1 0 6.4 3.2 3.2 0 0 1 0-6.4Z" /><path d="M4.5 16c1.2-2.8 3.4-4.3 5.5-4.3s4.3 1.5 5.5 4.3" /><path d="M6.5 10.8h7" /></svg>
+          </button>
+          <a class="icon-btn" href="./add-teacher.html" aria-label="Add teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /><path d="M6.8 7.8a3.2 3.2 0 1 1 6.4 0 3.2 3.2 0 0 1-6.4 0Z" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Teachers view</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter teachers">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Refresh list">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6V4l2 2-2 2" /><path d="M15 14v2l-2-2 2-2" /><path d="M5.5 10a4.5 4.5 0 0 1 8.4-2.4" /><path d="M14.5 10a4.5 4.5 0 0 1-8.4 2.4" /></svg>
+          </button>
+          <a class="icon-btn" href="./add-teacher.html" aria-label="Create teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /><path d="M6.8 7.8a3.2 3.2 0 1 1 6.4 0 3.2 3.2 0 0 1-6.4 0Z" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Teacher workflow</strong>
+            <span class="pill">RES-12</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item active" type="button"><span>Teachers view</span><span>Current</span></button>
+            <a class="config-item" href="./add-teacher.html"><span>Add teacher</span><span>Create</span></a>
+            <a class="config-item" href="./edit-teacher.html"><span>Edit teacher</span><span>Update</span></a>
+            <a class="config-item" href="./teacher-detail.html"><span>Teacher detail</span><span>Profile</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-12</div>
+            <h1>Teacher list and management actions</h1>
+            <p>
+              Browse the roster, inspect each teacher's code, color, and status, then jump into detail, edit, or
+              creation flows from the same workspace.
+            </p>
+          </div>
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Teacher list</label>
+              <div class="teacher-table">
+                <div class="teacher-table-head">
+                  <span>Name</span>
+                  <span>Code</span>
+                  <span>Color</span>
+                  <span>Status</span>
+                  <span>Actions</span>
+                </div>
+                <div class="teacher-table-row active">
+                  <div class="teacher-name"><span class="teacher-avatar">MP</span> M. Petrosyan</div>
+                  <span>T-014</span>
+                  <span class="teacher-color"><span class="teacher-swatch" style="background:#4a78d3"></span></span>
+                  <span class="status-chip active">Active</span>
+                  <div class="action-group">
+                    <a class="pill active" href="./teacher-detail.html">View</a>
+                    <a class="pill" href="./edit-teacher.html">Edit</a>
+                  </div>
+                </div>
+                <div class="teacher-table-row">
+                  <div class="teacher-name"><span class="teacher-avatar">AH</span> A. Harutyunyan</div>
+                  <span>T-022</span>
+                  <span class="teacher-color"><span class="teacher-swatch" style="background:#d38a36"></span></span>
+                  <span class="status-chip active">Active</span>
+                  <div class="action-group">
+                    <a class="pill active" href="./teacher-detail.html">View</a>
+                    <a class="pill" href="./edit-teacher.html">Edit</a>
+                  </div>
+                </div>
+                <div class="teacher-table-row">
+                  <div class="teacher-name"><span class="teacher-avatar">LG</span> L. Grigoryan</div>
+                  <span>T-031</span>
+                  <span class="teacher-color"><span class="teacher-swatch" style="background:#2c9e78"></span></span>
+                  <span class="status-chip active">Active</span>
+                  <div class="action-group">
+                    <a class="pill active" href="./teacher-detail.html">View</a>
+                    <a class="pill" href="./edit-teacher.html">Edit</a>
+                  </div>
+                </div>
+                <div class="teacher-table-row">
+                  <div class="teacher-name"><span class="teacher-avatar">NV</span> N. Vardanyan</div>
+                  <span>T-044</span>
+                  <span class="teacher-color"><span class="teacher-swatch" style="background:#7d63c7"></span></span>
+                  <span class="status-chip inactive">Inactive</span>
+                  <div class="action-group">
+                    <a class="pill active" href="./teacher-detail.html">View</a>
+                    <a class="pill" href="./edit-teacher.html">Edit</a>
+                  </div>
+                </div>
+                <div class="teacher-table-row">
+                  <div class="teacher-name"><span class="teacher-avatar">SP</span> S. Petrosyan</div>
+                  <span>T-052</span>
+                  <span class="teacher-color"><span class="teacher-swatch" style="background:#2d8da1"></span></span>
+                  <span class="status-chip active">Active</span>
+                  <div class="action-group">
+                    <a class="pill active" href="./teacher-detail.html">View</a>
+                    <a class="pill" href="./edit-teacher.html">Edit</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Roster controls</label>
+              <div class="pill-row">
+                <span class="pill active">Add teacher</span>
+                <span class="pill">Deactivate</span>
+                <span class="pill">Export roster</span>
+              </div>
+              <div class="setting-row">
+                <label>Search</label>
+                <div class="setting-input">Name, code, subject, or color</div>
+              </div>
+              <div class="setting-row">
+                <label>Filters</label>
+                <div class="setting-input">Active, inactive, cover pool, part time</div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Summary</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Active</span><span>24 teachers</span></div>
+                <div class="mini-preview-row"><span>Inactive</span><span>4 teachers</span></div>
+                <div class="mini-preview-row"><span>Pending invites</span><span>4 teachers</span></div>
+                <div class="mini-preview-row"><span>Color collisions</span><span>None</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">28 teachers</span>
+              <span class="pill">4 status states</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./holiday-calendar.html">Back</a>
+              <a class="action-btn" href="./add-teacher.html">Add teacher</a>
+              <button class="action-btn primary" type="button">Save roster</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">List view</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Create or edit teacher records</strong>
+            <span>Use this view to decide whether to open the add form, edit form, or the full profile detail page.</span>
+          </div>
+          <div class="preview-card">
+            <label>System note</label>
+            <strong>Code and color affect timetable rendering</strong>
+            <span>Those values should be treated as timetable identity, not optional display metadata.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

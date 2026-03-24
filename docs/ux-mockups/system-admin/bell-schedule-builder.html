@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Bell Schedule Builder</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Bell schedule">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v10H5z" /><path d="M8 8h4M8 11h4" /><path d="M6 6h8" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Add period">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /><path d="M10 4.5v11" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Bell schedule builder</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Copy schedule">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6h8v8H6z" /><path d="M4 4h8" /><path d="M8 8h4M8 11h4" /><path d="M7 5h6" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Save bell schedule">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /><path d="M6 6h8" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Configuration map</strong>
+            <span class="pill">CONFIG-07</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item" type="button"><span>Institution basics</span><span>Done</span></button>
+            <button class="config-item" type="button"><span>Academic years</span><span>Done</span></button>
+            <button class="config-item active" type="button"><span>Bell schedule</span><span>Current</span></button>
+            <a class="config-item" href="./holiday-calendar.html"><span>Holiday calendar</span><span>Next</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 2 / CONFIG-07</div>
+            <h1>Daily period and break structure</h1>
+            <p>
+              Build the time blocks that define the timetable grid. Variants let the institution switch between a
+              normal day and alternate structures like early release.
+            </p>
+          </div>
+
+          <div class="schedule-shell">
+            <article class="setting-card">
+              <label>Variant controls</label>
+              <div class="schedule-toolbar">
+                <span class="pill active">Normal day</span>
+                <span class="pill">Early release</span>
+                <span class="pill">Exam day</span>
+                <span class="pill">Copy to new variant</span>
+              </div>
+            </article>
+
+            <div class="variant-grid">
+              <aside class="setting-card">
+                <label>Variants</label>
+                <div class="variant-list">
+                  <div class="variant-item active">
+                    <strong>Normal day</strong>
+                    <span>7 lessons, one lunch break</span>
+                  </div>
+                  <div class="variant-item">
+                    <strong>Early release</strong>
+                    <span>5 lessons, shorter final block</span>
+                  </div>
+                  <div class="variant-item">
+                    <strong>Exam day</strong>
+                    <span>Special morning-only pattern</span>
+                  </div>
+                </div>
+              </aside>
+
+              <article class="setting-card">
+                <label>Preview timeline</label>
+                <div class="schedule-track">
+                  <div class="schedule-day">
+                    <div class="day-label">Mon-Fri</div>
+                    <div class="period-block lesson"><strong>Period 1</strong><span>08:00 - 08:45</span></div>
+                    <div class="period-block lesson"><strong>Period 2</strong><span>09:00 - 09:45</span></div>
+                    <div class="period-block break"><strong>Break</strong><span>09:45 - 10:00</span></div>
+                    <div class="period-block lesson"><strong>Period 3</strong><span>10:00 - 10:45</span></div>
+                  </div>
+                  <div class="schedule-day">
+                    <div class="day-label">Mon-Fri</div>
+                    <div class="period-block lesson"><strong>Period 4</strong><span>11:00 - 11:45</span></div>
+                    <div class="period-block break"><strong>Lunch</strong><span>11:45 - 12:15</span></div>
+                    <div class="period-block lesson"><strong>Period 5</strong><span>12:15 - 13:00</span></div>
+                    <div class="period-block lesson"><strong>Period 6</strong><span>13:15 - 14:00</span></div>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <article class="setting-card">
+              <label>Period editor</label>
+              <div class="calendar-strip">
+                <div class="calendar-label">Time block</div>
+                <div class="calendar-cell active"><strong>P1</strong><span>Start 08:00</span></div>
+                <div class="calendar-cell"><strong>P2</strong><span>Start 09:00</span></div>
+                <div class="calendar-cell"><strong>Break</strong><span>09:45 - 10:00</span></div>
+                <div class="calendar-cell"><strong>P3</strong><span>Start 10:00</span></div>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">Lesson</span>
+                <span class="pill">Break</span>
+                <span class="pill">Lunch</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">7 periods</span>
+              <span class="pill">1 lunch block</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./academic-years-terms.html">Back</a>
+              <button class="action-btn" type="button">Add variant</button>
+              <button class="action-btn primary" type="button">Save schedule</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Daily structure</span>
+          </div>
+          <div class="preview-card">
+            <label>Next page</label>
+            <strong>Holiday calendar</strong>
+            <span>After bell times are defined, holidays can be imported or edited against the same calendar framework.</span>
+            <a class="workflow-link" href="./holiday-calendar.html">Open holiday calendar</a>
+          </div>
+          <div class="preview-card">
+            <label>Why now</label>
+            <strong>Timetable grid depends on this</strong>
+            <span>All timetable views should read from these blocks rather than carrying hardcoded times.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
