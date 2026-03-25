@@ -31,8 +31,10 @@
         timeLabel: "Time",
         contextLabel: "Workflow",
         contextValue: scope,
-        switchLabel: "Switch moderator role",
-        logoutLabel: "Logout moderator session",
+        switchLabel: "Switch role",
+        logoutLabel: "Logout",
+        switchTitle: "Switch moderator role",
+        logoutTitle: "Logout moderator session",
       }
     : {
         initials: "SA",
@@ -41,8 +43,10 @@
         timeLabel: "Time",
         contextLabel: "Section",
         contextValue: scope,
-        switchLabel: "Switch admin role",
-        logoutLabel: "Logout admin session",
+        switchLabel: "Switch role",
+        logoutLabel: "Logout",
+        switchTitle: "Switch admin role",
+        logoutTitle: "Logout admin session",
       };
 
   const sessionBar = document.createElement("section");
@@ -66,8 +70,8 @@
       </div>
     </div>
     <div class="session-actions">
-      <button class="ghost-btn" type="button">${config.switchLabel}</button>
-      <button class="ghost-btn" type="button">${config.logoutLabel}</button>
+      <button class="ghost-btn" type="button" title="${config.switchTitle}" aria-label="${config.switchTitle}">${config.switchLabel}</button>
+      <button class="ghost-btn" type="button" title="${config.logoutTitle}" aria-label="${config.logoutTitle}">${config.logoutLabel}</button>
     </div>
   `;
 
