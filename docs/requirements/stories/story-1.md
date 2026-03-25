@@ -234,6 +234,7 @@ The current product direction introduces a few rules that apply across the auth 
 - User accounts may hold multiple roles at once.
 - If a user logs in without choosing a role, the highest available role is used.
 - If a user has multiple roles, the header should expose a role switcher so they can change the active role after login.
+- Teachers may be linked to multiple subjects, and those subject qualifications should be managed in the teacher profile flow.
 - Teacher code / staff number is managed by `Sys Admin` and is not self-edited by teachers.
 
 ---

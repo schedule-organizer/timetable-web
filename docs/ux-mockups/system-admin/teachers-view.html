@@ -44,7 +44,6 @@
           </div>
           <div class="config-list">
             <button class="config-item active" type="button"><span>Teachers view</span><span>Current</span></button>
-            <a class="config-item" href="./add-teacher.html"><span>Add teacher</span><span>Create</span></a>
             <a class="config-item" href="./edit-teacher.html"><span>Edit teacher</span><span>Update</span></a>
             <a class="config-item" href="./teacher-detail.html"><span>Teacher detail</span><span>Profile</span></a>
           </div>
@@ -68,75 +67,105 @@
                   <span>Code</span>
                   <span>Color</span>
                   <span>Status</span>
-                  <span>Actions</span>
                 </div>
                 <div class="teacher-table-row active">
                   <div class="teacher-name"><span class="teacher-avatar">MP</span> M. Petrosyan</div>
                   <span>T-014</span>
                   <span class="teacher-color"><span class="teacher-swatch" style="background:#4a78d3"></span></span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./teacher-detail.html">View</a>
-                    <a class="pill" href="./edit-teacher.html">Edit</a>
-                  </div>
                 </div>
                 <div class="teacher-table-row">
                   <div class="teacher-name"><span class="teacher-avatar">AH</span> A. Harutyunyan</div>
                   <span>T-022</span>
                   <span class="teacher-color"><span class="teacher-swatch" style="background:#d38a36"></span></span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./teacher-detail.html">View</a>
-                    <a class="pill" href="./edit-teacher.html">Edit</a>
-                  </div>
                 </div>
                 <div class="teacher-table-row">
                   <div class="teacher-name"><span class="teacher-avatar">LG</span> L. Grigoryan</div>
                   <span>T-031</span>
                   <span class="teacher-color"><span class="teacher-swatch" style="background:#2c9e78"></span></span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./teacher-detail.html">View</a>
-                    <a class="pill" href="./edit-teacher.html">Edit</a>
-                  </div>
                 </div>
                 <div class="teacher-table-row">
                   <div class="teacher-name"><span class="teacher-avatar">NV</span> N. Vardanyan</div>
                   <span>T-044</span>
                   <span class="teacher-color"><span class="teacher-swatch" style="background:#7d63c7"></span></span>
                   <span class="status-chip inactive">Inactive</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./teacher-detail.html">View</a>
-                    <a class="pill" href="./edit-teacher.html">Edit</a>
-                  </div>
                 </div>
                 <div class="teacher-table-row">
                   <div class="teacher-name"><span class="teacher-avatar">SP</span> S. Petrosyan</div>
                   <span>T-052</span>
                   <span class="teacher-color"><span class="teacher-swatch" style="background:#2d8da1"></span></span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./teacher-detail.html">View</a>
-                    <a class="pill" href="./edit-teacher.html">Edit</a>
-                  </div>
                 </div>
               </div>
             </article>
 
             <article class="setting-card">
-              <label>Roster controls</label>
-              <div class="pill-row">
-                <span class="pill active">Add teacher</span>
-                <span class="pill">Deactivate</span>
-                <span class="pill">Export roster</span>
+              <label>Selected teacher</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Teacher profile</div>
+                <h2>M. Petrosyan</h2>
+                <p>T-014 · Active</p>
               </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Name</label>
+                  <input class="setting-input" type="text" value="M. Petrosyan" />
+                </div>
+                <div class="setting-row">
+                  <label>Teacher code / number</label>
+                  <input class="setting-input" type="text" value="T-014" />
+                </div>
+              <div class="setting-row">
+                  <label>Subjects taught</label>
+                  <div class="subject-picker">
+                    <span class="subject-chip">Math</span>
+                    <span class="subject-chip">Algebra</span>
+                    <span class="subject-chip">Geometry</span>
+                  </div>
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Color</label>
+                  <input class="setting-input" type="color" value="#4a78d3" />
+                </div>
+                <div class="setting-row">
+                  <label>Availability</label>
+                  <input class="setting-input" type="text" value="Mon, Wed, Fri" />
+                </div>
+              </div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save teacher</button>
+                <a class="action-btn" href="./teacher-detail.html">Open detail</a>
+                <a class="action-btn" href="./edit-teacher.html">Open edit</a>
+                <button class="action-btn" type="button">Deactivate</button>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Roster controls</label>
               <div class="setting-row">
                 <label>Search</label>
-                <div class="setting-input">Name, code, subject, or color</div>
+                <input class="setting-input" type="text" placeholder="Name, code, subjects, or color" />
               </div>
               <div class="setting-row">
                 <label>Filters</label>
-                <div class="setting-input">Active, inactive, cover pool, part time</div>
+                <select class="setting-input">
+                  <option selected>Active</option>
+                  <option>Inactive</option>
+                  <option>Cover pool</option>
+                  <option>Part time</option>
+                </select>
+              </div>
+              <div class="pill-row">
+                <span class="pill">Export roster</span>
               </div>
             </article>
 
@@ -158,7 +187,6 @@
             </div>
             <div class="action-group">
               <a class="action-btn" href="./holiday-calendar.html">Back</a>
-              <a class="action-btn" href="./add-teacher.html">Add teacher</a>
               <button class="action-btn primary" type="button">Save roster</button>
             </div>
           </div>

@@ -166,6 +166,8 @@ All error responses:
 | POST | `/api/v1/engine/run` | Start solver job | Engine control panel |
 | GET | `/api/v1/engine/jobs/{id}` | Poll job status | GeneratorProgressPanel |
 | POST | `/api/v1/engine/jobs/{id}/cancel` | Cancel job | GeneratorProgressPanel |
+
+Teacher profiles can have multiple subject qualifications. The UI should present them as a selectable chip set or multi-select, not a single primary subject field.
 | CRUD | `/api/v1/holidays` | Holiday calendar | Holiday calendar page |
 | POST | `/api/v1/holidays/import` | Import from feed | Holiday calendar page |
 | POST | `/api/v1/cover` | Assign cover | Cover panel |

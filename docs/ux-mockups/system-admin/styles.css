@@ -267,7 +267,7 @@
 .teacher-table-head,
 .teacher-table-row {
   display: grid;
-  grid-template-columns: 1.3fr 0.8fr 0.7fr 0.9fr auto;
+  grid-template-columns: 1.3fr 0.8fr 0.7fr 0.9fr;
   gap: 10px;
   align-items: center;
 }
@@ -315,7 +315,6 @@
 .teacher-color {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   font-size: 12px;
 }
 
@@ -1110,6 +1109,39 @@ textarea.setting-input {
 textarea.setting-input {
   resize: vertical;
   min-height: 78px;
+}
+
+.subject-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.subject-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid #bfd0e5;
+  background: #edf3fb;
+  color: #26486f;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.subject-picker-input {
+  min-width: 150px;
+  flex: 1 1 150px;
+  border: 0;
+  padding: 0;
+  min-height: 28px;
+  background: transparent;
 }
 
 .pill-row {
