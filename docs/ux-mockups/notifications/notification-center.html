@@ -8,29 +8,17 @@
   </head>
   <body data-session-role="shared">
     <main class="notifications-app">
-      <section class="notifications-panel">
-        <div class="workflow-head">
-          <div>
-            <div class="eyebrow">Bell dropdown</div>
-            <h1>Notification center</h1>
-            <p>Recent alerts stay readable, clickable, and easy to mark as read.</p>
-          </div>
-          <div class="notif-actions">
-            <span class="candidate-tag">10 recent</span>
-            <button class="action-btn" type="button">Mark all as read</button>
-          </div>
-        </div>
-        <div class="notif-filters">
-          <span class="scope-pill active">All</span>
-          <span class="scope-pill">Unread</span>
-          <span class="scope-pill">Timetable</span>
-          <span class="scope-pill">Cover</span>
-          <span class="scope-pill">Delegation</span>
-        </div>
-      </section>
-
       <section class="notifications-grid">
         <article class="notifications-panel">
+          <div class="notif-toolbar">
+            <span class="candidate-tag">10 recent</span>
+            <button class="action-btn" type="button">Mark all as read</button>
+            <span class="scope-pill active">All</span>
+            <span class="scope-pill">Unread</span>
+            <span class="scope-pill">Timetable</span>
+            <span class="scope-pill">Cover</span>
+            <span class="scope-pill">Delegation</span>
+          </div>
           <div class="notif-list">
             <div class="notif-row unread">
               <div class="notif-dot"></div>
@@ -70,7 +58,7 @@
         <aside class="notifications-panel">
           <div class="workflow-head">
             <div>
-              <div class="eyebrow">Empty state</div>
+              <div class="eyebrow">Bell dropdown</div>
               <h2>No unread notifications</h2>
             </div>
             <span class="status-tag good">0 unread</span>
