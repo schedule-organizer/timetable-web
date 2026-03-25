@@ -223,3 +223,17 @@
 - Export user list to CSV
 
 ---
+
+## Access model clarification
+
+The current product direction introduces a few rules that apply across the auth and user-management flows:
+
+- The first institution account is created automatically as the initial `Sys Admin` and is immutable.
+- Teachers are the only role that can self-register, and that registration is subject to approval by `Sys Admin` or `Moderator`.
+- Teacher invitation still exists for staff onboarding, but approval/status handling must stay visible in the user list.
+- User accounts may hold multiple roles at once.
+- If a user logs in without choosing a role, the highest available role is used.
+- If a user has multiple roles, the header should expose a role switcher so they can change the active role after login.
+- Teacher code / staff number is managed by `Sys Admin` and is not self-edited by teachers.
+
+---

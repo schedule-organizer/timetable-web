@@ -12,6 +12,7 @@
 **Key capabilities:**
 - registration, login, logout, session refresh
 - role-based route protection
+- multi-role user accounts with active role switching
 - profile management and teacher invite completion
 - base design system, i18n, state management, and app shell
 

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Register</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to mockup hub">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <span class="toolbar-title">Register</span>
+        </div>
+        <div class="topbar-right">
+          <a class="action-btn" href="./auth-login.html">Login</a>
+        </div>
+      </section>
+
+      <section class="auth-stage">
+        <section class="auth-hero">
+          <div>
+            <div class="eyebrow">Shared access</div>
+            <h1>Request teacher access</h1>
+            <p>Teachers can register here, but the request stays pending until a Sys Admin or Moderator approves it.</p>
+          </div>
+          <div class="auth-points">
+            <div class="auth-point">
+              <span class="swatch c2"></span>
+              <div>
+                <strong>Teacher-first flow</strong>
+                <span>Registration is for teachers. Sys Admins are created automatically or promoted later.</span>
+              </div>
+            </div>
+            <div class="auth-point">
+              <span class="swatch c5"></span>
+              <div>
+                <strong>Approval required</strong>
+                <span>The user appears as pending until the request is approved in user management.</span>
+              </div>
+            </div>
+          </div>
+          <div class="auth-switch">
+            <a class="pill active" href="./auth-login.html">Login</a>
+            <a class="pill" href="./auth-complete-registration.html">Invite completion</a>
+            <a class="pill" href="./profile-management.html">Profile</a>
+          </div>
+        </section>
+
+        <section class="auth-panel">
+          <form class="auth-card">
+            <div class="auth-card-head">
+              <div class="eyebrow">Teacher request</div>
+              <h2>Register for approval</h2>
+              <p>Submit your details and wait for approval from an admin or moderator.</p>
+            </div>
+
+            <div class="auth-form-grid two-up">
+              <div class="setting-row">
+                <label>Full name</label>
+                <input class="setting-input" type="text" placeholder="Full name" value="A. Petrosyan" />
+              </div>
+              <div class="setting-row">
+                <label>Email</label>
+                <input class="setting-input" type="email" placeholder="name@school.edu" value="name@school.edu" />
+              </div>
+              <div class="setting-row">
+                <label>Requested role</label>
+                <select class="setting-input">
+                  <option>Teacher</option>
+                  <option>Teacher + Moderator</option>
+                </select>
+              </div>
+              <div class="setting-row full">
+                <label>Password</label>
+                <input class="setting-input" type="password" placeholder="Create a password" value="password" />
+              </div>
+              <div class="setting-row full">
+                <label>Confirm password</label>
+                <input class="setting-input" type="password" placeholder="Confirm password" value="password" />
+              </div>
+              <div class="auth-actions full">
+                <button class="action-btn primary auth-submit" type="submit">Submit request</button>
+                <a class="action-btn" href="./auth-complete-registration.html">Have an invite?</a>
+              </div>
+            </div>
+            <div class="auth-banner">
+              <strong>What happens next</strong>
+              <span>Your request is added to user management as pending until someone approves it. The school code is assigned by Sys Admin.</span>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

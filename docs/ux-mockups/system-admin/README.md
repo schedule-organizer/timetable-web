@@ -5,50 +5,60 @@ This folder is the starting point for system-admin UX mockups.
 ## Recommended page order
 
 1. `index.html`
-2. `auth-login.html`
-3. `auth-register.html`
-4. `auth-complete-registration.html`
-5. `profile-management.html`
-6. `user-management.html`
-7. `institution-settings.html`
-8. `labels-configuration.html`
-9. `difficulty-scale.html`
-10. `room-types.html`
-11. `academic-years-terms.html`
-12. `bell-schedule-builder.html`
-13. `holiday-calendar.html`
-14. `teachers-view.html`
-15. `add-teacher.html`
-16. `edit-teacher.html`
-17. `teacher-detail.html`
-18. `subject-management.html`
-19. `subject-add.html`
-20. `subject-edit.html`
-21. `subject-detail.html`
-22. `class-management.html`
-23. `class-add.html`
-24. `class-edit.html`
-25. `class-detail.html`
-26. `room-management.html`
-27. `room-add.html`
-28. `room-edit.html`
-29. `room-detail.html`
-30. `teaching-groups.html`
-31. `option-block-builder.html`
-32. `reports-teacher-utilization.html`
-33. `reports-room-utilization.html`
-34. `reports-subject-coverage.html`
-35. `audit-log.html`
-36. `export-panel.html`
+2. `user-management.html`
+3. `institution-settings.html`
+4. `labels-configuration.html`
+5. `difficulty-scale.html`
+6. `room-types.html`
+7. `academic-years-terms.html`
+8. `bell-schedule-builder.html`
+9. `holiday-calendar.html`
+10. `teachers-view.html`
+11. `add-teacher.html`
+12. `edit-teacher.html`
+13. `teacher-detail.html`
+14. `subject-management.html`
+15. `subject-add.html`
+16. `subject-edit.html`
+17. `subject-detail.html`
+18. `class-management.html`
+19. `class-add.html`
+20. `class-edit.html`
+21. `class-detail.html`
+22. `room-management.html`
+23. `room-add.html`
+24. `room-edit.html`
+25. `room-detail.html`
+26. `teaching-groups.html`
+27. `option-block-builder.html`
+28. `reports-teacher-utilization.html`
+29. `reports-room-utilization.html`
+30. `reports-subject-coverage.html`
+31. `audit-log.html`
+32. `export-panel.html`
+
+## Shared flows
+
+Common access and profile flows live in `docs/ux-mockups/`:
+
+- `auth-login.html`
+- `auth-register.html`
+- `auth-complete-registration.html`
+- `profile-management.html`
 
 ## Workflow groups from the epics
 
-### Foundation and access
-- Registration
+### Shared access flows
 - Login
+- Registration
 - Teacher invite completion
 - Profile management
+- These pages live in `docs/ux-mockups/`
+
+### Administration and access control
+- User management
 - Role-based access / route protection
+- Teacher code management
 
 ### Institution configuration
 - Institution settings

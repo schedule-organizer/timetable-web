@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Complete Registration</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to mockup hub">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <span class="toolbar-title">Invite completion</span>
+        </div>
+        <div class="topbar-right">
+          <a class="action-btn" href="./auth-login.html">Login</a>
+        </div>
+      </section>
+
+      <section class="auth-stage">
+        <section class="auth-hero">
+          <div>
+            <div class="eyebrow">Shared access</div>
+            <h1>Complete your invitation</h1>
+            <p>Finish setup after joining by invite. The account can still wait for approval depending on the school policy.</p>
+          </div>
+          <div class="auth-points">
+            <div class="auth-point">
+              <span class="swatch c3"></span>
+              <div>
+                <strong>Invite link flow</strong>
+                <span>Start from the invitation and land directly on setup.</span>
+              </div>
+            </div>
+            <div class="auth-point">
+              <span class="swatch c6"></span>
+              <div>
+                <strong>Approval-aware</strong>
+                <span>Some schools will activate immediately, others will hold the profile pending review.</span>
+              </div>
+            </div>
+          </div>
+          <div class="auth-switch">
+            <a class="pill active" href="./auth-login.html">Login</a>
+            <a class="pill" href="./auth-register.html">Register</a>
+            <a class="pill" href="./profile-management.html">Profile</a>
+          </div>
+        </section>
+
+        <section class="auth-panel">
+          <form class="auth-card">
+            <div class="auth-card-head">
+              <div class="eyebrow">Invite accepted</div>
+              <h2>Finish setup</h2>
+              <p>Set a password and confirm the details on your invited account.</p>
+            </div>
+
+            <div class="auth-form-grid two-up">
+              <div class="setting-row full">
+                <label>Invite email</label>
+                <input class="setting-input" type="email" value="name@school.edu" />
+              </div>
+              <div class="setting-row">
+                <label>Display name</label>
+                <input class="setting-input" type="text" value="A. Petrosyan" />
+              </div>
+              <div class="setting-row">
+                <label>Timezone</label>
+                <select class="setting-input">
+                  <option selected>Asia/Yerevan</option>
+                  <option>Europe/London</option>
+                  <option>UTC</option>
+                </select>
+              </div>
+              <div class="setting-row full">
+                <label>New password</label>
+                <input class="setting-input" type="password" placeholder="Create a password" value="password" />
+              </div>
+              <div class="setting-row full">
+                <label>Confirm password</label>
+                <input class="setting-input" type="password" placeholder="Confirm password" value="password" />
+              </div>
+              <div class="auth-actions full">
+                <button class="action-btn primary auth-submit" type="submit">Complete setup</button>
+                <a class="action-btn" href="./auth-login.html">Back to login</a>
+              </div>
+            </div>
+            <div class="auth-banner">
+              <strong>After setup</strong>
+              <span>Your profile will appear in user management so the approval and role assignment can be confirmed.</span>
+            </div>
+          </form>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

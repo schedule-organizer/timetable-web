@@ -615,7 +615,7 @@ const moveLessonMutation = useMutation({
 ```
 /                           → redirect based on auth state
 /auth/login
-/auth/register
+/auth/register                 → Teacher registration request / bootstrap path
 /auth/complete-registration → Teacher invite completion
 
 /dashboard
@@ -656,7 +656,7 @@ const moveLessonMutation = useMutation({
 /profile
 ```
 
-**Route guards:** A `<ProtectedRoute>` wrapper component checks `authStore.isAuthenticated` and redirects to `/auth/login` if not. A `<RoleGuard role="ADMIN">` wrapper renders `null` (or a redirect) for insufficient roles.
+**Route guards:** A `<ProtectedRoute>` wrapper component checks `authStore.isAuthenticated` and redirects to `/auth/login` if not. A `<RoleGuard role="ADMIN">` wrapper renders `null` (or a redirect) for insufficient roles. When a user has multiple roles, the frontend keeps an `activeRole` in auth state, defaults to the highest available role when no explicit choice is made, and exposes a header role switcher for changing the active role after login.
 
 ---
 
