@@ -11,11 +11,13 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
   gap: 12px;
+  align-items: start;
 }
 
 .notifications-panel {
   display: grid;
   gap: 12px;
+  align-content: start;
   min-width: 0;
   padding: 14px;
   border: 1px solid var(--line);
