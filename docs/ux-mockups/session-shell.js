@@ -10,8 +10,10 @@
   const isSystemAdmin = path.includes("/system-admin/");
   const isDailyOperations = path.includes("/daily-operations/");
   const isNotifications = path.includes("/notifications/");
+  const isTimetableAccess = path.includes("/timetable-access/");
+  const sessionRole = (body.dataset.sessionRole || "").toLowerCase();
 
-  if (!isModerator && !isSystemAdmin && !isDailyOperations && !isNotifications) {
+  if (!isModerator && !isSystemAdmin && !isDailyOperations && !isNotifications && !isTimetableAccess && !sessionRole) {
     return;
   }
 
@@ -25,57 +27,56 @@
     return h1 ? h1.textContent.trim() : pageTitle.trim();
   })();
 
-  const sessionRole = (body.dataset.sessionRole || "").toLowerCase();
-  const roleKey = sessionRole || (isModerator ? "moderator" : isSystemAdmin ? "system-admin" : "teacher");
+  const roleKey = sessionRole || (isModerator ? "moderator" : isSystemAdmin ? "system-admin" : isTimetableAccess ? "shared" : isDailyOperations ? "shared" : isNotifications ? "shared" : "teacher");
 
   const configByRole = {
     moderator: {
-        initials: "MU",
-        name: "Moderator User",
-        role: "Moderator",
-        timeLabel: "Time",
-        contextLabel: "Workflow",
-        contextValue: scope,
-        switchLabel: "Switch role",
-        logoutLabel: "Logout",
-        switchTitle: "Switch moderator role",
+      initials: "MU",
+      name: "Moderator User",
+      role: "Moderator",
+      timeLabel: "Time",
+      contextLabel: "Workflow",
+      contextValue: scope,
+      switchLabel: "Switch role",
+      logoutLabel: "Logout",
+      switchTitle: "Switch moderator role",
       logoutTitle: "Logout moderator session",
       },
     "system-admin": {
-        initials: "SA",
-        name: "System Admin User",
-        role: "System admin",
-        timeLabel: "Time",
-        contextLabel: "Section",
-        contextValue: scope,
-        switchLabel: "Switch role",
-        logoutLabel: "Logout",
-        switchTitle: "Switch admin role",
-        logoutTitle: "Logout admin session",
+      initials: "SA",
+      name: "System Admin User",
+      role: "System admin",
+      timeLabel: "Time",
+      contextLabel: "Section",
+      contextValue: scope,
+      switchLabel: "Switch role",
+      logoutLabel: "Logout",
+      switchTitle: "Switch admin role",
+      logoutTitle: "Logout admin session",
       },
     shared: {
-        initials: "NU",
-        name: "Signed-in user",
-        role: "User",
-        timeLabel: "Time",
-        contextLabel: "Center",
-        contextValue: scope,
-        switchLabel: "Switch role",
-        logoutLabel: "Logout",
-        switchTitle: "Switch active role",
-        logoutTitle: "Logout current session",
+      initials: "NU",
+      name: "Signed-in user",
+      role: "User",
+      timeLabel: "Time",
+      contextLabel: "Center",
+      contextValue: scope,
+      switchLabel: "Switch role",
+      logoutLabel: "Logout",
+      switchTitle: "Switch active role",
+      logoutTitle: "Logout current session",
       },
     teacher: {
-        initials: "TP",
-        name: "Teacher User",
-        role: "Teacher",
-        timeLabel: "Time",
-        contextLabel: "Request",
-        contextValue: scope,
-        switchLabel: "Switch role",
-        logoutLabel: "Logout",
-        switchTitle: "Switch teacher role",
-        logoutTitle: "Logout teacher session",
+      initials: "TP",
+      name: "Teacher User",
+      role: "Teacher",
+      timeLabel: "Time",
+      contextLabel: "Request",
+      contextValue: scope,
+      switchLabel: "Switch role",
+      logoutLabel: "Logout",
+      switchTitle: "Switch teacher role",
+      logoutTitle: "Logout teacher session",
       },
   };
 

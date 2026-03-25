@@ -56,12 +56,76 @@
   min-width: 0;
 }
 
+.candidate-tag,
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #f6f9fc;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-tag.good {
+  color: #23735b;
+  border-color: rgba(44, 158, 120, 0.24);
+  background: rgba(44, 158, 120, 0.1);
+}
+
+.status-tag.warn {
+  color: #8f651d;
+  border-color: rgba(211, 138, 54, 0.28);
+  background: rgba(211, 138, 54, 0.12);
+}
+
+.status-tag.bad {
+  color: #a63f3f;
+  border-color: rgba(213, 91, 91, 0.28);
+  background: rgba(213, 91, 91, 0.12);
+}
+
 .editing-link-grid,
 .editing-rows,
 .editing-actions,
 .editing-preview {
   display: grid;
   gap: 8px;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action-btn:hover {
+  border-color: #c1cfdf;
+  background: #f0f4f9;
+}
+
+.action-btn.primary {
+  border-color: var(--nav);
+  background: var(--nav);
+  color: #fff;
+}
+
+.action-btn.primary:hover {
+  background: #1c3f63;
+  border-color: #1c3f63;
 }
 
 .editing-link-grid {

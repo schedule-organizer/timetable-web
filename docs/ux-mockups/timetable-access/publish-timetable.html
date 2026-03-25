@@ -6,7 +6,7 @@
     <title>Publish Timetable</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-session-role="shared">
     <main class="app-shell">
       <section class="topbar">
         <div class="topbar-left">
@@ -29,30 +29,6 @@
           <a class="icon-btn" href="./index.html" aria-label="Back">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
           </a>
-        </div>
-      </section>
-
-      <section class="session-bar">
-        <div class="session-user">
-          <div class="avatar-badge">TB</div>
-          <div>
-            <strong>Timetabler</strong>
-            <span>Publish timetable</span>
-          </div>
-        </div>
-        <div class="session-metadata">
-          <div class="session-card">
-            <label>Time</label>
-            <strong>Tue, 10:15</strong>
-          </div>
-          <div class="session-card">
-            <label>State</label>
-            <strong>Draft ready to publish</strong>
-          </div>
-        </div>
-        <div class="session-actions">
-          <button class="primary-btn" type="button">Publish timetable</button>
-          <button class="ghost-btn" type="button">Review summary</button>
         </div>
       </section>
 
@@ -90,5 +66,6 @@
         </aside>
       </section>
     </main>
+    <script src="../session-shell.js"></script>
   </body>
 </html>

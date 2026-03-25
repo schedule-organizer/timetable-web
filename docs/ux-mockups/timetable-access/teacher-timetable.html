@@ -6,7 +6,7 @@
     <title>Teacher Timetable</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-session-role="shared">
     <main class="app-shell">
       <section class="topbar">
         <div class="topbar-left">
@@ -22,30 +22,6 @@
         <div class="topbar-right">
           <button class="primary-btn" type="button">Export PDF</button>
           <button class="ghost-btn" type="button">Export iCal</button>
-        </div>
-      </section>
-
-      <section class="session-bar">
-        <div class="session-user">
-          <div class="avatar-badge">MP</div>
-          <div>
-            <strong>M. Petrosyan</strong>
-            <span>Teacher</span>
-          </div>
-        </div>
-        <div class="session-metadata">
-          <div class="session-card">
-            <label>Time</label>
-            <strong>Tue, 10:15</strong>
-          </div>
-          <div class="session-card">
-            <label>Next lesson</label>
-            <strong>Math in R204</strong>
-          </div>
-        </div>
-        <div class="session-actions">
-          <button class="ghost-btn" type="button">Switch role</button>
-          <button class="ghost-btn" type="button">Logout</button>
         </div>
       </section>
 
@@ -152,5 +128,6 @@
         </aside>
       </section>
     </main>
+    <script src="../session-shell.js"></script>
   </body>
 </html>

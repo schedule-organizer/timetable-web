@@ -6,7 +6,7 @@
     <title>Master Timetable</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
+  <body data-session-role="shared">
     <main class="app-shell">
       <section class="topbar">
         <div class="topbar-left">
@@ -24,30 +24,6 @@
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
           </a>
           <button class="primary-btn" type="button">Export</button>
-        </div>
-      </section>
-
-      <section class="session-bar">
-        <div class="session-user">
-          <div class="avatar-badge">MT</div>
-          <div>
-            <strong>Timetabler</strong>
-            <span>Master timetable</span>
-          </div>
-        </div>
-        <div class="session-metadata">
-          <div class="session-card">
-            <label>Time</label>
-            <strong>Tue, 10:15</strong>
-          </div>
-          <div class="session-card">
-            <label>View</label>
-            <strong>Published master grid</strong>
-          </div>
-        </div>
-        <div class="session-actions">
-          <button class="ghost-btn" type="button">Switch role</button>
-          <button class="ghost-btn" type="button">Logout</button>
         </div>
       </section>
 
@@ -169,5 +145,6 @@
         </aside>
       </section>
     </main>
+    <script src="../session-shell.js"></script>
   </body>
 </html>
