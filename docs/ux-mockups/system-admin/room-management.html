@@ -16,9 +16,6 @@
           <button class="icon-btn" type="button" aria-label="Room management">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v10H4z" /><path d="M6 8h8M6 11h5" /></svg>
           </button>
-          <a class="icon-btn" href="./room-add.html" aria-label="Add room">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
-          </a>
         </div>
         <div class="topbar-center">
           <strong class="toolbar-title">Room management</strong>
@@ -69,47 +66,30 @@
                   <span>Code</span>
                   <span>Type</span>
                   <span>Capacity</span>
-                  <span>Actions</span>
                 </div>
                 <div class="room-table-row active">
                   <div class="room-name">Room 101</div>
                   <span>R-101</span>
                   <span>Classroom</span>
                   <span>28</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./room-detail.html">View</a>
-                    <a class="pill" href="./room-edit.html">Edit</a>
-                  </div>
                 </div>
                 <div class="room-table-row">
                   <div class="room-name">Lab 2</div>
                   <span>R-L2</span>
                   <span>Lab</span>
                   <span>24</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./room-detail.html">View</a>
-                    <a class="pill" href="./room-edit.html">Edit</a>
-                  </div>
                 </div>
                 <div class="room-table-row">
                   <div class="room-name">Hall A</div>
                   <span>R-HA</span>
                   <span>Hall</span>
                   <span>120</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./room-detail.html">View</a>
-                    <a class="pill" href="./room-edit.html">Edit</a>
-                  </div>
                 </div>
                 <div class="room-table-row">
                   <div class="room-name">Room 204</div>
                   <span>R-204</span>
                   <span>Classroom</span>
                   <span>30</span>
-                  <div class="action-group">
-                    <a class="pill active" href="./room-detail.html">View</a>
-                    <a class="pill" href="./room-edit.html">Edit</a>
-                  </div>
                 </div>
               </div>
             </article>
@@ -153,23 +133,54 @@
             </article>
 
             <article class="setting-card">
-              <label>Quick controls</label>
-              <div class="pill-row">
-                <span class="pill active">Add room</span>
-                <span class="pill">Export</span>
+              <label>Selected room</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Room profile</div>
+                <h2>Room 101</h2>
+                <p>R-101 · Active</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Room name</label>
+                  <input class="setting-input" type="text" value="Room 101" />
+                </div>
+                <div class="setting-row">
+                  <label>Room code</label>
+                  <input class="setting-input" type="text" value="R-101" />
+                </div>
+                <div class="setting-row">
+                  <label>Type</label>
+                  <select class="setting-input">
+                    <option selected>Classroom</option>
+                    <option>Lab</option>
+                    <option>Hall</option>
+                    <option>Sports</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Capacity</label>
+                  <input class="setting-input" type="text" value="28" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
               </div>
               <div class="setting-row">
-                <label>Search</label>
-                <div class="setting-input">Room name or code</div>
+                <label>Blocked slots</label>
+                <div class="mini-preview">
+                  <div class="mini-preview-row"><span>Mon</span><span>P2 blocked</span></div>
+                  <div class="mini-preview-row"><span>Tue</span><span>P3 blocked</span></div>
+                  <div class="mini-preview-row"><span>Wed</span><span>P4 blocked</span></div>
+                </div>
               </div>
-            </article>
-
-            <article class="setting-card">
-              <label>Summary</label>
-              <div class="mini-preview">
-                <div class="mini-preview-row"><span>Rooms</span><span>14</span></div>
-                <div class="mini-preview-row"><span>Blocked slots</span><span>3</span></div>
-                <div class="mini-preview-row"><span>Labs</span><span>4</span></div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save room</button>
+                <a class="action-btn" href="./room-detail.html">Open detail</a>
+                <a class="action-btn" href="./room-edit.html">Open edit</a>
               </div>
             </article>
           </div>
@@ -181,8 +192,6 @@
             </div>
             <div class="action-group">
               <a class="action-btn" href="./index.html">Back</a>
-              <a class="action-btn" href="./room-add.html">Add room</a>
-              <button class="action-btn primary" type="button">Save list</button>
             </div>
           </div>
         </section>

@@ -544,7 +544,7 @@
 .class-table-head,
 .class-table-row {
   display: grid;
-  grid-template-columns: 1.3fr 0.8fr 0.8fr 0.8fr auto;
+  grid-template-columns: 1.3fr 0.8fr 0.8fr 0.8fr;
   gap: 10px;
   align-items: center;
 }
@@ -618,7 +618,7 @@
 .room-table-head,
 .room-table-row {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr auto;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr;
   gap: 10px;
   align-items: center;
 }
@@ -659,7 +659,7 @@
 .group-table-head,
 .group-table-row {
   display: grid;
-  grid-template-columns: 1.4fr 0.8fr 0.6fr 0.7fr auto;
+  grid-template-columns: 1.4fr 0.8fr 0.6fr 0.7fr;
   gap: 10px;
   align-items: center;
 }
@@ -741,7 +741,7 @@
 .option-table-head,
 .option-table-row {
   display: grid;
-  grid-template-columns: 1.4fr 0.5fr 1fr 0.55fr auto;
+  grid-template-columns: 1.4fr 0.5fr 1fr 0.55fr;
   gap: 10px;
   align-items: center;
 }

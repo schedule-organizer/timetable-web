@@ -16,9 +16,6 @@
           <button class="icon-btn" type="button" aria-label="Teaching groups">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v4H5z" /><path d="M5 11h10v4H5z" /><path d="M8 9h4M8 15h4" /></svg>
           </button>
-          <a class="icon-btn" href="#create-group" aria-label="Create teaching group">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
-          </a>
         </div>
         <div class="topbar-center">
           <strong class="toolbar-title">Teaching groups</strong>
@@ -70,7 +67,6 @@
                   <span>Type</span>
                   <span>Members</span>
                   <span>Status</span>
-                  <span>Actions</span>
                 </div>
                 <div class="group-table-row active">
                   <div class="group-title">
@@ -80,10 +76,6 @@
                   <span class="group-type-chip">Split</span>
                   <span>14</span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-group">View</a>
-                    <a class="pill" href="#create-group">Edit</a>
-                  </div>
                 </div>
                 <div class="group-table-row">
                   <div class="group-title">
@@ -93,10 +85,6 @@
                   <span class="group-type-chip">Split</span>
                   <span>14</span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-group">View</a>
-                    <a class="pill" href="#create-group">Edit</a>
-                  </div>
                 </div>
                 <div class="group-table-row">
                   <div class="group-title">
@@ -106,10 +94,6 @@
                   <span class="group-type-chip">Merge</span>
                   <span>46</span>
                   <span class="status-chip active">Active</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-group">View</a>
-                    <a class="pill" href="#create-group">Edit</a>
-                  </div>
                 </div>
                 <div class="group-table-row">
                   <div class="group-title">
@@ -119,45 +103,52 @@
                   <span class="group-type-chip">Split</span>
                   <span>16</span>
                   <span class="status-chip inactive">Inactive</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-group">View</a>
-                    <a class="pill" href="#create-group">Edit</a>
-                  </div>
                 </div>
               </div>
             </article>
 
             <article class="setting-card" id="create-group">
-              <label>Create teaching group</label>
+              <label>Selected group</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Group profile</div>
+                <h2>8A split A</h2>
+                <p>Class 8A · Active</p>
+              </div>
               <div class="form-grid">
                 <div class="setting-row">
                   <label>Group name</label>
-                  <div class="setting-input">8A split A</div>
+                  <input class="setting-input" type="text" value="8A split A" />
                 </div>
                 <div class="setting-row">
                   <label>Group type</label>
-                  <div class="setting-input">Split / Merge</div>
+                  <select class="setting-input">
+                    <option selected>Split</option>
+                    <option>Merge</option>
+                  </select>
                 </div>
                 <div class="setting-row">
                   <label>Base class</label>
-                  <div class="setting-input">Class 8A</div>
+                  <input class="setting-input" type="text" value="Class 8A" />
                 </div>
                 <div class="setting-row">
                   <label>Status</label>
-                  <div class="setting-input">Active / Inactive</div>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
                 </div>
               </div>
               <div class="setting-row">
                 <label>Related classes</label>
-                <div class="setting-input">Select one or more classes</div>
+                <input class="setting-input" type="text" value="Class 8A" />
               </div>
               <div class="setting-row">
                 <label>Notes</label>
-                <div class="setting-input">Short reason for the split or merge</div>
+                <textarea class="setting-input" rows="3">Short reason for the split or merge</textarea>
               </div>
               <div class="pill-row">
-                <span class="pill active">Create group</span>
-                <span class="pill">Save draft</span>
+                <button class="action-btn primary" type="button">Save group</button>
+                <a class="action-btn" href="#create-group">Open edit</a>
               </div>
             </article>
 
@@ -200,8 +191,6 @@
             </div>
             <div class="action-group">
               <a class="action-btn" href="./index.html">Back</a>
-              <a class="action-btn" href="#create-group">Add group</a>
-              <button class="action-btn primary" type="button">Save list</button>
             </div>
           </div>
         </section>

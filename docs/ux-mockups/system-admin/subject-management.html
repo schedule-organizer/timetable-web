@@ -16,9 +16,6 @@
           <button class="icon-btn" type="button" aria-label="Subject management">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v8H4z" /><path d="M7 4v4M13 4v4" /></svg>
           </button>
-          <a class="icon-btn" href="./subject-add.html" aria-label="Add subject">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
-          </a>
         </div>
         <div class="topbar-center">
           <strong class="toolbar-title">Subject management</strong>
@@ -44,7 +41,6 @@
           </div>
           <div class="config-list">
             <button class="config-item active" type="button"><span>Subject management</span><span>Current</span></button>
-            <a class="config-item" href="./subject-add.html"><span>Add subject</span><span>Create</span></a>
             <a class="config-item" href="./subject-edit.html"><span>Edit subject</span><span>Update</span></a>
             <a class="config-item" href="./subject-detail.html"><span>Subject detail</span><span>Profile</span></a>
           </div>
@@ -97,28 +93,45 @@
             </article>
 
             <article class="setting-card">
-              <label>Quick controls</label>
+              <label>Selected subject</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Subject profile</div>
+                <h2>Mathematics</h2>
+                <p>SUB-01 · Active</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Name</label>
+                  <input class="setting-input" type="text" value="Mathematics" />
+                </div>
+                <div class="setting-row">
+                  <label>Code</label>
+                  <input class="setting-input" type="text" value="SUB-01" />
+                </div>
+                <div class="setting-row">
+                  <label>Difficulty</label>
+                  <input class="setting-input" type="text" value="4" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Color</label>
+                  <input class="setting-input" type="color" value="#4a78d3" />
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Teachers with this subject</label>
+                <div class="setting-input">M. Petrosyan, A. Harutyunyan, S. Petrosyan</div>
+              </div>
               <div class="pill-row">
-                <span class="pill active">Add subject</span>
-                <span class="pill">Deactivate</span>
-                <span class="pill">Export list</span>
-              </div>
-              <div class="setting-row">
-                <label>Search</label>
-                <div class="setting-input">Name, code, or difficulty</div>
-              </div>
-              <div class="setting-row">
-                <label>Filters</label>
-                <div class="setting-input">Active, inactive, high difficulty</div>
-              </div>
-            </article>
-
-            <article class="setting-card">
-              <label>Capacity snapshot</label>
-              <div class="mini-preview">
-                <div class="mini-preview-row"><span>Active subjects</span><span>18</span></div>
-                <div class="mini-preview-row"><span>Inactive</span><span>2</span></div>
-                <div class="mini-preview-row"><span>High difficulty</span><span>5</span></div>
+                <button class="action-btn primary" type="button">Save subject</button>
+                <a class="action-btn" href="./subject-detail.html">Open detail</a>
+                <a class="action-btn" href="./subject-edit.html">Open edit</a>
               </div>
             </article>
           </div>
@@ -130,8 +143,6 @@
             </div>
             <div class="action-group">
               <a class="action-btn" href="./index.html">Back</a>
-              <a class="action-btn" href="./subject-add.html">Add subject</a>
-              <button class="action-btn primary" type="button">Save list</button>
             </div>
           </div>
         </section>

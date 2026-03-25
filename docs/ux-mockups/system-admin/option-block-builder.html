@@ -16,9 +16,6 @@
           <button class="icon-btn" type="button" aria-label="Option block builder">
             <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h5v5H4zM11 5h5v5h-5zM4 12h12v3H4z" /></svg>
           </button>
-          <a class="icon-btn" href="#create-block" aria-label="Create option block">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
-          </a>
         </div>
         <div class="topbar-center">
           <strong class="toolbar-title">Option block builder</strong>
@@ -70,7 +67,6 @@
                   <span>Year</span>
                   <span>Subjects</span>
                   <span>Students</span>
-                  <span>Actions</span>
                 </div>
                 <div class="option-table-row active">
                   <div class="option-title">
@@ -80,10 +76,6 @@
                   <span>10</span>
                   <span>Physics, Chemistry</span>
                   <span>46</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-block">View</a>
-                    <a class="pill" href="#create-block">Edit</a>
-                  </div>
                 </div>
                 <div class="option-table-row">
                   <div class="option-title">
@@ -93,10 +85,6 @@
                   <span>9</span>
                   <span>Art, Music</span>
                   <span>32</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-block">View</a>
-                    <a class="pill" href="#create-block">Edit</a>
-                  </div>
                 </div>
                 <div class="option-table-row">
                   <div class="option-title">
@@ -106,10 +94,6 @@
                   <span>11</span>
                   <span>French, Spanish</span>
                   <span>40</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-block">View</a>
-                    <a class="pill" href="#create-block">Edit</a>
-                  </div>
                 </div>
                 <div class="option-table-row">
                   <div class="option-title">
@@ -119,32 +103,39 @@
                   <span>8</span>
                   <span>Robotics, Coding</span>
                   <span>28</span>
-                  <div class="action-group">
-                    <a class="pill active" href="#create-block">View</a>
-                    <a class="pill" href="#create-block">Edit</a>
-                  </div>
                 </div>
               </div>
             </article>
 
             <article class="setting-card" id="create-block">
-              <label>Create option block</label>
+              <label>Selected option block</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Block profile</div>
+                <h2>Year 10 science block</h2>
+                <p>Year 10 · Active</p>
+              </div>
               <div class="form-grid">
                 <div class="setting-row">
                   <label>Block name</label>
-                  <div class="setting-input">Year 10 science block</div>
+                  <input class="setting-input" type="text" value="Year 10 science block" />
                 </div>
                 <div class="setting-row">
                   <label>Target year</label>
-                  <div class="setting-input">Year 10</div>
+                  <input class="setting-input" type="text" value="Year 10" />
                 </div>
                 <div class="setting-row">
                   <label>Block type</label>
-                  <div class="setting-input">Choice block</div>
+                  <select class="setting-input">
+                    <option selected>Choice block</option>
+                    <option>Mandatory block</option>
+                  </select>
                 </div>
                 <div class="setting-row">
                   <label>Status</label>
-                  <div class="setting-input">Active / Inactive</div>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
                 </div>
               </div>
               <div class="setting-row">
@@ -157,11 +148,11 @@
               </div>
               <div class="setting-row">
                 <label>Students enrolled</label>
-                <div class="setting-input">Select students from the target year</div>
+                <input class="setting-input" type="text" value="46 students" />
               </div>
               <div class="pill-row">
-                <span class="pill active">Save block</span>
-                <span class="pill">Save draft</span>
+                <button class="action-btn primary" type="button">Save block</button>
+                <a class="action-btn" href="#create-block">Open edit</a>
               </div>
             </article>
 
@@ -222,8 +213,6 @@
             </div>
             <div class="action-group">
               <a class="action-btn" href="./index.html">Back</a>
-              <a class="action-btn" href="#create-block">Add block</a>
-              <button class="action-btn primary" type="button">Save list</button>
             </div>
           </div>
         </section>
