@@ -31,6 +31,8 @@
         timeLabel: "Time",
         contextLabel: "Workflow",
         contextValue: scope,
+        switchLabel: "Switch moderator role",
+        logoutLabel: "Logout moderator session",
       }
     : {
         initials: "SA",
@@ -39,6 +41,8 @@
         timeLabel: "Time",
         contextLabel: "Section",
         contextValue: scope,
+        switchLabel: "Switch admin role",
+        logoutLabel: "Logout admin session",
       };
 
   const sessionBar = document.createElement("section");
@@ -62,8 +66,8 @@
       </div>
     </div>
     <div class="session-actions">
-      <button class="ghost-btn" type="button">Switch role</button>
-      <button class="ghost-btn" type="button">Logout</button>
+      <button class="ghost-btn" type="button">${config.switchLabel}</button>
+      <button class="ghost-btn" type="button">${config.logoutLabel}</button>
     </div>
   `;
 
