@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Pin and Swap</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="editing-app">
+      <section class="editing-grid">
+        <article class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">E6-006 / E6-007</div>
+              <h1>Pin and swap tools</h1>
+              <p>Lock lessons in place or quickly exchange two slots when the timetable needs a manual refinement.</p>
+            </div>
+            <span class="status-tag good">Manual refinement</span>
+          </div>
+
+          <div class="editing-rows">
+            <div class="editing-row">
+              <strong>Pinned lessons</strong>
+              <span>5 lessons locked for the next engine run</span>
+              <span class="status-tag good">Pinned</span>
+            </div>
+            <div class="editing-row">
+              <strong>Swap mode</strong>
+              <span>Select a second lesson to exchange slots</span>
+              <span class="status-tag warn">Active</span>
+            </div>
+          </div>
+
+          <div class="editing-actions">
+            <button class="action-btn primary" type="button">Pin selected lesson</button>
+            <button class="action-btn" type="button">Unpin selected lesson</button>
+            <button class="action-btn" type="button">Enter swap mode</button>
+          </div>
+        </article>
+
+        <aside class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">Swap target</div>
+              <h2>Valid lessons</h2>
+            </div>
+            <button class="action-btn" type="button">Cancel swap</button>
+          </div>
+          <div class="editing-dot-list">
+            <div class="editing-dot-row">
+              <div class="editing-dot"></div>
+              <div>
+                <strong>9A - Math</strong>
+                <span>Valid swap target</span>
+              </div>
+              <span class="status-tag good">OK</span>
+            </div>
+            <div class="editing-dot-row">
+              <div class="editing-dot warn"></div>
+              <div>
+                <strong>10B - Physics</strong>
+                <span>Check teacher load before confirming</span>
+              </div>
+              <span class="status-tag warn">Review</span>
+            </div>
+            <div class="editing-dot-row">
+              <div class="editing-dot bad"></div>
+              <div>
+                <strong>11C - Lab</strong>
+                <span>Would create a hard conflict</span>
+              </div>
+              <span class="status-tag bad">Blocked</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../../session-shell.js"></script>
+  </body>
+</html>

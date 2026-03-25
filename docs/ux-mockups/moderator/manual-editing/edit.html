@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Timetable Editing</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="editing-app">
+      <section class="editing-grid">
+        <article class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">E6-005</div>
+              <h1>Drag and drop timetable editing</h1>
+              <p>Move the selected lesson to another slot and keep conflicts visible while you edit.</p>
+            </div>
+            <button class="action-btn primary" type="button">Undo last move</button>
+          </div>
+
+          <div class="editing-table-wrap">
+            <table class="editing-table">
+              <thead>
+                <tr>
+                  <th class="time-col">Period</th>
+                  <th>Monday</th>
+                  <th>Tuesday</th>
+                  <th>Wednesday</th>
+                  <th>Thursday</th>
+                  <th>Friday</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th class="time-col">P1 <span class="editing-time">08:20</span></th>
+                  <td><div class="editing-slot selected"><strong>Math</strong><span>Selected lesson</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Drop target</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Drop target</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Drop target</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Drop target</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P2 <span class="editing-time">09:10</span></th>
+                  <td><div class="editing-slot"><strong>Chemistry</strong><span>Lab 1</span></div></td>
+                  <td><div class="editing-slot pinned"><strong>Math</strong><span>Pinned lesson</span></div></td>
+                  <td><div class="editing-slot"><strong>Physics</strong><span>Lab 3</span></div></td>
+                  <td><div class="editing-slot"><strong>Music</strong><span>R111</span></div></td>
+                  <td><div class="editing-slot"><strong>History</strong><span>R108</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P3 <span class="editing-time">10:15</span></th>
+                  <td><div class="editing-slot"><strong>Literature</strong><span>R202</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="editing-slot conflict"><strong>Physics</strong><span>Conflict badge</span></div></td>
+                  <td><div class="editing-slot"><strong>Biology</strong><span>Lab 2</span></div></td>
+                  <td><div class="editing-slot"><strong>English</strong><span>R305</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P4 <span class="editing-time">11:05</span></th>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="editing-slot"><strong>Math</strong><span>R204</span></div></td>
+                  <td><div class="editing-slot"><strong>Physics</strong><span>Lab 3</span></div></td>
+                  <td><div class="editing-slot"><strong>Geography</strong><span>R208</span></div></td>
+                  <td><div class="editing-slot"><strong>Arts</strong><span>Studio</span></div></td>
+                </tr>
+                <tr>
+                  <th class="time-col">P5 <span class="editing-time">12:10</span></th>
+                  <td><div class="editing-slot"><strong>History</strong><span>R108</span></div></td>
+                  <td><div class="editing-slot"><strong>English</strong><span>R305</span></div></td>
+                  <td><div class="editing-slot free"><strong>Free</strong><span>Available slot</span></div></td>
+                  <td><div class="editing-slot"><strong>Chemistry</strong><span>Lab 1</span></div></td>
+                  <td><div class="editing-slot"><strong>Free</strong><span>Available slot</span></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">Selected slot</div>
+              <h2>Monday P1</h2>
+            </div>
+            <span class="candidate-tag">8A</span>
+          </div>
+          <div class="editing-rows">
+            <div class="editing-row">
+              <strong>Subject</strong>
+              <span>Math</span>
+              <span class="status-tag good">Selected</span>
+            </div>
+            <div class="editing-row">
+              <strong>Teacher</strong>
+              <span>M. Petrosyan</span>
+              <span class="status-tag">Moveable</span>
+            </div>
+            <div class="editing-row">
+              <strong>Room</strong>
+              <span>R204</span>
+              <span class="status-tag">Drop target</span>
+            </div>
+          </div>
+          <div class="editing-actions">
+            <button class="action-btn primary" type="button">Move lesson</button>
+            <button class="action-btn" type="button">Change room</button>
+            <button class="action-btn" type="button">Mark forbidden</button>
+          </div>
+          <div class="editing-banner">
+            <strong>Drag rule</strong>
+            <span>Moves are optimistic, but invalid targets should rollback and show a conflict message.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../../session-shell.js"></script>
+  </body>
+</html>
