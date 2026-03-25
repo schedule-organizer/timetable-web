@@ -18,11 +18,24 @@
   display: grid;
   gap: 12px;
   align-content: start;
+  align-self: start;
   min-width: 0;
-  padding: 14px;
+  padding: 12px;
   border: 1px solid var(--line);
   background: var(--surface);
   box-shadow: var(--shadow);
+}
+
+.workflow-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.workflow-head > div {
+  min-width: 0;
 }
 
 .notifications-panel h1,
@@ -44,6 +57,10 @@
   color: var(--muted);
 }
 
+.workflow-head p {
+  max-width: 60ch;
+}
+
 .notif-toolbar,
 .notif-filters,
 .notif-actions,
@@ -59,6 +76,7 @@
 .notif-preview {
   display: grid;
   gap: 8px;
+  align-content: start;
 }
 
 .notif-row {
