@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Delegation Queue</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="operations-app">
+      <section class="operations-hero">
+        <div>
+          <div class="eyebrow">Moderator flow</div>
+          <h1>Review delegation requests</h1>
+          <p>
+            See who requested the change, who they want to delegate to, and approve or reject each request from one
+            queue.
+          </p>
+        </div>
+        <div class="operations-stats">
+          <div class="operations-stat"><strong>5 requests</strong><span>Waiting in queue</span></div>
+          <div class="operations-stat"><strong>2 warnings</strong><span>Target teacher busy</span></div>
+          <div class="operations-stat"><strong>Bulk approve</strong><span>Available for clean cases</span></div>
+        </div>
+      </section>
+
+      <section class="operations-layout">
+        <section class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Queue</div>
+              <h2>Pending requests</h2>
+            </div>
+            <span class="status-tag warn">Pending</span>
+          </div>
+
+          <div class="workflow-meta">
+            <span class="scope-pill active">Pending</span>
+            <span class="scope-pill">Approved</span>
+            <span class="scope-pill">Rejected</span>
+            <span class="scope-pill">Bulk review</span>
+          </div>
+
+          <div class="queue-list">
+            <div class="queue-row">
+              <div>
+                <strong>A. Petrosyan → H. Minasyan</strong>
+                <span>8A Math, 9B Chemistry, note included</span>
+              </div>
+              <div class="queue-actions">
+                <button class="action-btn primary" type="button">Approve</button>
+                <button class="action-btn" type="button">Reject</button>
+              </div>
+            </div>
+            <div class="queue-row">
+              <div>
+                <strong>L. Grigoryan → T. Hovsepyan</strong>
+                <span>10A Physics, target teacher free</span>
+              </div>
+              <div class="queue-actions">
+                <button class="action-btn primary" type="button">Approve</button>
+                <button class="action-btn" type="button">Reject</button>
+              </div>
+            </div>
+            <div class="queue-row">
+              <div>
+                <strong>R. Davtyan → A. Sargsyan</strong>
+                <span>11B History, conflict warning present</span>
+              </div>
+              <div class="queue-actions">
+                <button class="action-btn primary" type="button">Approve</button>
+                <button class="action-btn" type="button">Reject</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Review notes</div>
+              <h2>Decision support</h2>
+            </div>
+            <span class="candidate-tag">3 visible</span>
+          </div>
+
+          <div class="status-list">
+            <div class="status-row">
+              <div>
+                <strong>Conflict warnings</strong>
+                <span>Target teacher unavailable for one request</span>
+              </div>
+              <span class="status-tag bad">1</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Teacher notifications</strong>
+                <span>Sent on approval or rejection</span>
+              </div>
+              <span class="status-tag good">Ready</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Bulk approve</strong>
+                <span>Use for clean, conflict-free requests</span>
+              </div>
+              <span class="status-tag">Enabled</span>
+            </div>
+          </div>
+
+          <div class="workflow-banner">
+            <strong>Queue rule</strong>
+            <span>Approved delegations become cover assignments, so this queue is the gate before any timetable change.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

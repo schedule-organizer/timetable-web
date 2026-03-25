@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Cover Management</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="operations-app">
+      <section class="operations-hero">
+        <div>
+          <div class="eyebrow">Moderator flow</div>
+          <h1>Mark absence and assign cover</h1>
+          <p>
+            Capture the absence first, then work through the lessons that need cover and choose the best available
+            teacher.
+          </p>
+        </div>
+        <div class="operations-stats">
+          <div class="operations-stat"><strong>2 lessons</strong><span>Need cover right now</span></div>
+          <div class="operations-stat"><strong>4 candidates</strong><span>Qualified and free</span></div>
+          <div class="operations-stat"><strong>Bulk assign</strong><span>Ready after review</span></div>
+        </div>
+      </section>
+
+      <section class="operations-layout">
+        <section class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Quick absence form</div>
+              <h2>Record the absence</h2>
+            </div>
+            <span class="candidate-tag">Needs cover</span>
+          </div>
+
+          <form class="workflow-form">
+            <div class="workflow-form-grid">
+              <div class="setting-row">
+                <label>Teacher</label>
+                <input class="setting-input" type="text" value="M. Petrosyan" />
+              </div>
+              <div class="setting-row">
+                <label>Date range</label>
+                <input class="setting-input" type="text" value="Mon 12 Mar - Tue 13 Mar" />
+              </div>
+              <div class="setting-row full">
+                <label>Reason</label>
+                <input class="setting-input" type="text" value="Sick leave" />
+              </div>
+            </div>
+
+            <div class="workflow-section">
+              <div class="workflow-head">
+                <div>
+                  <div class="eyebrow">Lessons needing cover</div>
+                  <h2>Open lessons</h2>
+                </div>
+                <span class="status-tag warn">2 open</span>
+              </div>
+              <div class="request-list">
+                <div class="request-row">
+                  <div>
+                    <strong>8A - Math</strong>
+                    <span>Mon 2nd period, Room 204</span>
+                  </div>
+                  <div class="request-actions">
+                    <span class="status-tag bad">No cover</span>
+                    <button class="action-btn primary" type="button">Assign</button>
+                  </div>
+                </div>
+                <div class="request-row">
+                  <div>
+                    <strong>9B - Chemistry</strong>
+                    <span>Tue 4th period, Lab 1</span>
+                  </div>
+                  <div class="request-actions">
+                    <span class="status-tag bad">No cover</span>
+                    <button class="action-btn primary" type="button">Assign</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="auth-actions">
+              <button class="action-btn primary" type="button">Open cover queue</button>
+              <button class="action-btn" type="button">Bulk assign</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Candidate ranking</div>
+              <h2>Best options</h2>
+            </div>
+            <span class="status-tag good">Qualified only</span>
+          </div>
+
+          <div class="candidate-list">
+            <div class="candidate-row">
+              <div>
+                <strong>H. Minasyan</strong>
+                <span>Free now, math qualified, light load</span>
+              </div>
+              <span class="candidate-tag">94</span>
+            </div>
+            <div class="candidate-row">
+              <div>
+                <strong>L. Arakelyan</strong>
+                <span>Free in the room, same subject</span>
+              </div>
+              <span class="candidate-tag">91</span>
+            </div>
+            <div class="candidate-row">
+              <div>
+                <strong>T. Hovsepyan</strong>
+                <span>Available, nearby room, lighter workload</span>
+              </div>
+              <span class="candidate-tag">86</span>
+            </div>
+            <div class="candidate-row">
+              <div>
+                <strong>A. Sargsyan</strong>
+                <span>Free, but not subject-qualified</span>
+              </div>
+              <span class="candidate-tag">71</span>
+            </div>
+          </div>
+
+          <div class="workflow-banner">
+            <strong>Ranking explanation</strong>
+            <span>Availability first, then subject match, then workload and room proximity.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

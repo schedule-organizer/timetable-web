@@ -8,8 +8,9 @@
   const path = window.location.pathname;
   const isModerator = path.includes("/moderator/");
   const isSystemAdmin = path.includes("/system-admin/");
+  const isDailyOperations = path.includes("/daily-operations/");
 
-  if (!isModerator && !isSystemAdmin) {
+  if (!isModerator && !isSystemAdmin && !isDailyOperations) {
     return;
   }
 
@@ -23,8 +24,11 @@
     return h1 ? h1.textContent.trim() : pageTitle.trim();
   })();
 
-  const config = isModerator
-    ? {
+  const sessionRole = (body.dataset.sessionRole || "").toLowerCase();
+  const roleKey = sessionRole || (isModerator ? "moderator" : isSystemAdmin ? "system-admin" : "teacher");
+
+  const configByRole = {
+    moderator: {
         initials: "MU",
         name: "Moderator User",
         role: "Moderator",
@@ -35,8 +39,8 @@
         logoutLabel: "Logout",
         switchTitle: "Switch moderator role",
         logoutTitle: "Logout moderator session",
-      }
-    : {
+      },
+    "system-admin": {
         initials: "SA",
         name: "System Admin User",
         role: "System admin",
@@ -47,7 +51,22 @@
         logoutLabel: "Logout",
         switchTitle: "Switch admin role",
         logoutTitle: "Logout admin session",
-      };
+      },
+    teacher: {
+        initials: "TP",
+        name: "Teacher User",
+        role: "Teacher",
+        timeLabel: "Time",
+        contextLabel: "Request",
+        contextValue: scope,
+        switchLabel: "Switch role",
+        logoutLabel: "Logout",
+        switchTitle: "Switch teacher role",
+        logoutTitle: "Logout teacher session",
+      },
+  };
+
+  const config = configByRole[roleKey] || configByRole.moderator;
 
   const sessionBar = document.createElement("section");
   sessionBar.className = "session-bar";

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Daily Operations</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="operations-app">
+      <section class="operations-hero">
+        <div>
+          <div class="eyebrow">Daily operations</div>
+          <h1>Cover, delegation, and temporary schedules</h1>
+          <p>
+            Use this workspace for day-of timetable changes after the master schedule has already been published.
+          </p>
+        </div>
+        <div class="operations-stats">
+          <div class="operations-stat"><strong>3 absences</strong><span>Need cover today</span></div>
+          <div class="operations-stat"><strong>5 requests</strong><span>Delegation queue</span></div>
+          <div class="operations-stat"><strong>1 temp schedule</strong><span>Exam week active</span></div>
+        </div>
+      </section>
+
+      <section class="operations-grid">
+        <article class="workflow-card">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Moderator</div>
+              <h2>Cover management</h2>
+              <p>Mark an absence, inspect affected lessons, and assign cover from one place.</p>
+            </div>
+            <span class="candidate-tag">COVER-08</span>
+          </div>
+          <div class="workflow-meta">
+            <span class="scope-pill active">Absence form</span>
+            <span class="scope-pill">Candidate ranking</span>
+            <span class="scope-pill">Bulk assign</span>
+          </div>
+          <a class="workflow-link" href="./cover-management.html">Open cover management</a>
+        </article>
+
+        <article class="workflow-card">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Teacher</div>
+              <h2>Delegation request</h2>
+              <p>Request a colleague to cover planned lessons and send it for approval.</p>
+            </div>
+            <span class="candidate-tag">E8-003</span>
+          </div>
+          <div class="workflow-meta">
+            <span class="scope-pill active">Select lessons</span>
+            <span class="scope-pill">Choose teacher</span>
+            <span class="scope-pill">Submit for approval</span>
+          </div>
+          <a class="workflow-link" href="./delegation-request.html">Open delegation request</a>
+        </article>
+
+        <article class="workflow-card">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Moderator</div>
+              <h2>Delegation queue</h2>
+              <p>Review pending requests, check conflicts, and approve or reject quickly.</p>
+            </div>
+            <span class="candidate-tag">E8-004</span>
+          </div>
+          <div class="workflow-meta">
+            <span class="scope-pill active">Pending</span>
+            <span class="scope-pill">Approved</span>
+            <span class="scope-pill">Rejected</span>
+          </div>
+          <a class="workflow-link" href="./delegation-queue.html">Open delegation queue</a>
+        </article>
+
+        <article class="workflow-card">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Moderator</div>
+              <h2>Temporary schedules</h2>
+              <p>Create a special-week schedule without changing the master timetable.</p>
+            </div>
+            <span class="candidate-tag">E8-005</span>
+          </div>
+          <div class="workflow-meta">
+            <span class="scope-pill active">Wizard</span>
+            <span class="scope-pill">Copy master</span>
+            <span class="scope-pill">Date range</span>
+          </div>
+          <a class="workflow-link" href="./temporary-schedules.html">Open temporary schedules</a>
+        </article>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>
