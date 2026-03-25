@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Engine Run</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="engine-app">
+      <section class="engine-grid">
+        <article class="engine-panel">
+          <div class="engine-head">
+            <div>
+              <div class="eyebrow">E6-001</div>
+              <h1>Run scheduling engine</h1>
+              <p>Confirm the run, choose a sensitivity preset, and launch the background job.</p>
+            </div>
+            <button class="action-btn primary" type="button">Generate timetable</button>
+          </div>
+
+          <div class="engine-rows">
+            <div class="engine-row">
+              <strong>Sensitivity</strong>
+              <span>Balanced is recommended for this draft</span>
+              <span class="status-tag good">70%</span>
+            </div>
+            <div class="engine-row">
+              <strong>Overwrite warning</strong>
+              <span>The current draft will be replaced by the new engine result.</span>
+              <span class="status-tag warn">Review</span>
+            </div>
+            <div class="engine-row">
+              <strong>Cancel path</strong>
+              <span>Job can be stopped from the progress view.</span>
+              <span class="status-tag">Enabled</span>
+            </div>
+          </div>
+
+          <div class="engine-actions">
+            <button class="action-btn">Strict</button>
+            <button class="action-btn primary">Balanced</button>
+            <button class="action-btn">Lenient</button>
+            <button class="action-btn">Minimal</button>
+          </div>
+        </article>
+
+        <aside class="engine-panel">
+          <div class="engine-head">
+            <div>
+              <div class="eyebrow">Protected items</div>
+              <h2>What stays locked</h2>
+            </div>
+            <span class="candidate-tag">5 locked</span>
+          </div>
+          <div class="engine-rows">
+            <div class="engine-row">
+              <strong>8A · Mon 09:00</strong>
+              <span>Chemistry pinned</span>
+              <span class="status-tag good">Hard</span>
+            </div>
+            <div class="engine-row">
+              <strong>10A · Thu 11:00</strong>
+              <span>Teacher missing and locked</span>
+              <span class="status-tag good">Hard</span>
+            </div>
+            <div class="engine-row">
+              <strong>Room override</strong>
+              <span>Lab 2 reserved</span>
+              <span class="status-tag good">Hard</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>
