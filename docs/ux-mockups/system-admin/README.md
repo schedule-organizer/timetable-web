@@ -5,37 +5,39 @@ This folder is the starting point for system-admin UX mockups.
 ## Recommended page order
 
 1. `index.html`
-2. `user-management.html`
-3. `institution-settings.html`
-4. `labels-configuration.html`
-5. `difficulty-scale.html`
-6. `room-types.html`
-7. `academic-years-terms.html`
-8. `bell-schedule-builder.html`
-9. `holiday-calendar.html`
-10. `teachers-view.html`
-11. `add-teacher.html`
-12. `edit-teacher.html`
-13. `teacher-detail.html`
-14. `subject-management.html`
-15. `subject-add.html`
-16. `subject-edit.html`
-17. `subject-detail.html`
-18. `class-management.html`
-19. `class-add.html`
-20. `class-edit.html`
-21. `class-detail.html`
-22. `room-management.html`
-23. `room-add.html`
-24. `room-edit.html`
-25. `room-detail.html`
-26. `teaching-groups.html`
-27. `option-block-builder.html`
-28. `reports-teacher-utilization.html`
-29. `reports-room-utilization.html`
-30. `reports-subject-coverage.html`
-31. `audit-log.html`
-32. `export-panel.html`
+2. `settings/index.html`
+3. `settings/constraints.html`
+4. `institution-settings.html`
+5. `labels-configuration.html`
+6. `difficulty-scale.html`
+7. `room-types.html`
+8. `academic-years-terms.html`
+9. `bell-schedule-builder.html`
+10. `holiday-calendar.html`
+11. `user-management.html`
+12. `teachers-view.html`
+13. `add-teacher.html`
+14. `edit-teacher.html`
+15. `teacher-detail.html`
+16. `subject-management.html`
+17. `subject-add.html`
+18. `subject-edit.html`
+19. `subject-detail.html`
+20. `class-management.html`
+21. `class-add.html`
+22. `class-edit.html`
+23. `class-detail.html`
+24. `room-management.html`
+25. `room-add.html`
+26. `room-edit.html`
+27. `room-detail.html`
+28. `teaching-groups.html`
+29. `option-block-builder.html`
+30. `reports-teacher-utilization.html`
+31. `reports-room-utilization.html`
+32. `reports-subject-coverage.html`
+33. `audit-log.html`
+34. `export-panel.html`
 
 ## Shared flows
 
@@ -61,12 +63,14 @@ Common access and profile flows live in `docs/ux-mockups/`:
 - Teacher code management
 
 ### Institution configuration
+- Settings hub
 - Institution settings
 - Terminology and labels
 - Difficulty scale
 - Room types
 - Academic years and terms
 - Bell schedule builder
+- Constraint weights
 
 ### Resource management
 - Teachers view
