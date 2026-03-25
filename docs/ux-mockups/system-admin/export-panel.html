@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Export Panel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Export panel">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h8v5H6z" /><path d="M4 12h12v4H4z" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Export panel</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Export PDF">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h6l3 3v9H6z" /><path d="M12 4v3h3" /><path d="M8 11h4" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Export CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v10H5z" /><path d="M8 8h4M8 11h4" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Export iCal">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6h10v9H5z" /><path d="M7 4v4M13 4v4" /><path d="M8 11h4" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Reporting</strong>
+            <span class="pill">EXPORT-04</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./reports-teacher-utilization.html"><span>Teacher utilization</span><span>Report</span></a>
+            <a class="config-item" href="./reports-room-utilization.html"><span>Room utilization</span><span>Report</span></a>
+            <a class="config-item" href="./reports-subject-coverage.html"><span>Subject coverage</span><span>Report</span></a>
+            <a class="config-item" href="./audit-log.html"><span>Audit log</span><span>Log</span></a>
+            <button class="config-item active" type="button"><span>Export panel</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 10 / EXPORT-04</div>
+            <h1>Download the active view as PDF, CSV, or iCal</h1>
+            <p>
+              Keep the export panel attached to the current report or view, so the output always matches what the
+              user is looking at.
+            </p>
+          </div>
+
+          <div class="export-layout">
+            <div class="export-grid">
+              <article class="export-card">
+                <label>Active views</label>
+                <div class="export-targets">
+                  <div class="export-target">
+                    <div>
+                      <strong>Teacher utilization</strong>
+                      <span>Teacher load and report table</span>
+                    </div>
+                    <div class="export-actions">
+                      <span class="pill active">PDF</span>
+                      <span class="pill">CSV</span>
+                      <span class="pill">iCal</span>
+                    </div>
+                  </div>
+                  <div class="export-target">
+                    <div>
+                      <strong>Room utilization</strong>
+                      <span>Room capacity and usage</span>
+                    </div>
+                    <div class="export-actions">
+                      <span class="pill active">PDF</span>
+                      <span class="pill">CSV</span>
+                      <span class="pill">iCal</span>
+                    </div>
+                  </div>
+                  <div class="export-target">
+                    <div>
+                      <strong>Subject coverage</strong>
+                      <span>Required and assigned hours</span>
+                    </div>
+                    <div class="export-actions">
+                      <span class="pill active">PDF</span>
+                      <span class="pill">CSV</span>
+                      <span class="pill">iCal</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="export-card">
+                <label>Export options</label>
+                <div class="form-grid">
+                  <div class="setting-row">
+                    <label>Format</label>
+                    <div class="setting-input">PDF / CSV / iCal</div>
+                  </div>
+                  <div class="setting-row">
+                    <label>Scope</label>
+                    <div class="setting-input">Current filters</div>
+                  </div>
+                  <div class="setting-row">
+                    <label>Destination</label>
+                    <div class="setting-input">Download / Share</div>
+                  </div>
+                  <div class="setting-row">
+                    <label>Name</label>
+                    <div class="setting-input">Auto-generated filename</div>
+                  </div>
+                </div>
+                <div class="pill-row">
+                  <span class="pill active">Generate export</span>
+                  <span class="pill">Copy link</span>
+                </div>
+              </article>
+            </div>
+
+            <aside class="report-panel">
+              <label>Ready state</label>
+              <div class="report-summary">
+                <div class="report-summary-item">
+                  <strong>PDF</strong>
+                  <span>Best for sharing and review.</span>
+                </div>
+                <div class="report-summary-item">
+                  <strong>CSV</strong>
+                  <span>Best for spreadsheet analysis.</span>
+                </div>
+                <div class="report-summary-item">
+                  <strong>iCal</strong>
+                  <span>Best for calendar-based feeds.</span>
+                </div>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">Ready to export</span>
+                <span class="pill">Uses active view</span>
+              </div>
+            </aside>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">EXPORT-04</span>
+              <span class="pill">Current view</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./audit-log.html">Open audit log</a>
+              <button class="action-btn primary" type="button">Download export</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Export</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Export the active report or view</strong>
+            <span>Use the selected page state so the download matches what was on screen.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>

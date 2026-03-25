@@ -30,13 +30,16 @@ This folder is the starting point for system-admin UX mockups.
 24. `class-edit.html`
 25. `class-detail.html`
 26. `room-management.html`
-27. `teaching-groups.html`
-28. `option-block-builder.html`
-29. `reports-teacher-utilization.html`
-30. `reports-room-utilization.html`
-31. `reports-subject-coverage.html`
-32. `audit-log.html`
-33. `export-panel.html`
+27. `room-add.html`
+28. `room-edit.html`
+29. `room-detail.html`
+30. `teaching-groups.html`
+31. `option-block-builder.html`
+32. `reports-teacher-utilization.html`
+33. `reports-room-utilization.html`
+34. `reports-subject-coverage.html`
+35. `audit-log.html`
+36. `export-panel.html`
 
 ## Workflow groups from the epics
 
@@ -69,6 +72,9 @@ This folder is the starting point for system-admin UX mockups.
 - Class edit
 - Class detail
 - Room management
+- Room add
+- Room edit
+- Room detail
 - Teaching groups
 - Option blocks
 

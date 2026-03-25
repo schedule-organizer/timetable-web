@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Teacher Utilization Report</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Teacher utilization report">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16h12" /><path d="M6 13v-5" /><path d="M10 13V6" /><path d="M14 13V8" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Teacher utilization report</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Export PDF">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h6l3 3v9H6z" /><path d="M12 4v3h3" /><path d="M8 11h4" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Export CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v10H5z" /><path d="M8 8h4M8 11h4" /></svg>
+          </button>
+          <a class="icon-btn" href="./reports-room-utilization.html" aria-label="Next report">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Reporting</strong>
+            <span class="pill">EXPORT-05</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item active" type="button"><span>Teacher utilization</span><span>Current</span></button>
+            <a class="config-item" href="./reports-room-utilization.html"><span>Room utilization</span><span>Next</span></a>
+            <a class="config-item" href="./reports-subject-coverage.html"><span>Subject coverage</span><span>Next</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 10 / EXPORT-05</div>
+            <h1>Teacher load and utilization</h1>
+            <p>
+              Show which teachers are under, on, or over the expected load, with a compact chart and a clear table.
+            </p>
+          </div>
+
+          <div class="report-layout">
+            <div class="report-stack">
+              <div class="report-kpis">
+                <div class="report-kpi">
+                  <strong>86%</strong>
+                  <span>Average utilization</span>
+                </div>
+                <div class="report-kpi">
+                  <strong>4</strong>
+                  <span>Underloaded teachers</span>
+                </div>
+                <div class="report-kpi">
+                  <strong>2</strong>
+                  <span>Overloaded teachers</span>
+                </div>
+              </div>
+
+              <article class="report-panel">
+                <label>Utilization chart</label>
+                <div class="report-chart">
+                  <div class="report-chart-row">
+                    <span>A. Petros</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 92%"></div></div>
+                    <span>92%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>L. Aram</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 84%"></div></div>
+                    <span>84%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>M. Tatev</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 77%"></div></div>
+                    <span>77%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>S. Ani</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 68%"></div></div>
+                    <span>68%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>R. Narek</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 59%"></div></div>
+                    <span>59%</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="report-panel">
+                <label>Teacher utilization table</label>
+                <div class="report-table">
+                  <div class="report-table-head">
+                    <span>Teacher</span>
+                    <span>Code</span>
+                    <span>Expected</span>
+                    <span>Assigned</span>
+                    <span>Status</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>A. Petros</strong>
+                    <span>T-101</span>
+                    <span>24</span>
+                    <span>22</span>
+                    <span class="status-chip active">On target</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>L. Aram</strong>
+                    <span>T-102</span>
+                    <span>24</span>
+                    <span>20</span>
+                    <span class="status-chip inactive">Under</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>M. Tatev</strong>
+                    <span>T-103</span>
+                    <span>22</span>
+                    <span>26</span>
+                    <span class="status-chip active">Over</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>S. Ani</strong>
+                    <span>T-104</span>
+                    <span>20</span>
+                    <span>18</span>
+                    <span class="status-chip inactive">Under</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <aside class="report-panel">
+              <label>Filters and export</label>
+              <div class="setting-row">
+                <label>Term</label>
+                <div class="setting-input">Current term</div>
+              </div>
+              <div class="setting-row">
+                <label>Department</label>
+                <div class="setting-input">All departments</div>
+              </div>
+              <div class="setting-row">
+                <label>View</label>
+                <div class="setting-input">Load and utilization</div>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">PDF</span>
+                <span class="pill">CSV</span>
+                <span class="pill">iCal</span>
+              </div>
+              <div class="report-summary">
+                <div class="report-summary-item">
+                  <strong>Export ready</strong>
+                  <span>Use the current filter state for the generated file.</span>
+                </div>
+                <div class="report-summary-item">
+                  <strong>Scope</strong>
+                  <span>Teacher load, not lesson detail.</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Report</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Review teacher load fairness</strong>
+            <span>Keep the chart and table aligned so the workload pattern is easy to scan.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
