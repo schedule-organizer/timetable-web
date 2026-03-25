@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow Timetable Access</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar">
+        <div class="topbar-left">
+          <div class="brand">
+            <div class="brand-mark"></div>
+            <div>
+              Timetable Access
+              <small>Shared published views</small>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-center">
+          <div class="tabs">
+            <a class="pill-btn" href="./master-timetable.html">Master</a>
+            <a class="pill-btn" href="./teacher-timetable.html">Teacher</a>
+            <a class="pill-btn" href="./student-timetable.html">Student</a>
+            <a class="pill-btn" href="./parent-timetable.html">Parent</a>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a class="icon-btn" href="../index.html" aria-label="Back to root hub">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </a>
+          <a class="icon-btn" href="../moderator/index.html" aria-label="Moderator hub">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4a5 5 0 0 1 5 5v2H5V9a5 5 0 0 1 5-5Z" /><path d="M7 13h6" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="session-bar">
+        <div class="session-user">
+          <div class="avatar-badge">TB</div>
+          <div>
+            <strong>Timetabler</strong>
+            <span>Access hub</span>
+          </div>
+        </div>
+        <div class="session-metadata">
+          <div class="session-card">
+            <label>Time</label>
+            <strong>Tue, 10:15</strong>
+          </div>
+          <div class="session-card">
+            <label>Continue</label>
+            <strong>Teacher, student, or parent access</strong>
+          </div>
+        </div>
+        <div class="session-actions">
+          <button class="ghost-btn" type="button">Switch role</button>
+          <button class="ghost-btn" type="button">Logout</button>
+        </div>
+      </section>
+
+      <section class="content-shell">
+        <aside class="side-panel">
+          <div class="panel-title">Views</div>
+          <input class="search" type="text" value="Search timetable views" />
+          <div class="entity-list">
+            <a class="entity-btn active" href="./master-timetable.html"><span class="swatch c1"></span><span>Master timetable</span><span>All lessons</span></a>
+            <a class="entity-btn" href="./teacher-timetable.html"><span class="swatch c2"></span><span>Teacher timetable</span><span>Personal</span></a>
+            <a class="entity-btn" href="./student-timetable.html"><span class="swatch c3"></span><span>Student timetable</span><span>Class + options</span></a>
+            <a class="entity-btn" href="./parent-timetable.html"><span class="swatch c4"></span><span>Parent timetable</span><span>Read-only</span></a>
+          </div>
+        </aside>
+
+        <section class="table-panel">
+          <div class="table-toolbar">
+            <div class="table-title">
+              <strong>Family overview</strong>
+              <span>Shared access pages stay visually aligned while keeping the role-specific details simple.</span>
+            </div>
+          </div>
+          <div class="table-tabs">
+            <a class="segment-btn active" href="./master-timetable.html">Master</a>
+            <a class="segment-btn" href="./teacher-timetable.html">Teacher</a>
+            <a class="segment-btn" href="./student-timetable.html">Student</a>
+            <a class="segment-btn" href="./parent-timetable.html">Parent</a>
+          </div>
+          <div class="detail-list">
+            <div class="detail-row"><div><label>Publish state</label><strong>Ready to publish</strong></div><div class="status-chip">Draft</div></div>
+            <div class="detail-row"><div><label>Personal access</label><strong>Teacher, student, and parent views share the same timetable source</strong></div><div class="status-chip">Shared</div></div>
+            <div class="detail-row"><div><label>Exports</label><strong>PDF and calendar export from every audience view</strong></div><div class="status-chip">Enabled</div></div>
+          </div>
+        </section>
+
+        <aside class="side-panel">
+          <div class="panel-title">Published access</div>
+          <div class="legend-list">
+            <div class="info-row"><span>Teacher</span><span class="status-chip">Mobile first</span></div>
+            <div class="info-row"><span>Student</span><span class="status-chip">Simple view</span></div>
+            <div class="info-row"><span>Parent</span><span class="status-chip">Read only</span></div>
+            <div class="info-row"><span>Master</span><span class="status-chip">Full view</span></div>
+          </div>
+          <div class="sidebar-footer">
+            <a class="primary-btn" href="./publish-timetable.html">Open publish flow</a>
+            <a class="ghost-btn" href="./teacher-timetable.html">Start with teacher view</a>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
