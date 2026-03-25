@@ -184,4 +184,15 @@
 - Warning if option has no teacher assigned
 - Preview of how block appears in timetable
 
+**Mockup References:**
+- [Teachers list](../../ux-mockups/system-admin/teachers-view.html)
+- [Add teacher](../../ux-mockups/system-admin/add-teacher.html)
+- [Edit teacher](../../ux-mockups/system-admin/edit-teacher.html)
+- [Teacher detail](../../ux-mockups/system-admin/teacher-detail.html)
+- [Subject management](../../ux-mockups/system-admin/subject-management.html)
+- [Class management](../../ux-mockups/system-admin/class-management.html)
+- [Room management](../../ux-mockups/system-admin/room-management.html)
+- [Teaching groups](../../ux-mockups/system-admin/teaching-groups.html)
+- [Option block builder](../../ux-mockups/system-admin/option-block-builder.html)
+
 ---

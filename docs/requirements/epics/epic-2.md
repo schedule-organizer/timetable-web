@@ -19,3 +19,12 @@
 **Frontend alignment:** `CONFIG-06` to `CONFIG-08`, `HOL-06`
 
 **Success signal:** a school can fully define its scheduling vocabulary, calendar, and operating structure before creating resources.
+
+**Mockup References:**
+- [System admin hub](../../ux-mockups/system-admin/index.html)
+- [Institution settings](../../ux-mockups/system-admin/institution-settings.html)
+- [Labels configuration](../../ux-mockups/system-admin/labels-configuration.html)
+- [Difficulty scale](../../ux-mockups/system-admin/settings/constraints.html)
+- [Academic years and terms](../../ux-mockups/system-admin/academic-years-terms.html)
+- [Bell schedule builder](../../ux-mockups/system-admin/bell-schedule-builder.html)
+- [Holiday calendar](../../ux-mockups/system-admin/holiday-calendar.html)

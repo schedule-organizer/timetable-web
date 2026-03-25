@@ -237,4 +237,12 @@ The current product direction introduces a few rules that apply across the auth 
 - Teachers may be linked to multiple subjects, and those subject qualifications should be managed in the teacher profile flow.
 - Teacher code / staff number is managed by `Sys Admin` and is not self-edited by teachers.
 
+**Mockup References:**
+- [Root hub](../../ux-mockups/index.html)
+- [Login](../../ux-mockups/auth-login.html)
+- [Register](../../ux-mockups/auth-register.html)
+- [Invite completion](../../ux-mockups/auth-complete-registration.html)
+- [Profile management](../../ux-mockups/profile-management.html)
+- [User management](../../ux-mockups/system-admin/user-management.html)
+
 ---

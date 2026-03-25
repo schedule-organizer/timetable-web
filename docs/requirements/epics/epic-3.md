@@ -19,3 +19,14 @@
 **Frontend alignment:** `RES-12` to `RES-17`
 
 **Success signal:** an institution can model the full set of teachers, classes, subjects, rooms, and grouping rules needed for timetable generation.
+
+**Mockup References:**
+- [Teacher management](../../ux-mockups/system-admin/teachers-view.html)
+- [Add teacher](../../ux-mockups/system-admin/add-teacher.html)
+- [Edit teacher](../../ux-mockups/system-admin/edit-teacher.html)
+- [Teacher detail](../../ux-mockups/system-admin/teacher-detail.html)
+- [Subject management](../../ux-mockups/system-admin/subject-management.html)
+- [Class management](../../ux-mockups/system-admin/class-management.html)
+- [Room management](../../ux-mockups/system-admin/room-management.html)
+- [Teaching groups](../../ux-mockups/system-admin/teaching-groups.html)
+- [Option block builder](../../ux-mockups/system-admin/option-block-builder.html)

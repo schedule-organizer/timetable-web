@@ -114,4 +114,13 @@
 - Clear indication of changes
 - Print-friendly layout
 
+**Mockup References:**
+- [Timetable access hub](../../ux-mockups/timetable-access/index.html)
+- [Publish timetable](../../ux-mockups/timetable-access/publish-timetable.html)
+- [Master timetable](../../ux-mockups/timetable-access/master-timetable.html)
+- [Teacher timetable](../../ux-mockups/timetable-access/teacher-timetable.html)
+- [Student timetable](../../ux-mockups/timetable-access/student-timetable.html)
+- [Parent timetable](../../ux-mockups/timetable-access/parent-timetable.html)
+- [Notifications center](../../ux-mockups/notifications/notification-center.html)
+
 ---

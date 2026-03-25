@@ -19,3 +19,11 @@
 **Frontend alignment:** `FOUND-02`, `FOUND-10` to `FOUND-15`, `AUTH-11` to `AUTH-16`
 
 **Success signal:** a new institution can register, invite staff, and access role-appropriate areas without manual support.
+
+**Mockup References:**
+- [Root hub and shared auth pages](../../ux-mockups/index.html)
+- [Login](../../ux-mockups/auth-login.html)
+- [Register](../../ux-mockups/auth-register.html)
+- [Invite completion](../../ux-mockups/auth-complete-registration.html)
+- [Profile management](../../ux-mockups/profile-management.html)
+- [System admin user management](../../ux-mockups/system-admin/user-management.html)

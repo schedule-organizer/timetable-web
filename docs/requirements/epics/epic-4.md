@@ -17,3 +17,7 @@
 **Frontend alignment:** `TMPL-05`
 
 **Success signal:** first-time users can start from a template instead of configuring every concept from scratch.
+
+**Mockup References:**
+- No dedicated template mockups yet.
+- Use the [root hub](../../ux-mockups/index.html) and [system admin hub](../../ux-mockups/system-admin/index.html) as the starting points for future onboarding screens.

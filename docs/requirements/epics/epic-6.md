@@ -20,3 +20,17 @@
 **Frontend alignment:** `SCHED-12` to `SCHED-18`
 
 **Success signal:** a timetabler can generate a schedule, understand quality tradeoffs, and make guided adjustments without breaking trust in the system.
+
+**Mockup References:**
+- [Engine hub](../../ux-mockups/engine/index.html)
+- [Engine run](../../ux-mockups/engine/run.html)
+- [Engine progress](../../ux-mockups/engine/progress.html)
+- [Engine quality](../../ux-mockups/engine/quality.html)
+- [Moderator engine start state](../../ux-mockups/moderator/engine-start-state.html)
+- [Moderator engine progress](../../ux-mockups/moderator/engine-runtime-progress.html)
+- [Lesson actions weekly view](../../ux-mockups/moderator/lesson-actions-weekly-view.html)
+- [Manual editing hub](../../ux-mockups/moderator/manual-editing/index.html)
+- [Manual editing workspace](../../ux-mockups/moderator/manual-editing/edit.html)
+- [Pin and swap tools](../../ux-mockups/moderator/manual-editing/pin-swap.html)
+- [Conflict review](../../ux-mockups/moderator/manual-editing/conflicts.html)
+- [Constraint weights](../../ux-mockups/system-admin/settings/constraints.html)

@@ -114,4 +114,9 @@
 - Save button with confirmation
 - Preview of current settings
 
+**Mockup References:**
+- [Notifications hub](../../ux-mockups/notifications/index.html)
+- [Notification center](../../ux-mockups/notifications/notification-center.html)
+- [Notification preferences](../../ux-mockups/notifications/notification-preferences.html)
+
 ---

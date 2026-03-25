@@ -17,3 +17,8 @@
 **Frontend alignment:** `NOTIF-01`, `NOTIF-04`
 
 **Success signal:** users are informed about changes that affect them and can control the level of communication they receive.
+
+**Mockup References:**
+- [Notifications hub](../../ux-mockups/notifications/index.html)
+- [Notification center](../../ux-mockups/notifications/notification-center.html)
+- [Notification preferences](../../ux-mockups/notifications/notification-preferences.html)

@@ -17,3 +17,17 @@
 **Frontend alignment:** `SCHED-12`, `SCHED-13`, `SCHED-14`
 
 **Success signal:** users can reliably inspect the current timetable from the view most relevant to them.
+
+**Mockup References:**
+- [Moderator flow board](../../ux-mockups/moderator/index.html)
+- [Class view switcher](../../ux-mockups/moderator/view-switcher-class.html)
+- [Teacher view switcher](../../ux-mockups/moderator/view-switcher-teacher.html)
+- [Room view switcher](../../ux-mockups/moderator/view-switcher-room.html)
+- [Subject view switcher](../../ux-mockups/moderator/view-switcher-subject.html)
+- [Weekly class overview](../../ux-mockups/moderator/weekly-class-overview.html)
+- [Moderator timetable legacy view](../../ux-mockups/moderator-timetable.html)
+- [Timetable access hub](../../ux-mockups/timetable-access/index.html)
+- [Master timetable](../../ux-mockups/timetable-access/master-timetable.html)
+- [Teacher timetable](../../ux-mockups/timetable-access/teacher-timetable.html)
+- [Student timetable](../../ux-mockups/timetable-access/student-timetable.html)
+- [Parent timetable](../../ux-mockups/timetable-access/parent-timetable.html)

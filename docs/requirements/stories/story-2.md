@@ -171,4 +171,13 @@
 - Copy schedule to create variants
 - Templates: 6-period, 7-period, 8-period day
 
+**Mockup References:**
+- [System admin hub](../../ux-mockups/system-admin/index.html)
+- [Institution settings](../../ux-mockups/system-admin/institution-settings.html)
+- [Labels configuration](../../ux-mockups/system-admin/labels-configuration.html)
+- [Difficulty scale / constraints](../../ux-mockups/system-admin/settings/constraints.html)
+- [Academic years and terms](../../ux-mockups/system-admin/academic-years-terms.html)
+- [Bell schedule builder](../../ux-mockups/system-admin/bell-schedule-builder.html)
+- [Holiday calendar](../../ux-mockups/system-admin/holiday-calendar.html)
+
 ---

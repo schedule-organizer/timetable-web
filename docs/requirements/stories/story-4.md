@@ -29,4 +29,8 @@
 - Color-coded holiday types
 - Recurring holiday support (e.g., every Monday)
 
+**Mockup References:**
+- [Holiday calendar](../../ux-mockups/system-admin/holiday-calendar.html)
+- [System admin hub](../../ux-mockups/system-admin/index.html)
+
 ---

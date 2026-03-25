@@ -18,3 +18,11 @@
 **Frontend alignment:** `COVER-08` to `COVER-11`
 
 **Success signal:** institutions can handle day-of and short-term changes inside the platform rather than through ad hoc calls or chat threads.
+
+**Mockup References:**
+- [Daily operations hub](../../ux-mockups/daily-operations/index.html)
+- [Cover management](../../ux-mockups/daily-operations/cover-management.html)
+- [Delegation request](../../ux-mockups/daily-operations/delegation-request.html)
+- [Delegation queue](../../ux-mockups/daily-operations/delegation-queue.html)
+- [Temporary schedules](../../ux-mockups/daily-operations/temporary-schedules.html)
+- [Notifications center](../../ux-mockups/notifications/notification-center.html)

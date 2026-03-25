@@ -173,4 +173,12 @@
 - Dismissible but reappears on page reload
 - Mobile-friendly layout
 
+**Mockup References:**
+- [Daily operations hub](../../ux-mockups/daily-operations/index.html)
+- [Cover management](../../ux-mockups/daily-operations/cover-management.html)
+- [Delegation request](../../ux-mockups/daily-operations/delegation-request.html)
+- [Delegation queue](../../ux-mockups/daily-operations/delegation-queue.html)
+- [Temporary schedules](../../ux-mockups/daily-operations/temporary-schedules.html)
+- [Notifications center](../../ux-mockups/notifications/notification-center.html)
+
 ---

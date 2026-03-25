@@ -194,4 +194,15 @@
 - Search by entity ID
 - Export to CSV
 
+**Mockup References:**
+- [System admin hub](../../ux-mockups/system-admin/index.html)
+- [Export panel](../../ux-mockups/system-admin/export-panel.html)
+- [Audit log](../../ux-mockups/system-admin/audit-log.html)
+- [Teacher utilization report](../../ux-mockups/system-admin/reports-teacher-utilization.html)
+- [Room utilization report](../../ux-mockups/system-admin/reports-room-utilization.html)
+- [Subject coverage report](../../ux-mockups/system-admin/reports-subject-coverage.html)
+- [Timetable access hub](../../ux-mockups/timetable-access/index.html)
+- [Teacher timetable](../../ux-mockups/timetable-access/teacher-timetable.html)
+- [Student timetable](../../ux-mockups/timetable-access/student-timetable.html)
+
 ---

@@ -17,3 +17,11 @@
 **Frontend alignment:** `EXPORT-04` to `EXPORT-08`
 
 **Success signal:** leaders can review utilization and change history without manually assembling reports from multiple tools.
+
+**Mockup References:**
+- [System admin hub](../../ux-mockups/system-admin/index.html)
+- [Teacher utilization report](../../ux-mockups/system-admin/reports-teacher-utilization.html)
+- [Room utilization report](../../ux-mockups/system-admin/reports-room-utilization.html)
+- [Subject coverage report](../../ux-mockups/system-admin/reports-subject-coverage.html)
+- [Audit log](../../ux-mockups/system-admin/audit-log.html)
+- [Export panel](../../ux-mockups/system-admin/export-panel.html)
