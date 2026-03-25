@@ -2,53 +2,9 @@
 
 .operations-app {
   min-height: 100vh;
-  padding: 18px;
+  padding: 12px 18px 18px;
   display: grid;
-  gap: 16px;
-}
-
-.operations-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
-  gap: 16px;
-  align-items: center;
-  padding: 14px 16px;
-  border: 1px solid var(--line);
-  background:
-    radial-gradient(circle at top right, rgba(74, 120, 211, 0.12), transparent 32%),
-    linear-gradient(180deg, #fff 0%, #f6f8fb 100%);
-  box-shadow: var(--shadow);
-}
-
-.operations-hero h1 {
-  margin: 4px 0 8px;
-  font-size: 26px;
-  line-height: 1.08;
-}
-
-.operations-hero p {
-  margin: 0;
-  max-width: 62ch;
-  font-size: 14px;
-  color: var(--muted);
-}
-
-.operations-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.operations-stat {
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-}
-
-.operations-stat strong {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 14px;
+  gap: 12px;
 }
 
 .operations-grid {
@@ -269,7 +225,6 @@
 }
 
 @media (max-width: 1100px) {
-  .operations-hero,
   .operations-layout,
   .operations-grid {
     grid-template-columns: 1fr;
