@@ -11,9 +11,10 @@
   const isDailyOperations = path.includes("/daily-operations/");
   const isNotifications = path.includes("/notifications/");
   const isTimetableAccess = path.includes("/timetable-access/");
+  const isSharedRoot = path.endsWith("/docs/ux-mockups/index.html") || /\/(auth-login|auth-register|auth-complete-registration|profile-management)\.html$/.test(path);
   const sessionRole = (body.dataset.sessionRole || "").toLowerCase();
 
-  if (!isModerator && !isSystemAdmin && !isDailyOperations && !isNotifications && !isTimetableAccess && !sessionRole) {
+  if (!isModerator && !isSystemAdmin && !isDailyOperations && !isNotifications && !isTimetableAccess && !isSharedRoot && !sessionRole) {
     return;
   }
 
@@ -27,7 +28,7 @@
     return h1 ? h1.textContent.trim() : pageTitle.trim();
   })();
 
-  const roleKey = sessionRole || (isModerator ? "moderator" : isSystemAdmin ? "system-admin" : isTimetableAccess ? "shared" : isDailyOperations ? "shared" : isNotifications ? "shared" : "teacher");
+  const roleKey = sessionRole || (isModerator ? "moderator" : isSystemAdmin ? "system-admin" : isTimetableAccess ? "shared" : isDailyOperations ? "shared" : isNotifications ? "shared" : isSharedRoot ? "shared" : "teacher");
 
   const configByRole = {
     moderator: {
