@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Notification Preferences</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="shared">
+    <main class="notifications-app">
+      <section class="notifications-panel">
+        <div class="workflow-head">
+          <div>
+            <div class="eyebrow">Settings</div>
+            <h1>Notification preferences</h1>
+            <p>Control which events reach you in-app and by email, plus quiet hours.</p>
+          </div>
+          <div class="notif-actions">
+            <button class="action-btn primary" type="button">Save preferences</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="notifications-grid">
+        <article class="notifications-panel">
+          <div class="notif-settings">
+            <div class="notif-category">
+              <div class="notif-category-head">
+                <strong>Timetable</strong>
+                <span class="status-tag good">Enabled</span>
+              </div>
+              <div class="notif-switches">
+                <div class="notif-switch-row">
+                  <div>
+                    <strong>Timetable published</strong>
+                    <span>New schedules and revisions</span>
+                  </div>
+                  <span class="status-tag good">In-app</span>
+                  <span class="status-tag good">Email</span>
+                </div>
+                <div class="notif-switch-row">
+                  <div>
+                    <strong>Lesson changed</strong>
+                    <span>Manual edits and reschedules</span>
+                  </div>
+                  <span class="status-tag good">In-app</span>
+                  <span class="status-tag">Email off</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="notif-category">
+              <div class="notif-category-head">
+                <strong>Cover and delegation</strong>
+                <span class="status-tag good">Enabled</span>
+              </div>
+              <div class="notif-switches">
+                <div class="notif-switch-row">
+                  <div>
+                    <strong>Cover assigned</strong>
+                    <span>Absence and cover updates</span>
+                  </div>
+                  <span class="status-tag good">In-app</span>
+                  <span class="status-tag good">Email</span>
+                </div>
+                <div class="notif-switch-row">
+                  <div>
+                    <strong>Delegation update</strong>
+                    <span>Approved or rejected requests</span>
+                  </div>
+                  <span class="status-tag good">In-app</span>
+                  <span class="status-tag">Email off</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="notifications-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Quiet hours</div>
+              <h2>Notification window</h2>
+            </div>
+            <span class="candidate-tag">Active</span>
+          </div>
+          <div class="quiet-hours">
+            <div class="setting-row">
+              <label>Start</label>
+              <input class="setting-input" type="time" value="22:00" />
+            </div>
+            <div class="setting-row">
+              <label>End</label>
+              <input class="setting-input" type="time" value="07:00" />
+            </div>
+          </div>
+          <div class="notif-preview">
+            <div class="workflow-banner">
+              <strong>Preview</strong>
+              <span>High-priority timetable changes can still reach you; routine updates stay muted during quiet hours.</span>
+            </div>
+            <div class="workflow-banner">
+              <strong>Current state</strong>
+              <span>In-app: On for all categories. Email: On only for timetable published and cover assigned.</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

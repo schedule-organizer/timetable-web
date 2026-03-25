@@ -9,8 +9,9 @@
   const isModerator = path.includes("/moderator/");
   const isSystemAdmin = path.includes("/system-admin/");
   const isDailyOperations = path.includes("/daily-operations/");
+  const isNotifications = path.includes("/notifications/");
 
-  if (!isModerator && !isSystemAdmin && !isDailyOperations) {
+  if (!isModerator && !isSystemAdmin && !isDailyOperations && !isNotifications) {
     return;
   }
 
@@ -38,7 +39,7 @@
         switchLabel: "Switch role",
         logoutLabel: "Logout",
         switchTitle: "Switch moderator role",
-        logoutTitle: "Logout moderator session",
+      logoutTitle: "Logout moderator session",
       },
     "system-admin": {
         initials: "SA",
@@ -51,6 +52,18 @@
         logoutLabel: "Logout",
         switchTitle: "Switch admin role",
         logoutTitle: "Logout admin session",
+      },
+    shared: {
+        initials: "NU",
+        name: "Signed-in user",
+        role: "User",
+        timeLabel: "Time",
+        contextLabel: "Center",
+        contextValue: scope,
+        switchLabel: "Switch role",
+        logoutLabel: "Logout",
+        switchTitle: "Switch active role",
+        logoutTitle: "Logout current session",
       },
     teacher: {
         initials: "TP",
@@ -66,7 +79,7 @@
       },
   };
 
-  const config = configByRole[roleKey] || configByRole.moderator;
+  const config = configByRole[roleKey] || configByRole.shared || configByRole.moderator;
 
   const sessionBar = document.createElement("section");
   sessionBar.className = "session-bar";
