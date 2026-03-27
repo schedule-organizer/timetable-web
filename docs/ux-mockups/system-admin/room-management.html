@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Room Management</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Room management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v10H4z" /><path d="M6 8h8M6 11h5" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Room management</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter rooms">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Refresh list">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6V4l2 2-2 2" /><path d="M15 14v2l-2-2 2-2" /><path d="M5.5 10a4.5 4.5 0 0 1 8.4-2.4" /><path d="M14.5 10a4.5 4.5 0 0 1-8.4 2.4" /></svg>
+          </button>
+          <a class="icon-btn" href="./room-add.html" aria-label="Create room">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Room workflow</strong>
+            <span class="pill">RES-12</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item active" type="button"><span>Room management</span><span>Current</span></button>
+            <a class="config-item" href="./room-add.html"><span>Add room</span><span>Create</span></a>
+            <a class="config-item" href="./room-edit.html"><span>Edit room</span><span>Update</span></a>
+            <a class="config-item" href="./room-detail.html"><span>Room detail</span><span>Slots</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-12</div>
+            <h1>Room list and forbidden slot setup</h1>
+            <p>
+              Keep the room record lean, with the one extra thing rooms need: blocked slots that the timetable engine
+              must avoid.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Room list</label>
+              <div class="room-table">
+                <div class="room-table-head">
+                  <span>Room</span>
+                  <span>Code</span>
+                  <span>Type</span>
+                  <span>Capacity</span>
+                </div>
+                <div class="room-table-row active">
+                  <div class="room-name">Room 101</div>
+                  <span>R-101</span>
+                  <span>Classroom</span>
+                  <span>28</span>
+                </div>
+                <div class="room-table-row">
+                  <div class="room-name">Lab 2</div>
+                  <span>R-L2</span>
+                  <span>Lab</span>
+                  <span>24</span>
+                </div>
+                <div class="room-table-row">
+                  <div class="room-name">Hall A</div>
+                  <span>R-HA</span>
+                  <span>Hall</span>
+                  <span>120</span>
+                </div>
+                <div class="room-table-row">
+                  <div class="room-name">Room 204</div>
+                  <span>R-204</span>
+                  <span>Classroom</span>
+                  <span>30</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Forbidden slots</label>
+              <div class="slot-grid">
+                <div class="slot-head">
+                  <span>Day</span>
+                  <span>P1</span>
+                  <span>P2</span>
+                  <span>P3</span>
+                  <span>P4</span>
+                  <span>P5</span>
+                </div>
+                <div class="slot-row">
+                  <span>Mon</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell active">Blocked</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                </div>
+                <div class="slot-row">
+                  <span>Tue</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell active">Blocked</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                </div>
+                <div class="slot-row">
+                  <span>Wed</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell active">Blocked</span>
+                  <span class="slot-cell">Open</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Selected room</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Room profile</div>
+                <h2>Room 101</h2>
+                <p>R-101 · Active</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Room name</label>
+                  <input class="setting-input" type="text" value="Room 101" />
+                </div>
+                <div class="setting-row">
+                  <label>Room code</label>
+                  <input class="setting-input" type="text" value="R-101" />
+                </div>
+                <div class="setting-row">
+                  <label>Type</label>
+                  <select class="setting-input">
+                    <option selected>Classroom</option>
+                    <option>Lab</option>
+                    <option>Hall</option>
+                    <option>Sports</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Capacity</label>
+                  <input class="setting-input" type="text" value="28" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Blocked slots</label>
+                <div class="mini-preview">
+                  <div class="mini-preview-row"><span>Mon</span><span>P2 blocked</span></div>
+                  <div class="mini-preview-row"><span>Tue</span><span>P3 blocked</span></div>
+                  <div class="mini-preview-row"><span>Wed</span><span>P4 blocked</span></div>
+                </div>
+              </div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save room</button>
+                <a class="action-btn" href="./room-detail.html">Open detail</a>
+                <a class="action-btn" href="./room-edit.html">Open edit</a>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">14 rooms</span>
+              <span class="pill">RES-12</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./index.html">Back</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">List</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Manage rooms and blocked slots</strong>
+            <span>Keep the room workflow focused on capacity and forbidden times, nothing extra.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

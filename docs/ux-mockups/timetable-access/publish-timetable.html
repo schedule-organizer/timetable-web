@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Publish Timetable</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="shared">
+    <main class="app-shell">
+      <section class="topbar">
+        <div class="topbar-left">
+          <div class="brand">
+            <div class="brand-mark"></div>
+            <div>
+              Publish timetable
+              <small>Confirm before visibility changes</small>
+            </div>
+          </div>
+        </div>
+        <div class="topbar-center">
+          <div class="tabs">
+            <a class="pill-btn" href="./index.html">Hub</a>
+            <a class="pill-btn" href="./master-timetable.html">Master</a>
+            <a class="pill-btn" href="./teacher-timetable.html">Teacher</a>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <a class="icon-btn" href="./index.html" aria-label="Back">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="content-shell">
+        <aside class="side-panel">
+          <div class="panel-title">Checks</div>
+          <div class="detail-list">
+            <div class="detail-row"><div><label>Hard conflicts</label><strong>None</strong></div><span class="status-chip">OK</span></div>
+            <div class="detail-row"><div><label>Soft warnings</label><strong>2 items to review</strong></div><span class="status-chip">Review</span></div>
+            <div class="detail-row"><div><label>Recipients</label><strong>All stakeholders</strong></div><span class="status-chip">Full</span></div>
+          </div>
+        </aside>
+
+        <section class="table-panel">
+          <div class="table-toolbar">
+            <div class="table-title">
+              <strong>Publish summary</strong>
+              <span>One clear confirmation surface with enough context to avoid mistakes.</span>
+            </div>
+          </div>
+          <div class="detail-list">
+            <div class="detail-row"><div><label>Current state</label><strong>Draft timetable ready for publish</strong></div><div class="status-chip">Draft</div></div>
+            <div class="detail-row"><div><label>Next state</label><strong>Published timetable visible to all logged-in audiences</strong></div><div class="status-chip">Publish</div></div>
+            <div class="detail-row"><div><label>Fallback</label><strong>Return to master timetable if the summary needs changes</strong></div><div class="status-chip">Safe</div></div>
+          </div>
+        </section>
+
+        <aside class="side-panel">
+          <div class="panel-title">Output</div>
+          <div class="legend-list">
+            <div class="info-row"><span>Teacher access</span><span>Dashboard + iCal</span></div>
+            <div class="info-row"><span>Student access</span><span>Mobile timetable</span></div>
+            <div class="info-row"><span>Parent access</span><span>Read-only timetable</span></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

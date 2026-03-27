@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Room Utilization Report</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Room utilization report">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16h12" /><path d="M6 13v-4" /><path d="M10 13V8" /><path d="M14 13V6" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Room utilization report</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Export PDF">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h6l3 3v9H6z" /><path d="M12 4v3h3" /><path d="M8 11h4" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Export CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v10H5z" /><path d="M8 8h4M8 11h4" /></svg>
+          </button>
+          <a class="icon-btn" href="./reports-subject-coverage.html" aria-label="Next report">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4l6 6-6 6" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Reporting</strong>
+            <span class="pill">EXPORT-06</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./reports-teacher-utilization.html"><span>Teacher utilization</span><span>Prev</span></a>
+            <button class="config-item active" type="button"><span>Room utilization</span><span>Current</span></button>
+            <a class="config-item" href="./reports-subject-coverage.html"><span>Subject coverage</span><span>Next</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 10 / EXPORT-06</div>
+            <h1>Room usage and idle capacity</h1>
+            <p>
+              Show which rooms are heavily used, which are underused, and where capacity is sitting empty.
+            </p>
+          </div>
+
+          <div class="report-layout">
+            <div class="report-stack">
+              <div class="report-kpis">
+                <div class="report-kpi">
+                  <strong>73%</strong>
+                  <span>Average room use</span>
+                </div>
+                <div class="report-kpi">
+                  <strong>5</strong>
+                  <span>Underused rooms</span>
+                </div>
+                <div class="report-kpi">
+                  <strong>2</strong>
+                  <span>Peak pressure rooms</span>
+                </div>
+              </div>
+
+              <article class="report-panel">
+                <label>Room utilization chart</label>
+                <div class="report-chart">
+                  <div class="report-chart-row">
+                    <span>Room 101</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 88%"></div></div>
+                    <span>88%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>Lab 2</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 81%"></div></div>
+                    <span>81%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>Room 204</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 67%"></div></div>
+                    <span>67%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>Hall A</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 59%"></div></div>
+                    <span>59%</span>
+                  </div>
+                  <div class="report-chart-row">
+                    <span>Room 312</span>
+                    <div class="report-bar"><div class="report-bar-fill" style="width: 41%"></div></div>
+                    <span>41%</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="report-panel">
+                <label>Room utilization table</label>
+                <div class="report-table">
+                  <div class="report-table-head">
+                    <span>Room</span>
+                    <span>Code</span>
+                    <span>Capacity</span>
+                    <span>Use</span>
+                    <span>Status</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>Room 101</strong>
+                    <span>R-101</span>
+                    <span>28</span>
+                    <span>88%</span>
+                    <span class="status-chip active">High</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>Lab 2</strong>
+                    <span>R-L2</span>
+                    <span>24</span>
+                    <span>81%</span>
+                    <span class="status-chip active">High</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>Hall A</strong>
+                    <span>R-HA</span>
+                    <span>120</span>
+                    <span>59%</span>
+                    <span class="status-chip inactive">Mid</span>
+                  </div>
+                  <div class="report-table-row">
+                    <strong>Room 312</strong>
+                    <span>R-312</span>
+                    <span>30</span>
+                    <span>41%</span>
+                    <span class="status-chip inactive">Low</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <aside class="report-panel">
+              <label>Filters and export</label>
+              <div class="setting-row">
+                <label>Term</label>
+                <div class="setting-input">Current term</div>
+              </div>
+              <div class="setting-row">
+                <label>Room type</label>
+                <div class="setting-input">All types</div>
+              </div>
+              <div class="setting-row">
+                <label>Metric</label>
+                <div class="setting-input">Booked hours / capacity</div>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">PDF</span>
+                <span class="pill">CSV</span>
+                <span class="pill">iCal</span>
+              </div>
+              <div class="report-summary">
+                <div class="report-summary-item">
+                  <strong>Export ready</strong>
+                  <span>Use the current room filters for the file output.</span>
+                </div>
+                <div class="report-summary-item">
+                  <strong>Scope</strong>
+                  <span>Room occupancy and capacity only.</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Report</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Check where rooms are over or underused</strong>
+            <span>Keep the chart and table tied to room capacity so the result is easy to read.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

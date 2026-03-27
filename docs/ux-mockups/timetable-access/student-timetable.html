@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Timetable</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="shared">
+    <main class="app-shell">
+      <section class="topbar">
+        <div class="topbar-left">
+          <div class="brand"><div class="brand-mark"></div><div>Student timetable<small>Class and options</small></div></div>
+        </div>
+        <div class="topbar-center">
+          <div class="tabs">
+            <a class="pill-btn" href="./index.html">Hub</a>
+            <a class="pill-btn" href="./master-timetable.html">Master</a>
+            <a class="pill-btn" href="./parent-timetable.html">Parent</a>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="primary-btn" type="button">Add to calendar</button>
+        </div>
+      </section>
+
+      <section class="content-shell">
+        <aside class="side-panel">
+          <div class="panel-title">Today</div>
+          <div class="detail-list">
+            <div class="detail-row"><div><label>Now</label><strong>Math</strong></div><span class="status-chip">Live</span></div>
+            <div class="detail-row"><div><label>Next</label><strong>English</strong></div><span class="status-chip">Soon</span></div>
+            <div class="detail-row"><div><label>Room</label><strong>R204</strong></div><span class="status-chip">Visible</span></div>
+          </div>
+        </aside>
+
+        <section class="table-panel">
+          <div class="table-toolbar">
+            <div class="table-title">
+              <strong>Week view</strong>
+              <span>Large text, clear room info, and minimal chrome keep the schedule easy to read.</span>
+            </div>
+            <div class="table-actions">
+              <a class="segment-btn active" href="./student-timetable.html">Week</a>
+              <a class="segment-btn" href="./parent-timetable.html">Parent</a>
+            </div>
+          </div>
+          <table class="timetable">
+            <thead>
+              <tr>
+                <th class="time-col">Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th class="time-col">08:20 - 09:00</th>
+                <td class="cell"><div class="lesson-card math"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Start day</span></div></td>
+                <td class="cell"><div class="lesson-card biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                <td class="cell"><div class="lesson-card english"><strong>English</strong><span>S. Davtyan</span><span>R305</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">09:10 - 09:50</th>
+                <td class="cell"><div class="lesson-card chemistry"><strong>Chemistry</strong><span>L. Arakelyan</span><span>Lab 1</span></div></td>
+                <td class="cell"><div class="lesson-card math pinned"><strong>Math</strong><span>M. Petrosyan</span><span>R204 · pinned</span></div></td>
+                <td class="cell"><div class="lesson-card physics"><strong>Physics</strong><span>H. Minasyan</span><span>Lab 3</span></div></td>
+                <td class="cell"><div class="lesson-card cover"><strong>Chemistry</strong><span>Cover: D. Sargsyan</span><span>Lab 1</span></div></td>
+                <td class="cell"><div class="lesson-card arts"><strong>Arts</strong><span>K. Shahbazyan</span><span>Studio</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">10:15 - 10:55</th>
+                <td class="cell"><div class="lesson-card history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">11:05 - 11:45</th>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card math"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                <td class="cell"><div class="lesson-card physics"><strong>Physics</strong><span>H. Minasyan</span><span>Lab 3</span></div></td>
+                <td class="cell"><div class="lesson-card cover"><strong>Chemistry</strong><span>Cover: D. Sargsyan</span><span>Lab 1</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">12:10 - 12:50</th>
+                <td class="cell"><div class="lesson-card biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                <td class="cell"><div class="lesson-card english"><strong>English</strong><span>S. Davtyan</span><span>R305</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card math"><strong>Math</strong><span>M. Petrosyan</span><span>R204</span></div></td>
+                <td class="cell"><div class="lesson-card arts"><strong>Arts</strong><span>K. Shahbazyan</span><span>Studio</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">13:00 - 13:40</th>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card chemistry"><strong>Chemistry</strong><span>L. Arakelyan</span><span>Lab 1</span></div></td>
+                <td class="cell"><div class="lesson-card english"><strong>English</strong><span>S. Davtyan</span><span>R305</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+              </tr>
+              <tr>
+                <th class="time-col">13:50 - 14:30</th>
+                <td class="cell"><div class="lesson-card arts"><strong>Arts</strong><span>K. Shahbazyan</span><span>Studio</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+                <td class="cell"><div class="lesson-card history"><strong>History</strong><span>A. Mkrtchyan</span><span>R108</span></div></td>
+                <td class="cell"><div class="lesson-card biology"><strong>Biology</strong><span>N. Gevorgyan</span><span>Lab 2</span></div></td>
+                <td class="cell"><div class="lesson-card free"><strong>Free</strong><span>Open slot</span></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <aside class="side-panel">
+          <div class="panel-title">Option blocks</div>
+          <div class="detail-list">
+            <div class="detail-row"><div><label>Science</label><strong>Group B chosen</strong></div><span class="status-chip">Active</span></div>
+            <div class="detail-row"><div><label>Humanities</label><strong>Group A chosen</strong></div><span class="status-chip">Active</span></div>
+            <div class="detail-row"><div><label>Calendar</label><strong>Ready to export</strong></div><span class="status-chip">Sync</span></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

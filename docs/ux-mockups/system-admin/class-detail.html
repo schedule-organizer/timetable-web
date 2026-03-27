@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Class Detail</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./class-management.html" aria-label="Back to class management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Class detail">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v10H4z" /><path d="M7 8h6M7 11h4" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Class detail</strong>
+        </div>
+        <div class="topbar-right">
+          <a class="icon-btn" href="./class-edit.html" aria-label="Edit class">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 16h4" /><path d="M12.2 4.8 15.2 7.8 7.5 15.5 4.5 16l.5-3Z" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Class workflow</strong>
+            <span class="pill">Matrix</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./class-management.html"><span>Class management</span><span>List</span></a>
+            <a class="config-item" href="./class-add.html"><span>Add class</span><span>Create</span></a>
+            <a class="config-item" href="./class-edit.html"><span>Edit class</span><span>Update</span></a>
+            <button class="config-item active" type="button"><span>Class detail</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="detail-hero">
+            <div class="detail-avatar">8A</div>
+            <div class="detail-meta">
+              <div class="eyebrow">Epic 3 / RES-14</div>
+              <h1>Class 8A</h1>
+              <div class="teacher-tags">
+                <span class="status-chip active">C-08A</span>
+                <span class="status-chip active">Active</span>
+              </div>
+              <div class="pill-row">
+                <span class="pill active">Grade 8</span>
+                <span class="pill">28 students</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Profile</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Code</span><span>C-08A</span></div>
+                <div class="mini-preview-row"><span>Grade</span><span>8</span></div>
+                <div class="mini-preview-row"><span>Students</span><span>28</span></div>
+                <div class="mini-preview-row"><span>Status</span><span>Active</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Subject-hours matrix</label>
+              <div class="matrix-grid">
+                <div class="matrix-head">
+                  <span>Subject</span>
+                  <span>P1</span>
+                  <span>P2</span>
+                  <span>P3</span>
+                  <span>P4</span>
+                </div>
+                <div class="matrix-row">
+                  <span>Math</span>
+                  <span class="matrix-cell active">5</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell">4</span>
+                </div>
+                <div class="matrix-row">
+                  <span>English</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell active">4</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell">4</span>
+                </div>
+                <div class="matrix-row">
+                  <span>Science</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell">4</span>
+                  <span class="matrix-cell active">5</span>
+                  <span class="matrix-cell">4</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Matrix complete</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./class-management.html">Back to list</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Detail</span>
+          </div>
+          <div class="preview-card">
+            <label>Profile</label>
+            <strong>Code, grade, students, and hours matrix</strong>
+            <span>Keep the detail page centered on the class record and its subject hours.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

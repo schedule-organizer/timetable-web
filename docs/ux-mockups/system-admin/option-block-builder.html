@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Option Block Builder</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Option block builder">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h5v5H4zM11 5h5v5h-5zM4 12h12v3H4z" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Option block builder</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter blocks">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Refresh blocks">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6V4l2 2-2 2" /><path d="M15 14v2l-2-2 2-2" /><path d="M5.5 10a4.5 4.5 0 0 1 8.4-2.4" /><path d="M14.5 10a4.5 4.5 0 0 1-8.4 2.4" /></svg>
+          </button>
+          <a class="icon-btn" href="#create-block" aria-label="Create block">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Resource workflow</strong>
+            <span class="pill">RES-17</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./teaching-groups.html"><span>Teaching groups</span><span>Split / merge</span></a>
+            <a class="config-item" href="./class-management.html"><span>Class management</span><span>Hours</span></a>
+            <a class="config-item" href="./subject-management.html"><span>Subject management</span><span>Curriculum</span></a>
+            <a class="config-item" href="./teachers-view.html"><span>Teachers view</span><span>Roster</span></a>
+            <button class="config-item active" type="button"><span>Option blocks</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-17</div>
+            <h1>Wizard for option choices and student enrolment</h1>
+            <p>
+              Keep the builder focused on the subjects in the block, the target year, and the students who belong to
+              it.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Option blocks list</label>
+              <div class="option-table">
+                <div class="option-table-head">
+                  <span>Block</span>
+                  <span>Year</span>
+                  <span>Subjects</span>
+                  <span>Students</span>
+                </div>
+                <div class="option-table-row active">
+                  <div class="option-title">
+                    <strong>Year 10 science block</strong>
+                    <span>4 choices</span>
+                  </div>
+                  <span>10</span>
+                  <span>Physics, Chemistry</span>
+                  <span>46</span>
+                </div>
+                <div class="option-table-row">
+                  <div class="option-title">
+                    <strong>Year 9 arts block</strong>
+                    <span>3 choices</span>
+                  </div>
+                  <span>9</span>
+                  <span>Art, Music</span>
+                  <span>32</span>
+                </div>
+                <div class="option-table-row">
+                  <div class="option-title">
+                    <strong>Year 11 language block</strong>
+                    <span>4 choices</span>
+                  </div>
+                  <span>11</span>
+                  <span>French, Spanish</span>
+                  <span>40</span>
+                </div>
+                <div class="option-table-row">
+                  <div class="option-title">
+                    <strong>Year 8 STEM block</strong>
+                    <span>3 choices</span>
+                  </div>
+                  <span>8</span>
+                  <span>Robotics, Coding</span>
+                  <span>28</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card" id="create-block">
+              <label>Selected option block</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Block profile</div>
+                <h2>Year 10 science block</h2>
+                <p>Year 10 · Active</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Block name</label>
+                  <input class="setting-input" type="text" value="Year 10 science block" />
+                </div>
+                <div class="setting-row">
+                  <label>Target year</label>
+                  <input class="setting-input" type="text" value="Year 10" />
+                </div>
+                <div class="setting-row">
+                  <label>Block type</label>
+                  <select class="setting-input">
+                    <option selected>Choice block</option>
+                    <option>Mandatory block</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Subjects in block</label>
+                <div class="pill-row">
+                  <span class="pill active">Physics</span>
+                  <span class="pill">Chemistry</span>
+                  <span class="pill">Biology</span>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Students enrolled</label>
+                <input class="setting-input" type="text" value="46 students" />
+              </div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save block</button>
+                <a class="action-btn" href="#create-block">Open edit</a>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Step preview</label>
+              <div class="option-steps">
+                <div class="option-step active">
+                  <strong>1. Choose subjects</strong>
+                  <span>Keep the subject list short and clear.</span>
+                </div>
+                <div class="option-step">
+                  <strong>2. Assign students</strong>
+                  <span>Add students from the target year only.</span>
+                </div>
+                <div class="option-step">
+                  <strong>3. Review output</strong>
+                  <span>Confirm the block before publishing it.</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Student assignment snapshot</label>
+              <div class="option-board">
+                <div class="option-board-column">
+                  <strong>Included</strong>
+                  <div class="pill-row">
+                    <span class="pill">Ami M.</span>
+                    <span class="pill">Ben K.</span>
+                    <span class="pill">Lina S.</span>
+                  </div>
+                </div>
+                <div class="option-board-column">
+                  <strong>Available</strong>
+                  <div class="pill-row">
+                    <span class="pill">Nora T.</span>
+                    <span class="pill">Owen R.</span>
+                    <span class="pill">Sara P.</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Summary</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Blocks</span><span>8</span></div>
+                <div class="mini-preview-row"><span>Students assigned</span><span>146</span></div>
+                <div class="mini-preview-row"><span>Drafts</span><span>2</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">8 blocks</span>
+              <span class="pill">RES-17</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./index.html">Back</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Wizard</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Build option blocks and enroll students</strong>
+            <span>Show only the choices, the year, and the students we already know about.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Delegation Request</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="teacher">
+    <main class="operations-app">
+      <section class="operations-layout">
+        <section class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Delegation form</div>
+              <h2>Request another teacher</h2>
+            </div>
+            <span class="candidate-tag">E8-003</span>
+          </div>
+
+          <form class="workflow-form">
+            <div class="workflow-form-grid">
+              <div class="setting-row full">
+                <label>Selected lessons</label>
+                <div class="checkbox-list">
+                  <label class="checkbox-row"><input type="checkbox" checked /> 8A - Math, Mon 2nd period</label>
+                  <label class="checkbox-row"><input type="checkbox" checked /> 9B - Chemistry, Tue 4th period</label>
+                  <label class="checkbox-row"><input type="checkbox" checked /> 10A - Physics, Wed 1st period</label>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Colleague</label>
+                <input class="setting-input" type="text" value="H. Minasyan" />
+              </div>
+              <div class="setting-row">
+                <label>Notify</label>
+                <select class="setting-input">
+                  <option selected>Moderator and target teacher</option>
+                  <option>Moderator only</option>
+                  <option>Target teacher only</option>
+                </select>
+              </div>
+              <div class="setting-row full">
+                <label>Note</label>
+                <textarea class="setting-input" rows="4">I will be away for a planned appointment and need cover for the selected lessons.</textarea>
+              </div>
+            </div>
+
+            <div class="auth-actions">
+              <button class="action-btn primary" type="button">Submit for approval</button>
+              <button class="action-btn" type="button">Save draft</button>
+            </div>
+          </form>
+        </section>
+
+        <aside class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Status tracking</div>
+              <h2>Request progress</h2>
+            </div>
+            <span class="status-tag warn">Awaiting review</span>
+          </div>
+
+          <div class="status-list">
+            <div class="status-row">
+              <div>
+                <strong>Submitted</strong>
+                <span>Request added to the queue</span>
+              </div>
+              <span class="status-tag good">Done</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Moderator review</strong>
+                <span>Waiting for approval or rejection</span>
+              </div>
+              <span class="status-tag warn">Pending</span>
+            </div>
+            <div class="status-row">
+              <div>
+                <strong>Teacher notified</strong>
+                <span>Target teacher gets the decision</span>
+              </div>
+              <span class="status-tag">Queued</span>
+            </div>
+          </div>
+
+          <div class="workflow-banner">
+            <strong>Approval rule</strong>
+            <span>The moderator validates whether the requested cover is appropriate before it becomes a cover assignment.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

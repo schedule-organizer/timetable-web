@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moderator Flow - View Switcher to Teacher View</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-mode="master">
+    <main class="demo-page weekly-page" data-left-open="true" data-right-open="true" data-teacher-codes="true">
+      <header class="demo-head compact-head">
+        <div>
+          <div class="eyebrow">Moderator Flow 3 of 4</div>
+          <h1>View switcher to teacher view</h1>
+          <p>Use the same shared view switcher to move from the master timetable into one teacher’s weekly schedule, including free periods, cover, and delegation context.</p>
+        </div>
+        <div class="demo-controls">
+          <a class="jump-link" href="./view-switcher-class.html">Back to class view flow</a>
+          <a class="jump-link" href="./index.html">Back to flow board</a>
+        </div>
+      </header>
+
+      <section class="app-toolbar">
+        <div class="toolbar-left">
+          <button class="icon-btn" type="button" aria-label="Back">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </button>
+          <button class="icon-btn" type="button" data-set-mode="switcher" aria-label="Open switcher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h5v10H4z" /><path d="M11 5h5v10h-5z" /><path d="M9 10h2" /></svg>
+          </button>
+          <button class="icon-btn active" type="button" data-panel-target="left" aria-label="Selection panel">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12M4 10h12M4 15h12" /><path d="M6 5v10" /></svg>
+          </button>
+          <button class="icon-btn active" type="button" data-panel-target="right" aria-label="Context panel">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4h10v12H5z" /><path d="M8 8h4M8 11h4" /></svg>
+          </button>
+        </div>
+        <div class="toolbar-center">
+          <span class="toolbar-title">Timetable view switcher</span>
+        </div>
+        <div class="toolbar-right">
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4a3 3 0 0 1 3 3v2.5c0 1 .4 2 1.1 2.7L15 13H5l.9-.8A3.8 3.8 0 0 0 7 9.5V7a3 3 0 0 1 3-3Z" /><path d="M8.5 15a1.5 1.5 0 0 0 3 0" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="User">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3" /><path d="M4.5 16c1.2-2.4 3-3.5 5.5-3.5S14.3 13.6 15.5 16" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="state-strip">
+        <div class="state-chip active" data-mode-label="master">Master timetable</div>
+        <div class="state-chip" data-mode-label="switcher">Switcher opened</div>
+        <div class="state-chip" data-mode-label="teacher">Teacher view selected</div>
+      </section>
+
+      <section class="weekly-workspace">
+        <aside class="side-panel side-panel-left" data-panel="left">
+          <div class="panel-title">Selection</div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">View mode</div>
+            <div class="engine-option-list">
+              <button class="engine-option active" data-state="master">Master timetable</button>
+              <button class="engine-option">Class view</button>
+              <button class="engine-option" data-show="switcher teacher">Teacher view</button>
+              <button class="engine-option">Room view</button>
+              <button class="engine-option">Subject view</button>
+            </div>
+          </div>
+
+          <div class="sidebar-section" data-show="teacher">
+            <div class="sidebar-section-title">Selected teacher</div>
+            <div class="teacher-list">
+              <div class="teacher-row"><span>Teacher</span><span>M. Petrosyan</span></div>
+              <div class="teacher-row"><span>Code</span><span>12</span></div>
+              <div class="teacher-row"><span>Load</span><span>18 / 24</span></div>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-section-title">Navigation</div>
+            <div class="teacher-list">
+              <div class="teacher-row"><span>Current term</span><span>Week 12</span></div>
+              <div class="teacher-row"><span>URL shape</span><span data-show="master">/timetable/week-12/master</span><span data-show="teacher">/timetable/week-12/teacher/12</span></div>
+              <div class="teacher-row"><span>Search</span><span>Teacher combobox</span></div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="weekly-main weekly-center">
+          <div class="switcher-stage">
+            <div class="switcher-banner">
+              <strong data-show="master">Master timetable is active</strong>
+              <strong data-show="switcher">Choose a teacher</strong>
+              <strong data-show="teacher">Teacher view is active for M. Petrosyan</strong>
+              <span data-show="master">Switching perspective should reuse the same workspace, not force a new mental model.</span>
+              <span data-show="switcher">Teacher search should be fast because teacher view is usually accessed by name, not code.</span>
+              <span data-show="teacher">Free periods, cover assignments, and delegations become first-class information in this view.</span>
+            </div>
+
+            <div class="switcher-shell strong-selected">
+              <div class="switcher-topline">
+                <div class="view-switch">
+                  <button class="toggle-btn active" data-state="master">Master</button>
+                  <button class="toggle-btn">Class</button>
+                  <button class="toggle-btn" data-state="switcher teacher">Teacher</button>
+                  <button class="toggle-btn">Room</button>
+                  <button class="toggle-btn">Subject</button>
+                </div>
+                <div class="top-actions">
+                  <span class="footer-chip" data-show="master">All resources visible</span>
+                  <span class="footer-chip" data-show="teacher">Teacher 12 selected</span>
+                  <span class="footer-chip" data-show="teacher">Free periods visible</span>
+                </div>
+              </div>
+
+              <div class="switcher-picker" data-show="switcher">
+                <div class="switcher-search strong-selected">
+                  <label>Teacher selector</label>
+                  <div class="search-input">Search teachers: M. Petrosyan</div>
+                </div>
+                <div class="switcher-results">
+                  <button class="switcher-result active strong-selected" data-set-mode="teacher">
+                    <strong>M. Petrosyan</strong>
+                    <span>Code 12 · Math · 18 / 24 load</span>
+                  </button>
+                  <button class="switcher-result">
+                    <strong>S. Davtyan</strong>
+                    <span>Code 03 · English · 20 / 24 load</span>
+                  </button>
+                  <button class="switcher-result">
+                    <strong>N. Gevorgyan</strong>
+                    <span>Code 07 · Biology · 17 / 24 load</span>
+                  </button>
+                  <button class="switcher-result">
+                    <strong>A. Mkrtchyan</strong>
+                    <span>Code 18 · History · 19 / 24 load</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="overview-wrap" data-show="master switcher">
+                <table class="week-time-table">
+                  <thead>
+                    <tr>
+                      <th class="class-col">Class</th>
+                      <th>
+                        <div class="day-head">
+                          <div class="day-title">Monday</div>
+                          <div class="time-strip">
+                            <div class="time-chip"><strong>08:00</strong><span>08:45</span></div>
+                            <div class="time-chip"><strong>09:00</strong><span>09:45</span></div>
+                            <div class="time-chip"><strong>10:00</strong><span>10:45</span></div>
+                            <div class="time-chip"><strong>11:00</strong><span>11:45</span></div>
+                            <div class="time-chip"><strong>12:00</strong><span>12:45</span></div>
+                            <div class="time-chip"><strong>13:00</strong><span>13:45</span></div>
+                            <div class="time-chip"><strong>14:00</strong><span>14:45</span></div>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="day-head">
+                          <div class="day-title">Tuesday</div>
+                          <div class="time-strip">
+                            <div class="time-chip"><strong>08:00</strong><span>08:45</span></div>
+                            <div class="time-chip"><strong>09:00</strong><span>09:45</span></div>
+                            <div class="time-chip"><strong>10:00</strong><span>10:45</span></div>
+                            <div class="time-chip"><strong>11:00</strong><span>11:45</span></div>
+                            <div class="time-chip"><strong>12:00</strong><span>12:45</span></div>
+                            <div class="time-chip"><strong>13:00</strong><span>13:45</span></div>
+                            <div class="time-chip"><strong>14:00</strong><span>14:45</span></div>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="day-head">
+                          <div class="day-title">Wednesday</div>
+                          <div class="time-strip">
+                            <div class="time-chip"><strong>08:00</strong><span>08:45</span></div>
+                            <div class="time-chip"><strong>09:00</strong><span>09:45</span></div>
+                            <div class="time-chip"><strong>10:00</strong><span>10:45</span></div>
+                            <div class="time-chip"><strong>11:00</strong><span>11:45</span></div>
+                            <div class="time-chip"><strong>12:00</strong><span>12:45</span></div>
+                            <div class="time-chip"><strong>13:00</strong><span>13:45</span></div>
+                            <div class="time-chip"><strong>14:00</strong><span>14:45</span></div>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="day-head">
+                          <div class="day-title">Thursday</div>
+                          <div class="time-strip">
+                            <div class="time-chip"><strong>08:00</strong><span>08:45</span></div>
+                            <div class="time-chip"><strong>09:00</strong><span>09:45</span></div>
+                            <div class="time-chip"><strong>10:00</strong><span>10:45</span></div>
+                            <div class="time-chip"><strong>11:00</strong><span>11:45</span></div>
+                            <div class="time-chip"><strong>12:00</strong><span>12:45</span></div>
+                            <div class="time-chip"><strong>13:00</strong><span>13:45</span></div>
+                            <div class="time-chip"><strong>14:00</strong><span>14:45</span></div>
+                          </div>
+                        </div>
+                      </th>
+                      <th>
+                        <div class="day-head">
+                          <div class="day-title">Friday</div>
+                          <div class="time-strip">
+                            <div class="time-chip"><strong>08:00</strong><span>08:45</span></div>
+                            <div class="time-chip"><strong>09:00</strong><span>09:45</span></div>
+                            <div class="time-chip"><strong>10:00</strong><span>10:45</span></div>
+                            <div class="time-chip"><strong>11:00</strong><span>11:45</span></div>
+                            <div class="time-chip"><strong>12:00</strong><span>12:45</span></div>
+                            <div class="time-chip"><strong>13:00</strong><span>13:45</span></div>
+                            <div class="time-chip"><strong>14:00</strong><span>14:45</span></div>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+<tr>
+                      <th class="class-col">10A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red conflict"><strong>Chm</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">8A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Lit</strong><span>16</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue conflict"><strong>Phy</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green conflict"><strong>Bio</strong><span>R clash</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Art</strong><span>05</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-orange"><strong>Art</strong><span>05</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">11B</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="split-slot"><div class="mini-slot t-purple"><strong>Eng G1</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm G2</strong><span>24</span></div></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">10A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red conflict"><strong>Chm</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">8A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Lit</strong><span>16</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue conflict"><strong>Phy</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green conflict"><strong>Bio</strong><span>R clash</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Art</strong><span>05</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-orange"><strong>Art</strong><span>05</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">11B</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="split-slot"><div class="mini-slot t-purple"><strong>Eng G1</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm G2</strong><span>24</span></div></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">10A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red conflict"><strong>Chm</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">8A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Lit</strong><span>16</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue conflict"><strong>Phy</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green conflict"><strong>Bio</strong><span>R clash</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-purple"><strong>Art</strong><span>05</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-purple"><strong>Mus</strong><span>11</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-orange"><strong>Art</strong><span>05</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">11B</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="split-slot"><div class="mini-slot t-purple"><strong>Eng G1</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm G2</strong><span>24</span></div></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div></div></td>
+                    </tr>
+<tr>
+                      <th class="class-col">10A</th>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>Geo</strong><span>19</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-red conflict"><strong>Chm</strong><span>--</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-blue"><strong>Phy</strong><span>09</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                      <td><div class="day-slot-grid"><div class="mini-slot t-green"><strong>Bio</strong><span>07</span></div><div class="mini-slot t-blue"><strong>Mth</strong><span>12</span></div><div class="mini-slot t-purple"><strong>Eng</strong><span>03</span></div><div class="mini-slot t-red"><strong>Chm</strong><span>24</span></div><div class="mini-slot t-orange"><strong>His</strong><span>18</span></div><div class="mini-slot t-green"><strong>PE</strong><span>22</span></div><div class="mini-slot free"><strong>Free</strong></div></div></td>
+                    </tr>
+</tbody>
+                </table>
+              </div>
+
+              <div class="overview-wrap teacher-focus-board" data-show="teacher">
+                <div class="class-focus-topbar">
+                  <div class="top-actions">
+                    <span class="footer-chip">Teacher M. Petrosyan</span>
+                    <span class="footer-chip">Math</span>
+                    <span class="footer-chip">18 / 24 load</span>
+                  </div>
+                  <div class="top-actions">
+                    <button class="toggle-btn">Previous teacher</button>
+                    <button class="toggle-btn active">M. Petrosyan</button>
+                    <button class="toggle-btn">Next teacher</button>
+                  </div>
+                </div>
+
+                <table class="mini-table class-focus-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Mon</th>
+                      <th>Tue</th>
+                      <th>Wed</th>
+                      <th>Thu</th>
+                      <th>Fri</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>08:00<br /><span>08:45</span></th>
+                      <td><div class="slot math strong-selected"><strong>10B · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>9A · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                    </tr>
+                    <tr>
+                      <th>09:00<br /><span>09:45</span></th>
+                      <td><div class="slot math strong-selected"><strong>8A · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>8A · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>10A · Math</strong><span>R12</span></div></td>
+                    </tr>
+                    <tr>
+                      <th>10:00<br /><span>10:45</span></th>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot geography"><strong>Delegation review</strong><span>11B requested swap</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>11A · Math</strong><span>R15</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>8A · Math</strong><span>R12</span></div></td>
+                    </tr>
+                    <tr>
+                      <th>11:00<br /><span>11:45</span></th>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>9B · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>8A · Math cover</strong><span>Lab 3 · cover badge</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                    </tr>
+                    <tr>
+                      <th>12:00<br /><span>12:45</span></th>
+                      <td><div class="slot math strong-selected"><strong>12A · Math</strong><span>R20</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot math strong-selected"><strong>10A · Math</strong><span>R12</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                      <td><div class="slot free"><strong>Free period</strong><span>No lesson</span></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <aside class="side-panel side-panel-right" data-panel="right">
+          <div class="panel-title">Context</div>
+
+          <section data-show="master">
+            <div class="teacher-list explanation-list">
+              <div class="teacher-row"><span>Current view</span><span>Master timetable</span></div>
+              <div class="teacher-row"><span>Why switch</span><span>Inspect one teacher fast</span></div>
+              <div class="teacher-row"><span>Teacher to inspect</span><span>M. Petrosyan</span></div>
+            </div>
+          </section>
+
+          <section data-show="switcher">
+            <div class="teacher-list explanation-list">
+              <div class="teacher-row strong-selected"><span>Open control</span><span>Shared view switcher</span></div>
+              <div class="teacher-row"><span>Selection type</span><span>Teacher + searchable target</span></div>
+              <div class="teacher-row"><span>Expected feeling</span><span>Fast by name</span></div>
+            </div>
+          </section>
+
+          <section data-show="teacher">
+            <div class="teacher-list explanation-list">
+              <div class="teacher-row strong-selected"><span>Current view</span><span>M. Petrosyan</span></div>
+              <div class="teacher-row"><span>Free periods</span><span>Clearly visible</span></div>
+              <div class="teacher-row"><span>Cover assignments</span><span>Shown inline</span></div>
+              <div class="teacher-row"><span>Delegations</span><span>Relevant requests visible</span></div>
+              <div class="teacher-row"><span>URL</span><span>/timetable/week-12/teacher/12</span></div>
+            </div>
+          </section>
+
+          <div class="panel-title sub">Why this matters</div>
+          <div class="detail-card">
+            <label>Tool rule</label>
+            <span>Teacher view should answer “when is this teacher busy, free, covering, or involved in delegation?” at a glance.</span>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="app-footerbar">
+        <div class="footer-left">
+          <span class="footer-chip">View switcher</span>
+          <span class="footer-chip">Teacher transition</span>
+          <span class="footer-chip">Free periods visible</span>
+        </div>
+      </footer>
+    </main>
+
+    <script src="./flow.js"></script>
+    <script src="./weekly-overview.js"></script>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Temporary Schedules</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="operations-app">
+      <section class="operations-layout">
+        <section class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Temporary schedule wizard</div>
+              <h2>Set up the special week</h2>
+            </div>
+            <span class="candidate-tag">E8-005</span>
+          </div>
+
+          <div class="step-list">
+            <div class="step-card">
+              <span class="step-tag">1</span>
+              <div>
+                <strong>Name and date range</strong>
+                <span>Exam week, Mon 12 Mar - Fri 16 Mar</span>
+              </div>
+              <span class="status-tag good">Done</span>
+            </div>
+            <div class="step-card">
+              <span class="step-tag">2</span>
+              <div>
+                <strong>Copy from master</strong>
+                <span>Use the current timetable as a starting point</span>
+              </div>
+              <span class="status-tag good">Done</span>
+            </div>
+            <div class="step-card">
+              <span class="step-tag">3</span>
+              <div>
+                <strong>Modify lessons</strong>
+                <span>Adjust exam rooms and special cases only</span>
+              </div>
+              <span class="status-tag warn">In progress</span>
+            </div>
+          </div>
+
+          <div class="auth-actions">
+            <button class="action-btn primary" type="button">Activate temporary schedule</button>
+            <button class="action-btn" type="button">Save draft</button>
+          </div>
+        </section>
+
+        <aside class="operations-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Active schedule</div>
+              <h2>Current special weeks</h2>
+            </div>
+            <span class="status-tag warn">1 active</span>
+          </div>
+
+          <div class="schedule-list">
+            <div class="schedule-row">
+              <div>
+                <strong>Exam week</strong>
+                <span>12 Mar - 16 Mar, active</span>
+              </div>
+              <span class="status-tag good">Live</span>
+            </div>
+            <div class="schedule-row">
+              <div>
+                <strong>Trip week</strong>
+                <span>Archived, no longer active</span>
+              </div>
+              <span class="status-tag">Archived</span>
+            </div>
+          </div>
+
+          <div class="workflow-banner">
+            <strong>Visibility rule</strong>
+            <span>When a temporary schedule is active, the timetable should show a prominent banner so users do not confuse it with the master view.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

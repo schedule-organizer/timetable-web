@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Teaching Groups</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Teaching groups">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5h10v4H5z" /><path d="M5 11h10v4H5z" /><path d="M8 9h4M8 15h4" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Teaching groups</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter groups">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Refresh groups">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6V4l2 2-2 2" /><path d="M15 14v2l-2-2 2-2" /><path d="M5.5 10a4.5 4.5 0 0 1 8.4-2.4" /><path d="M14.5 10a4.5 4.5 0 0 1-8.4 2.4" /></svg>
+          </button>
+          <a class="icon-btn" href="#create-group" aria-label="Create group">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Resource workflow</strong>
+            <span class="pill">RES-16</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./teachers-view.html"><span>Teachers view</span><span>Roster</span></a>
+            <a class="config-item" href="./subject-management.html"><span>Subject management</span><span>Curriculum</span></a>
+            <a class="config-item" href="./class-management.html"><span>Class management</span><span>Hours</span></a>
+            <a class="config-item" href="./room-management.html"><span>Room management</span><span>Constraints</span></a>
+            <button class="config-item active" type="button"><span>Teaching groups</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-16</div>
+            <h1>Class split and cross-class merge groups</h1>
+            <p>
+              Keep the group records lean: a list for review, a form for creation, and a small preview for split or
+              merge setup.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Teaching groups list</label>
+              <div class="group-table">
+                <div class="group-table-head">
+                  <span>Group</span>
+                  <span>Type</span>
+                  <span>Members</span>
+                  <span>Status</span>
+                </div>
+                <div class="group-table-row active">
+                  <div class="group-title">
+                    <strong>8A split A</strong>
+                    <span>Class 8A</span>
+                  </div>
+                  <span class="group-type-chip">Split</span>
+                  <span>14</span>
+                  <span class="status-chip active">Active</span>
+                </div>
+                <div class="group-table-row">
+                  <div class="group-title">
+                    <strong>8A split B</strong>
+                    <span>Class 8A</span>
+                  </div>
+                  <span class="group-type-chip">Split</span>
+                  <span>14</span>
+                  <span class="status-chip active">Active</span>
+                </div>
+                <div class="group-table-row">
+                  <div class="group-title">
+                    <strong>10A + 10B science</strong>
+                    <span>Cross-class</span>
+                  </div>
+                  <span class="group-type-chip">Merge</span>
+                  <span>46</span>
+                  <span class="status-chip active">Active</span>
+                </div>
+                <div class="group-table-row">
+                  <div class="group-title">
+                    <strong>9B language support</strong>
+                    <span>Class 9B</span>
+                  </div>
+                  <span class="group-type-chip">Split</span>
+                  <span>16</span>
+                  <span class="status-chip inactive">Inactive</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card" id="create-group">
+              <label>Selected group</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Group profile</div>
+                <h2>8A split A</h2>
+                <p>Class 8A · Active</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Group name</label>
+                  <input class="setting-input" type="text" value="8A split A" />
+                </div>
+                <div class="setting-row">
+                  <label>Group type</label>
+                  <select class="setting-input">
+                    <option selected>Split</option>
+                    <option>Merge</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Base class</label>
+                  <input class="setting-input" type="text" value="Class 8A" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Related classes</label>
+                <input class="setting-input" type="text" value="Class 8A" />
+              </div>
+              <div class="setting-row">
+                <label>Notes</label>
+                <textarea class="setting-input" rows="3">Short reason for the split or merge</textarea>
+              </div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save group</button>
+                <a class="action-btn" href="#create-group">Open edit</a>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Split and merge preview</label>
+              <div class="group-flow">
+                <div class="group-flow-card active">
+                  <strong>Split setup</strong>
+                  <span>Class 8A</span>
+                  <div class="pill-row">
+                    <span class="pill">8A split A</span>
+                    <span class="pill">8A split B</span>
+                  </div>
+                </div>
+                <div class="group-flow-card">
+                  <strong>Cross-class merge</strong>
+                  <span>10A + 10B science</span>
+                  <div class="pill-row">
+                    <span class="pill">10A</span>
+                    <span class="pill">10B</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Summary</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Groups</span><span>12</span></div>
+                <div class="mini-preview-row"><span>Split groups</span><span>7</span></div>
+                <div class="mini-preview-row"><span>Merge groups</span><span>5</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">12 groups</span>
+              <span class="pill">RES-16</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./index.html">Back</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Split / merge</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Model the teaching groups needed by the timetable</strong>
+            <span>Keep the page focused on the group name, the source classes, and the member count.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

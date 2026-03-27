@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow System Admin Workflows</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="../moderator/index.html" aria-label="Back to moderator workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="System admin overview">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h5v4H4zM11 5h5v4h-5zM4 11h5v4H4zM11 11h5v4h-5z" /><path d="M9 7h2M12 13h2M6 13h2" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Notifications">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4a3 3 0 0 1 3 3v2.5c0 1 .4 2 1.1 2.7L15 13H5l.9-.8A3.8 3.8 0 0 0 7 9.5V7a3 3 0 0 1 3-3Z" /><path d="M8.5 15a1.5 1.5 0 0 0 3 0" /><path d="M7.2 5.6a3.7 3.7 0 0 1 5.6 0" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">System admin workflows</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="User">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3" /><path d="M4.5 16c1.2-2.4 3-3.5 5.5-3.5S14.3 13.6 15.5 16" /><path d="M7 7.8c.9.8 2 .8 3 0" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="admin-hero">
+        <div>
+          <div class="eyebrow">Super Admin</div>
+          <h1>Institution configuration workflows</h1>
+          <p>
+            Build the institution-level setup pages first, then layer in the resource, reporting, and governance
+            flows around them. The goal is to keep system-wide settings, labels, calendars, and setup rules in one
+            consistent admin shell.
+          </p>
+        </div>
+        <div class="hero-panel">
+          <strong>Recommended first sequence</strong>
+          <div class="hero-stats">
+            <div class="hero-stat"><strong>1</strong><span>Institution settings</span></div>
+            <div class="hero-stat"><strong>2</strong><span>Labels + terminology</span></div>
+            <div class="hero-stat"><strong>3</strong><span>Academic years + terms</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="workflow-grid">
+        <article class="workflow-card">
+          <strong>Settings hub</strong>
+          <span>Institution defaults, labels, calendar, bell schedule, and constraints.</span>
+          <div class="workflow-meta">
+            <span class="pill active">Start here</span>
+            <span class="pill">CONFIG-06</span>
+            <span class="pill">CONFIG-08</span>
+          </div>
+          <a class="workflow-link" href="./settings/index.html">Open settings hub</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Institution setup</strong>
+          <span>Identity, locale, timezone, and system-wide defaults.</span>
+          <div class="workflow-meta">
+            <span class="pill active">Start here</span>
+            <span class="pill">CONFIG-06</span>
+          </div>
+          <a class="workflow-link" href="./institution-settings.html">Open institution settings</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Terminology and labels</strong>
+          <span>Class, period, subject, room, and student naming overrides.</span>
+          <div class="workflow-meta">
+            <span class="pill">CONFIG-06</span>
+            <span class="pill active">Next</span>
+          </div>
+          <a class="workflow-link" href="./labels-configuration.html">Open labels configuration</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Academic structure</strong>
+          <span>Academic years, terms, room types, and bell schedules.</span>
+          <div class="workflow-meta">
+            <span class="pill">CONFIG-07</span>
+            <span class="pill">CONFIG-08</span>
+            <span class="pill">HOL-06</span>
+          </div>
+          <a class="workflow-link" href="./academic-years-terms.html">Open academic years and terms</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Teachers view</strong>
+          <span>Teacher roster, codes, colors, availability, and staff actions.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-12</span>
+            <span class="pill">RES-13</span>
+          </div>
+          <a class="workflow-link" href="./teachers-view.html">Open teachers view</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>User management</strong>
+          <span>Invites, approvals, role changes, and teacher code control.</span>
+          <div class="workflow-meta">
+            <span class="pill">AUTH-14</span>
+            <span class="pill">Sys Admin</span>
+          </div>
+          <a class="workflow-link" href="./user-management.html">Open user management</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Reporting and oversight</strong>
+          <span>Utilization reports, audit log, and export entry points.</span>
+          <div class="workflow-meta">
+            <span class="pill">EXPORT-05</span>
+            <span class="pill">EXPORT-08</span>
+          </div>
+          <a class="workflow-link" href="./reports-teacher-utilization.html">Open reporting pages</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Governance tools</strong>
+          <span>Audit log and export panel for active views.</span>
+          <div class="workflow-meta">
+            <span class="pill">EXPORT-04</span>
+            <span class="pill">EXPORT-08</span>
+          </div>
+          <a class="workflow-link" href="./audit-log.html">Open audit and export</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Subject management</strong>
+          <span>Subject list, code, color, difficulty, and load setup.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-13</span>
+            <span class="pill">Curriculum</span>
+          </div>
+          <a class="workflow-link" href="./subject-management.html">Open subject management</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Class management</strong>
+          <span>Class list and subject-hours matrix editor.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-14</span>
+            <span class="pill">Hours matrix</span>
+          </div>
+          <a class="workflow-link" href="./class-management.html">Open class management</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Room management</strong>
+          <span>Room list and forbidden-slot editor.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-12</span>
+            <span class="pill">Slots</span>
+          </div>
+          <a class="workflow-link" href="./room-management.html">Open room management</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Teaching groups</strong>
+          <span>Class split and cross-class merge groups.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-16</span>
+            <span class="pill">Split / merge</span>
+          </div>
+          <a class="workflow-link" href="./teaching-groups.html">Open teaching groups</a>
+        </article>
+
+        <article class="workflow-card">
+          <strong>Option blocks</strong>
+          <span>Wizard for subject choices and student enrolment.</span>
+          <div class="workflow-meta">
+            <span class="pill">RES-17</span>
+            <span class="pill">Wizard</span>
+          </div>
+          <a class="workflow-link" href="./option-block-builder.html">Open option block builder</a>
+        </article>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

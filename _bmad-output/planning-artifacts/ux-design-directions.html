@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SchediFlow — Design Directions</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Inter", system-ui, sans-serif; font-size: 13px; background: #0f1923; color: #fff; }
+
+    /* ── SELECTOR ── */
+    .selector {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: #0f1923; border-bottom: 1px solid #2a3a4a;
+      display: flex; align-items: center; gap: 0; height: 48px; padding: 0 20px;
+    }
+    .sel-brand { font-weight: 700; font-size: 14px; margin-right: 24px; opacity: .6; }
+    .sel-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; opacity: .4; margin-right: 12px; }
+    .sel-tabs { display: flex; gap: 4px; }
+    .sel-tab {
+      padding: 6px 16px; border-radius: 6px; border: 1px solid transparent;
+      cursor: pointer; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.5);
+      background: transparent; transition: all .15s;
+    }
+    .sel-tab:hover { color: rgba(255,255,255,.8); background: rgba(255,255,255,.05); }
+    .sel-tab.active { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); }
+    .sel-note { margin-left: auto; font-size: 11px; opacity: .35; }
+
+    /* ── FRAMES ── */
+    .frame { display: none; height: calc(100vh - 48px); margin-top: 48px; overflow: hidden; }
+    .frame.active { display: flex; flex-direction: column; }
+
+    /* ══════════════════════════════════════════════════════════
+       DIRECTION 1: COMMAND (validated — dark topbar, white workspace)
+    ══════════════════════════════════════════════════════════ */
+    #d1 {
+      --top:    #172436;
+      --top2:   #1e2e40;
+      --blue:   #4a78d3;
+      --bdr:    #d0d8e4;
+      --bg:     #f4f6f9;
+      --white:  #ffffff;
+      --text:   #172436;
+      --muted:  #6b7a8e;
+    }
+    #d1 .topbar {
+      height: 40px; display: flex; align-items: center; gap: 8px;
+      padding: 0 12px; background: var(--top); color: #fff; flex-shrink: 0;
+    }
+    #d1 .tb-brand { font-weight: 700; font-size: 13px; }
+    #d1 .tb-sep { width: 1px; height: 16px; background: rgba(255,255,255,.15); }
+    #d1 .tb-title { font-size: 12px; opacity: .65; }
+    #d1 .tb-space { flex: 1; }
+    #d1 .tv-btn { padding: 3px 10px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: rgba(255,255,255,.5); font-size: 11px; }
+    #d1 .tv-btn.active { background: rgba(255,255,255,.13); color: #fff; }
+    #d1 .tb-btn { height: 27px; padding: 0 11px; border-radius: 4px; border: none; cursor: pointer; font-size: 11px; font-weight: 500; }
+    #d1 .tb-ghost { background: rgba(255,255,255,.1); color: rgba(255,255,255,.8); }
+    #d1 .tb-primary { background: var(--blue); color: #fff; }
+
+    #d1 .workspace { display: flex; flex: 1; overflow: hidden; }
+    #d1 .side-nav {
+      width: 160px; flex-shrink: 0; background: var(--top2); color: rgba(255,255,255,.65);
+      display: flex; flex-direction: column; padding: 8px 0;
+    }
+    #d1 .nav-sec { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: rgba(255,255,255,.3); padding: 8px 12px 4px; }
+    #d1 .nav-item { display: flex; align-items: center; gap: 7px; padding: 5px 12px; font-size: 12px; cursor: pointer; border-left: 3px solid transparent; }
+    #d1 .nav-item.active { background: rgba(255,255,255,.08); color: #fff; border-left-color: var(--blue); }
+    #d1 .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.3); flex-shrink: 0; }
+    #d1 .nav-item.active .nav-dot { background: var(--blue); }
+
+    #d1 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+    #d1 .sub-tb {
+      height: 34px; display: flex; align-items: center; gap: 7px;
+      padding: 0 10px; background: var(--white); border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+    }
+    #d1 .st-btn { height: 24px; padding: 0 9px; border-radius: 3px; border: 1px solid var(--bdr); font-size: 11px; cursor: pointer; background: var(--white); color: var(--text); }
+    #d1 .st-btn.active { background: var(--top); color: #fff; border-color: var(--top); }
+    #d1 .st-space { flex: 1; }
+    #d1 .st-stat { font-size: 11px; color: var(--muted); }
+    #d1 .ok { color: #2c9e78; font-weight: 600; }
+    #d1 .bad { color: #c0392b; font-weight: 600; }
+
+    #d1 .grid-wrap { flex: 1; overflow: auto; background: var(--white); }
+    #d1 table { border-collapse: collapse; width: 100%; }
+    #d1 thead th { background: var(--top2); color: rgba(255,255,255,.8); font-size: 11px; font-weight: 600; padding: 6px 8px; border-right: 1px solid rgba(255,255,255,.08); text-align: center; position: sticky; top: 0; }
+    #d1 thead th.tc { background: var(--top); text-align: left; width: 52px; }
+    #d1 tbody tr { border-bottom: 1px solid var(--bdr); }
+    #d1 tbody tr:nth-child(even) td, #d1 tbody tr:nth-child(even) th { background: #fafbfd; }
+    #d1 tbody th { position: sticky; left: 0; background: var(--white); border-right: 1px solid var(--bdr); font-size: 11px; font-weight: 700; padding: 0 8px; width: 52px; color: var(--text); z-index: 1; }
+    #d1 tbody td { padding: 2px 3px; border-right: 1px solid var(--bdr); vertical-align: top; }
+    #d1 .dc { display: flex; gap: 2px; padding: 1px; }
+    #d1 .ms { flex: 1; border-left: 3px solid #c8d0da; border-radius: 2px; padding: 2px 3px; background: #fff; }
+    #d1 .ms strong { display: block; font-size: 10px; font-weight: 700; }
+    #d1 .ms span { display: block; font-size: 9px; color: var(--muted); }
+    #d1 .ms.ma { border-color: #4a78d3; background: rgba(74,120,211,.08); }
+    #d1 .ms.sc { border-color: #2c9e78; background: rgba(44,158,120,.08); }
+    #d1 .ms.la { border-color: #7d63c7; background: rgba(125,99,199,.08); }
+    #d1 .ms.hi { border-color: #c47a20; background: rgba(196,122,32,.08); }
+    #d1 .ms.pe { border-color: #2d8da1; background: rgba(45,141,161,.08); }
+    #d1 .ms.fr { border-color: #c8d0da; background: transparent; background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 6px); }
+    #d1 .ms.fr strong { color: #9aa8b8; font-weight: 400; }
+    #d1 .ms.fr span { display: none; }
+    #d1 .ms.cf { border-color: #c0392b; background: #fff1f1; }
+    #d1 .ms.cf strong { color: #c0392b; }
+    #d1 .ms.pn { box-shadow: inset 0 0 0 2px rgba(23,36,54,.2); }
+
+    #d1 .statusbar { height: 24px; display: flex; align-items: center; gap: 16px; padding: 0 12px; background: var(--white); border-top: 1px solid var(--bdr); font-size: 11px; color: var(--muted); flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════
+       DIRECTION 2: PROFESSIONAL LIGHT (fully light, colored sidebar)
+    ══════════════════════════════════════════════════════════ */
+    #d2 {
+      --blue:  #3b6cc7;
+      --bdr:   #dde3ec;
+      --bg:    #f0f3f8;
+      --white: #ffffff;
+      --text:  #1a2740;
+      --muted: #6b7a8e;
+      --side:  #1a2740;
+    }
+    #d2 .topbar {
+      height: 44px; display: flex; align-items: center; gap: 10px;
+      padding: 0 16px; background: var(--white); border-bottom: 1px solid var(--bdr);
+      flex-shrink: 0;
+    }
+    #d2 .tb-brand { font-weight: 800; font-size: 14px; color: var(--text); letter-spacing: -.01em; }
+    #d2 .tb-brand span { color: var(--blue); }
+    #d2 .tb-sep { width: 1px; height: 16px; background: var(--bdr); }
+    #d2 .tb-title { font-size: 12px; color: var(--muted); }
+    #d2 .tb-space { flex: 1; }
+    #d2 .tv-btn { padding: 4px 12px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; background: transparent; color: var(--muted); font-size: 12px; font-weight: 500; }
+    #d2 .tv-btn.active { background: var(--bg); border-color: var(--bdr); color: var(--text); font-weight: 600; }
+    #d2 .tb-btn { height: 30px; padding: 0 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 500; }
+    #d2 .tb-ghost { background: var(--bg); color: var(--text); border: 1px solid var(--bdr); }
+    #d2 .tb-primary { background: var(--blue); color: #fff; }
+
+    #d2 .workspace { display: flex; flex: 1; overflow: hidden; }
+    #d2 .side-nav {
+      width: 180px; flex-shrink: 0; background: var(--side); color: rgba(255,255,255,.65);
+      display: flex; flex-direction: column; padding: 12px 0;
+    }
+    #d2 .nav-logo { padding: 4px 14px 12px; font-weight: 800; font-size: 15px; color: #fff; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 8px; }
+    #d2 .nav-logo span { color: #6a9fff; }
+    #d2 .nav-sec { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.25); padding: 10px 14px 4px; }
+    #d2 .nav-item { display: flex; align-items: center; gap: 8px; padding: 6px 14px; font-size: 12px; cursor: pointer; border-radius: 0; margin: 0 6px; border-radius: 6px; }
+    #d2 .nav-item.active { background: rgba(255,255,255,.1); color: #fff; }
+    #d2 .nav-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.25); flex-shrink: 0; }
+    #d2 .nav-item.active .nav-dot { background: #6a9fff; }
+
+    #d2 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+    #d2 .sub-tb {
+      height: 40px; display: flex; align-items: center; gap: 8px;
+      padding: 0 16px; background: var(--white); border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+    }
+    #d2 .sub-tb-title { font-weight: 600; font-size: 13px; color: var(--text); }
+    #d2 .st-btn { height: 26px; padding: 0 10px; border-radius: 5px; border: 1px solid var(--bdr); font-size: 11px; cursor: pointer; background: var(--white); color: var(--muted); }
+    #d2 .st-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    #d2 .st-space { flex: 1; }
+    #d2 .ok { color: #2c9e78; font-weight: 600; }
+    #d2 .bad { color: #c0392b; font-weight: 600; }
+
+    #d2 .grid-wrap { flex: 1; overflow: auto; background: var(--white); margin: 10px; border-radius: 8px; border: 1px solid var(--bdr); box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    #d2 table { border-collapse: collapse; width: 100%; }
+    #d2 thead th { background: #f8fafc; color: var(--muted); font-size: 11px; font-weight: 600; padding: 7px 8px; border-right: 1px solid var(--bdr); border-bottom: 2px solid var(--bdr); text-align: center; position: sticky; top: 0; }
+    #d2 thead th.tc { text-align: left; width: 54px; font-size: 10px; text-transform: uppercase; letter-spacing: .05em; }
+    #d2 tbody tr { border-bottom: 1px solid var(--bdr); }
+    #d2 tbody th { position: sticky; left: 0; background: #f8fafc; border-right: 2px solid var(--bdr); font-size: 11px; font-weight: 700; padding: 0 8px; width: 54px; color: var(--text); z-index: 1; }
+    #d2 tbody td { padding: 3px; border-right: 1px solid var(--bdr); vertical-align: top; }
+    #d2 .dc { display: flex; gap: 2px; padding: 1px; }
+    #d2 .ms { flex: 1; border-left: 3px solid #dde3ec; border-radius: 3px; padding: 3px 4px; background: #fff; }
+    #d2 .ms strong { display: block; font-size: 10px; font-weight: 700; }
+    #d2 .ms span { display: block; font-size: 9px; color: var(--muted); }
+    #d2 .ms.ma { border-color: #4a78d3; background: rgba(74,120,211,.07); }
+    #d2 .ms.sc { border-color: #2c9e78; background: rgba(44,158,120,.07); }
+    #d2 .ms.la { border-color: #7d63c7; background: rgba(125,99,199,.07); }
+    #d2 .ms.hi { border-color: #c47a20; background: rgba(196,122,32,.07); }
+    #d2 .ms.pe { border-color: #2d8da1; background: rgba(45,141,161,.07); }
+    #d2 .ms.fr { border-color: #dde3ec; background: transparent; background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(0,0,0,.025) 3px,rgba(0,0,0,.025) 6px); }
+    #d2 .ms.fr strong { color: #aab4c2; font-weight: 400; }
+    #d2 .ms.fr span { display: none; }
+    #d2 .ms.cf { border-color: #c0392b; background: #fff1f1; }
+    #d2 .ms.cf strong { color: #c0392b; }
+    #d2 .ms.pn { box-shadow: inset 0 0 0 2px rgba(26,39,64,.2); }
+    #d2 .statusbar { height: 28px; display: flex; align-items: center; gap: 16px; padding: 0 16px; background: var(--white); border-top: 1px solid var(--bdr); font-size: 11px; color: var(--muted); flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════
+       DIRECTION 3: DARK PRO (full dark — long-session comfort)
+    ══════════════════════════════════════════════════════════ */
+    #d3 {
+      --top:   #0d1825;
+      --side:  #111e2c;
+      --panel: #162030;
+      --card:  #1c2d40;
+      --bdr:   rgba(255,255,255,.09);
+      --blue:  #5a8eef;
+      --text:  rgba(255,255,255,.9);
+      --muted: rgba(255,255,255,.4);
+      --dim:   rgba(255,255,255,.15);
+    }
+    #d3 .topbar {
+      height: 40px; display: flex; align-items: center; gap: 8px;
+      padding: 0 12px; background: var(--top); border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+    }
+    #d3 .tb-brand { font-weight: 700; font-size: 13px; color: var(--text); }
+    #d3 .tb-sep { width: 1px; height: 16px; background: var(--bdr); }
+    #d3 .tb-title { font-size: 12px; color: var(--muted); }
+    #d3 .tb-space { flex: 1; }
+    #d3 .tv-btn { padding: 3px 10px; border-radius: 4px; border: none; cursor: pointer; background: transparent; color: var(--muted); font-size: 11px; }
+    #d3 .tv-btn.active { background: rgba(255,255,255,.08); color: var(--text); }
+    #d3 .tb-btn { height: 27px; padding: 0 11px; border-radius: 4px; border: none; cursor: pointer; font-size: 11px; font-weight: 500; }
+    #d3 .tb-ghost { background: rgba(255,255,255,.07); color: rgba(255,255,255,.7); border: 1px solid var(--bdr); }
+    #d3 .tb-primary { background: var(--blue); color: #fff; }
+
+    #d3 .workspace { display: flex; flex: 1; overflow: hidden; background: var(--panel); }
+    #d3 .side-nav {
+      width: 160px; flex-shrink: 0; background: var(--side); border-right: 1px solid var(--bdr);
+      display: flex; flex-direction: column; padding: 8px 0;
+    }
+    #d3 .nav-sec { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--dim); padding: 8px 12px 4px; }
+    #d3 .nav-item { display: flex; align-items: center; gap: 7px; padding: 5px 12px; font-size: 12px; cursor: pointer; color: rgba(255,255,255,.5); border-left: 3px solid transparent; }
+    #d3 .nav-item.active { background: rgba(255,255,255,.06); color: var(--text); border-left-color: var(--blue); }
+    #d3 .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.2); flex-shrink: 0; }
+    #d3 .nav-item.active .nav-dot { background: var(--blue); }
+
+    #d3 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    #d3 .sub-tb {
+      height: 34px; display: flex; align-items: center; gap: 7px;
+      padding: 0 10px; background: var(--panel); border-bottom: 1px solid var(--bdr); flex-shrink: 0;
+    }
+    #d3 .st-btn { height: 24px; padding: 0 9px; border-radius: 3px; border: 1px solid var(--bdr); font-size: 11px; cursor: pointer; background: rgba(255,255,255,.04); color: var(--muted); }
+    #d3 .st-btn.active { background: rgba(90,142,239,.2); color: var(--blue); border-color: rgba(90,142,239,.35); }
+    #d3 .st-space { flex: 1; }
+    #d3 .ok { color: #3db88a; font-weight: 600; }
+    #d3 .bad { color: #e05c5c; font-weight: 600; }
+
+    #d3 .grid-wrap { flex: 1; overflow: auto; }
+    #d3 table { border-collapse: collapse; width: 100%; }
+    #d3 thead th { background: #0d1825; color: rgba(255,255,255,.55); font-size: 11px; font-weight: 600; padding: 6px 8px; border-right: 1px solid var(--bdr); text-align: center; position: sticky; top: 0; }
+    #d3 thead th.tc { text-align: left; width: 52px; }
+    #d3 tbody tr { border-bottom: 1px solid var(--bdr); }
+    #d3 tbody tr:nth-child(odd) td, #d3 tbody tr:nth-child(odd) th { background: #1a2b3d; }
+    #d3 tbody tr:nth-child(even) td, #d3 tbody tr:nth-child(even) th { background: var(--card); }
+    #d3 tbody th { position: sticky; left: 0; border-right: 1px solid var(--bdr); font-size: 11px; font-weight: 700; padding: 0 8px; width: 52px; color: var(--text); z-index: 1; background: inherit; }
+    #d3 tbody td { padding: 2px 3px; border-right: 1px solid var(--bdr); vertical-align: top; }
+    #d3 .dc { display: flex; gap: 2px; padding: 1px; }
+    #d3 .ms { flex: 1; border-left: 3px solid rgba(255,255,255,.12); border-radius: 2px; padding: 2px 3px; background: rgba(255,255,255,.04); }
+    #d3 .ms strong { display: block; font-size: 10px; font-weight: 700; color: rgba(255,255,255,.85); }
+    #d3 .ms span { display: block; font-size: 9px; color: rgba(255,255,255,.35); }
+    #d3 .ms.ma { border-color: #5a8eef; background: rgba(90,142,239,.12); }
+    #d3 .ms.sc { border-color: #3db88a; background: rgba(61,184,138,.12); }
+    #d3 .ms.la { border-color: #9d7ee0; background: rgba(157,126,224,.12); }
+    #d3 .ms.hi { border-color: #e09a40; background: rgba(224,154,64,.12); }
+    #d3 .ms.pe { border-color: #3dacc0; background: rgba(61,172,192,.12); }
+    #d3 .ms.fr { border-color: rgba(255,255,255,.1); background: transparent; background-image: repeating-linear-gradient(45deg,transparent,transparent 3px,rgba(255,255,255,.03) 3px,rgba(255,255,255,.03) 6px); }
+    #d3 .ms.fr strong { color: rgba(255,255,255,.2); font-weight: 400; }
+    #d3 .ms.fr span { display: none; }
+    #d3 .ms.cf { border-color: #e05c5c; background: rgba(224,92,92,.12); }
+    #d3 .ms.cf strong { color: #e05c5c; }
+    #d3 .ms.pn { box-shadow: inset 0 0 0 2px rgba(90,142,239,.4); }
+    #d3 .statusbar { height: 24px; display: flex; align-items: center; gap: 16px; padding: 0 12px; background: var(--top); border-top: 1px solid var(--bdr); font-size: 11px; color: var(--muted); flex-shrink: 0; }
+
+    /* shared grid data macro */
+  </style>
+</head>
+<body>
+
+<!-- SELECTOR -->
+<div class="selector">
+  <span class="sel-brand">SchediFlow</span>
+  <span class="sel-label">Direction</span>
+  <div class="sel-tabs">
+    <button class="sel-tab active" onclick="show(1)">1 · Command (validated)</button>
+    <button class="sel-tab" onclick="show(2)">2 · Professional Light</button>
+    <button class="sel-tab" onclick="show(3)">3 · Dark Pro</button>
+  </div>
+  <span class="sel-note">Full-school timetable view · Term 3 draft</span>
+</div>
+
+<!-- ══ DIRECTION 1 ══════════════════════════════════════════════════════════ -->
+<div class="frame active" id="d1">
+  <div class="topbar">
+    <span class="tb-brand">SchediFlow</span>
+    <span class="tb-sep"></span>
+    <span class="tb-title">Term 3 · 2025/26 · Draft</span>
+    <span class="tb-space"></span>
+    <button class="tv-btn active">Class</button>
+    <button class="tv-btn">Teacher</button>
+    <button class="tv-btn">Room</button>
+    <button class="tv-btn">Subject</button>
+    <div style="width:8px"></div>
+    <button class="tb-btn tb-ghost">Run engine</button>
+    <button class="tb-btn tb-primary">Publish</button>
+  </div>
+  <div class="workspace">
+    <nav class="side-nav">
+      <div class="nav-sec">Resources</div>
+      <div class="nav-item active"><div class="nav-dot"></div>Timetable</div>
+      <div class="nav-item"><div class="nav-dot"></div>Teachers</div>
+      <div class="nav-item"><div class="nav-dot"></div>Classes</div>
+      <div class="nav-item"><div class="nav-dot"></div>Subjects</div>
+      <div class="nav-item"><div class="nav-dot"></div>Rooms</div>
+      <div class="nav-sec">Configure</div>
+      <div class="nav-item"><div class="nav-dot"></div>Constraints</div>
+      <div class="nav-item"><div class="nav-dot"></div>Bell schedule</div>
+      <div class="nav-sec">Reports</div>
+      <div class="nav-item"><div class="nav-dot"></div>Workload</div>
+    </nav>
+    <div class="main">
+      <div class="sub-tb">
+        <button class="st-btn active">All</button>
+        <button class="st-btn">Yr 8</button>
+        <button class="st-btn">Yr 9</button>
+        <button class="st-btn">Yr 10</button>
+        <button class="st-btn">Yr 11</button>
+        <button class="st-btn">Yr 12</button>
+        <span class="st-space"></span>
+        <span class="st-stat">Soft prefs: <span class="ok">89%</span></span>
+        <span style="margin-left:10px" class="st-stat">Conflicts: <span class="bad">2</span></span>
+      </div>
+      <div class="grid-wrap" id="g1"></div>
+      <div class="statusbar">
+        <span>15 classes · 525 slots</span>
+        <span class="ok">484 assigned</span>
+        <span style="color:#c0392b">2 conflicts</span>
+        <span style="margin-left:auto">Draft · Not published</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DIRECTION 2 ══════════════════════════════════════════════════════════ -->
+<div class="frame" id="d2">
+  <div class="topbar">
+    <span class="tb-brand">Schedi<span>Flow</span></span>
+    <span class="tb-sep"></span>
+    <span class="tb-title">Term 3 · 2025/26 · Draft</span>
+    <span class="tb-space"></span>
+    <button class="tv-btn active">Class view</button>
+    <button class="tv-btn">Teacher view</button>
+    <button class="tv-btn">Room view</button>
+    <div style="width:8px"></div>
+    <button class="tb-btn tb-ghost">Run engine</button>
+    <button class="tb-btn tb-primary">Publish</button>
+  </div>
+  <div class="workspace">
+    <nav class="side-nav">
+      <div class="nav-logo">Schedi<span>Flow</span></div>
+      <div class="nav-sec">Workspace</div>
+      <div class="nav-item active"><div class="nav-dot"></div>Timetable</div>
+      <div class="nav-item"><div class="nav-dot"></div>Teachers</div>
+      <div class="nav-item"><div class="nav-dot"></div>Classes</div>
+      <div class="nav-item"><div class="nav-dot"></div>Subjects</div>
+      <div class="nav-item"><div class="nav-dot"></div>Rooms</div>
+      <div class="nav-sec">Settings</div>
+      <div class="nav-item"><div class="nav-dot"></div>Constraints</div>
+      <div class="nav-item"><div class="nav-dot"></div>Bell schedule</div>
+      <div class="nav-sec">Reports</div>
+      <div class="nav-item"><div class="nav-dot"></div>Workload</div>
+    </nav>
+    <div class="main">
+      <div class="sub-tb">
+        <span class="sub-tb-title">School Timetable</span>
+        <div style="width:12px"></div>
+        <button class="st-btn active">All years</button>
+        <button class="st-btn">Year 8</button>
+        <button class="st-btn">Year 9</button>
+        <button class="st-btn">Year 10</button>
+        <button class="st-btn">Year 11</button>
+        <button class="st-btn">Year 12</button>
+        <span class="st-space"></span>
+        <span style="font-size:11px;color:#6b7a8e">Soft prefs: <span class="ok">89%</span> · Conflicts: <span class="bad">2</span></span>
+      </div>
+      <div class="grid-wrap" id="g2"></div>
+      <div class="statusbar">
+        <span>15 classes · 525 slots · 484 assigned · 2 conflicts</span>
+        <span style="margin-left:auto">Draft · Not published</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DIRECTION 3 ══════════════════════════════════════════════════════════ -->
+<div class="frame" id="d3">
+  <div class="topbar">
+    <span class="tb-brand">SchediFlow</span>
+    <span class="tb-sep"></span>
+    <span class="tb-title">Term 3 · 2025/26 · Draft</span>
+    <span class="tb-space"></span>
+    <button class="tv-btn active">Class</button>
+    <button class="tv-btn">Teacher</button>
+    <button class="tv-btn">Room</button>
+    <button class="tv-btn">Subject</button>
+    <div style="width:8px"></div>
+    <button class="tb-btn tb-ghost">Run engine</button>
+    <button class="tb-btn tb-primary">Publish</button>
+  </div>
+  <div class="workspace">
+    <nav class="side-nav">
+      <div class="nav-sec">Resources</div>
+      <div class="nav-item active"><div class="nav-dot"></div>Timetable</div>
+      <div class="nav-item"><div class="nav-dot"></div>Teachers</div>
+      <div class="nav-item"><div class="nav-dot"></div>Classes</div>
+      <div class="nav-item"><div class="nav-dot"></div>Subjects</div>
+      <div class="nav-item"><div class="nav-dot"></div>Rooms</div>
+      <div class="nav-sec">Configure</div>
+      <div class="nav-item"><div class="nav-dot"></div>Constraints</div>
+      <div class="nav-item"><div class="nav-dot"></div>Bell schedule</div>
+      <div class="nav-sec">Reports</div>
+      <div class="nav-item"><div class="nav-dot"></div>Workload</div>
+    </nav>
+    <div class="main">
+      <div class="sub-tb">
+        <button class="st-btn active">All</button>
+        <button class="st-btn">Yr 8</button>
+        <button class="st-btn">Yr 9</button>
+        <button class="st-btn">Yr 10</button>
+        <button class="st-btn">Yr 11</button>
+        <button class="st-btn">Yr 12</button>
+        <span class="st-space"></span>
+        <span style="font-size:11px">Soft prefs: <span class="ok">89%</span> &nbsp; Conflicts: <span class="bad">2</span></span>
+      </div>
+      <div class="grid-wrap" id="g3"></div>
+      <div class="statusbar">
+        <span>15 classes · 525 slots</span>
+        <span class="ok">484 assigned</span>
+        <span style="color:#e05c5c">2 conflicts</span>
+        <span style="margin-left:auto">Draft · Not published</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+const PERIODS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00'];
+const YR = [
+  {label:'Year 8', cls:['8A','8B','8C']},
+  {label:'Year 9', cls:['9A','9B','9C']},
+  {label:'Year 10', cls:['10A','10B','10C']},
+  {label:'Year 11', cls:['11A','11B','11C']},
+  {label:'Year 12', cls:['12A','12B','12C']},
+];
+const POOL = {
+  '8A':['ma','sc','la','hi','pe','sc','la'], '8B':['ma','sc','la','hi','pe','ma','la'],
+  '8C':['ma','sc','la','hi','pe','sc','hi'], '9A':['ma','sc','la','hi','pe','sc','la'],
+  '9B':['ma','sc','la','hi','pe','ma','hi'], '9C':['ma','sc','la','hi','pe','sc','la'],
+  '10A':['ma','sc','sc','la','hi','pe','sc'],'10B':['ma','sc','sc','la','hi','pe','ma'],
+  '10C':['ma','sc','sc','la','hi','pe','la'],'11A':['ma','sc','sc','la','hi','pe','sc'],
+  '11B':['ma','sc','sc','la','hi','pe','hi'],'11C':['ma','sc','sc','la','hi','pe','la'],
+  '12A':['ma','sc','sc','sc','la','hi','pe'],'12B':['ma','sc','sc','la','hi','pe','sc'],
+  '12C':['ma','sc','sc','la','hi','pe','sc'],
+};
+const SP = {'10A_3_1':'cf','11B_0_4':'cf','9A_1_2':'pn','9B_2_0':'pn','10C_4_6':'pn','11A_0_3':'pn','12A_3_1':'pn'};
+
+function shuffle(arr, seed) {
+  const a=[...arr]; let s=seed;
+  for(let i=a.length-1;i>0;i--){s=(s*1664525+1013904223)&0xffffffff;const j=Math.abs(s)%(i+1);[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function buildTable(id) {
+  const el = document.getElementById(id);
+  let h = '<table><thead><tr><th class="tc">Class</th>';
+  DAYS.forEach(d => { h+=`<th><div style="text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:4px 0">${d}</div><div style="display:flex;border-top:1px solid rgba(128,128,128,.15);">${PERIODS.map(p=>`<div style="flex:1;text-align:center;padding:2px 1px;font-size:9px;opacity:.6;border-right:1px solid rgba(128,128,128,.1)">${p}</div>`).join('')}</div></th>`; });
+  h += '</tr></thead><tbody>';
+  YR.forEach(({label, cls}) => {
+    h += `<tr style="border-bottom:1px solid rgba(128,128,128,.15)"><th colspan="${DAYS.length+1}" style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;opacity:.5;padding:4px 8px;font-weight:700">${label}</th></tr>`;
+    cls.forEach(c => {
+      h += `<tr><th class="tc">${c}</th>`;
+      DAYS.forEach((_,di) => {
+        const pool = shuffle(POOL[c], di*97+c.charCodeAt(0)*13+(c.charCodeAt(1)||7)*7);
+        h += '<td><div class="dc">';
+        PERIODS.forEach((_,pi) => {
+          const key=`${c}_${di}_${pi}`, sp=SP[key], cls2=sp||pool[pi]||'fr';
+          h += `<div class="ms ${cls2}${sp==='pn'?' pn':''}"><strong>${cls2==='fr'?'—':cls2==='cf'?'!!':cls2.toUpperCase()}</strong><span>${pi+1}</span></div>`;
+        });
+        h += '</div></td>';
+      });
+      h += '</tr>';
+    });
+  });
+  h += '</tbody></table>';
+  el.innerHTML = h;
+}
+
+buildTable('g1'); buildTable('g2'); buildTable('g3');
+
+function show(n) {
+  document.querySelectorAll('.frame').forEach((f,i) => f.classList.toggle('active', i===n-1));
+  document.querySelectorAll('.sel-tab').forEach((t,i) => t.classList.toggle('active', i===n-1));
+}
+</script>
+</body>
+</html>

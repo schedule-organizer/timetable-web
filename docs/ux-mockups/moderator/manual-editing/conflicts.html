@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Conflict Review</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="editing-app">
+      <section class="editing-grid">
+        <article class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">E6-008</div>
+              <h1>Conflict review</h1>
+              <p>See the current hard issues, then jump to the slot that needs attention.</p>
+            </div>
+            <span class="candidate-tag">3 conflicts</span>
+          </div>
+
+          <div class="editing-conflict-list">
+            <div class="editing-dot-row">
+              <div class="editing-dot bad"></div>
+              <div>
+                <strong>Teacher double-booked</strong>
+                <span>10A Physics and 10B Chemistry at the same time</span>
+              </div>
+              <button class="action-btn" type="button">Open</button>
+            </div>
+            <div class="editing-dot-row">
+              <div class="editing-dot bad"></div>
+              <div>
+                <strong>Room over-capacity</strong>
+                <span>Lab 1 assigned to a class that is too large</span>
+              </div>
+              <button class="action-btn" type="button">Open</button>
+            </div>
+            <div class="editing-dot-row">
+              <div class="editing-dot warn"></div>
+              <div>
+                <strong>Subject spread warning</strong>
+                <span>Hard lesson cluster still needs rebalancing</span>
+              </div>
+              <button class="action-btn" type="button">Open</button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="editing-panel">
+          <div class="editing-head">
+            <div>
+              <div class="eyebrow">Suggested fixes</div>
+              <h2>Quick actions</h2>
+            </div>
+            <span class="status-tag good">Live</span>
+          </div>
+          <div class="editing-rows">
+            <div class="editing-row">
+              <strong>Move to Period 3</strong>
+              <span>Suggested for the double-booked teacher</span>
+              <span class="status-tag good">Fix</span>
+            </div>
+            <div class="editing-row">
+              <strong>Assign different room</strong>
+              <span>Use a larger room for the over-capacity lesson</span>
+              <span class="status-tag good">Fix</span>
+            </div>
+            <div class="editing-row">
+              <strong>Filter conflicted lessons</strong>
+              <span>Show only lessons with badges</span>
+              <span class="status-tag">Filter</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../../session-shell.js"></script>
+  </body>
+</html>

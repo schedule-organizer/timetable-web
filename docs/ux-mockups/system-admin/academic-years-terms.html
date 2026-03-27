@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Academic Years and Terms</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Academic years">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v10H4z" /><path d="M7 4v4M13 4v4M4 9h12" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Current term">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Academic years and terms</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Calendar preview">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v10H4z" /><path d="M7 4v4M13 4v4M4 9h12" /></svg>
+          </button>
+          <a class="icon-btn" href="./bell-schedule-builder.html" aria-label="Open bell schedule builder">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.5v5" /><path d="M10 12.5v4" /><path d="M5.5 10h9" /><path d="M7.5 5.5 5 8" /><path d="M12.5 5.5 15 8" /><path d="M6 14.5c1.1-1.6 2.4-2.4 4-2.4s2.9.8 4 2.4" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Save academic structure">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Configuration map</strong>
+            <span class="pill">CONFIG-08</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item" type="button"><span>Institution basics</span><span>Done</span></button>
+            <button class="config-item" type="button"><span>Terminology</span><span>Done</span></button>
+            <button class="config-item active" type="button"><span>Academic years</span><span>Current</span></button>
+            <a class="config-item" href="./bell-schedule-builder.html"><span>Bell schedule</span><span>Next</span></a>
+            <button class="config-item" type="button"><span>Holiday calendar</span><span>Next</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 2 / CONFIG-08</div>
+            <h1>Academic year and term structure</h1>
+            <p>
+              Define the school calendar structure before building bell schedules. This page keeps academic years,
+              terms, and the current-term flag visible in one timeline.
+            </p>
+          </div>
+
+          <div class="timeline-shell">
+            <article class="year-card">
+              <div class="year-head">
+                <div>
+                  <strong>Academic year 2025-2026</strong>
+                  <span>Start: 1 Sep 2025 · End: 31 Aug 2026</span>
+                </div>
+                <div class="pill-row">
+                  <span class="pill active">Current year</span>
+                  <span class="pill">2 terms</span>
+                  <span class="pill">Calendar view enabled</span>
+                </div>
+              </div>
+
+              <div class="term-band">
+                <div class="term-block active">
+                  <strong>Term 1</strong>
+                  <span>1 Sep 2025 - 20 Dec 2025</span>
+                </div>
+                <div class="term-block">
+                  <strong>Term 2</strong>
+                  <span>5 Jan 2026 - 20 Mar 2026</span>
+                </div>
+                <div class="term-block">
+                  <strong>Term 3</strong>
+                  <span>30 Mar 2026 - 26 Jun 2026</span>
+                </div>
+                <div class="term-block">
+                  <strong>Summer break</strong>
+                  <span>27 Jun 2026 - 31 Aug 2026</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="year-card">
+              <div class="year-head">
+                <div>
+                  <strong>Academic year 2026-2027</strong>
+                  <span>Planned structure ready for next cycle</span>
+                </div>
+                <div class="pill-row">
+                  <span class="pill">Draft</span>
+                  <span class="pill">3 terms</span>
+                </div>
+              </div>
+
+              <div class="calendar-strip">
+                <div class="calendar-label">Structure</div>
+                <div class="calendar-cell active"><strong>Term 1</strong><span>Early autumn</span></div>
+                <div class="calendar-cell"><strong>Term 2</strong><span>Mid year</span></div>
+                <div class="calendar-cell"><strong>Term 3</strong><span>Late spring</span></div>
+                <div class="calendar-cell"><strong>Breaks</strong><span>Insert holidays</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Quick templates</label>
+              <div class="pill-row">
+                <span class="pill active">2-term year</span>
+                <span class="pill">3-term year</span>
+                <span class="pill">4-term year</span>
+              </div>
+              <div class="setting-row">
+                <label>Validation</label>
+                <div class="setting-input">Terms cannot overlap and must stay within the academic year bounds.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Current term = Term 1</span>
+              <span class="pill">1 warning</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./labels-configuration.html">Back</a>
+              <a class="action-btn" href="./bell-schedule-builder.html">Open bell schedule</a>
+              <button class="action-btn" type="button">Add term</button>
+              <button class="action-btn primary" type="button">Save calendar</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Timeline</span>
+          </div>
+          <div class="preview-card">
+            <label>Next page</label>
+            <strong>Bell schedule builder</strong>
+            <span>Once the school year is defined, move to daily periods and breaks so the timetable grid can reflect real bell times.</span>
+            <a class="workflow-link" href="./bell-schedule-builder.html">Open bell schedule builder</a>
+          </div>
+          <div class="preview-card">
+            <label>Risk notes</label>
+            <strong>Current term visibility</strong>
+            <span>Marking a current term should influence the default timetable view and reporting filters.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

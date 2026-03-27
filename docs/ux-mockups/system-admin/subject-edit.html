@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Edit Subject</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./subject-management.html" aria-label="Back to subject management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Edit subject</strong>
+        </div>
+        <div class="topbar-right"></div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Subject workflow</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./subject-management.html"><span>Subject management</span><span>List</span></a>
+            <a class="config-item" href="./subject-add.html"><span>Add subject</span><span>Create</span></a>
+            <button class="config-item active" type="button"><span>Edit subject</span><span>Current</span></button>
+            <a class="config-item" href="./subject-detail.html"><span>Subject detail</span><span>Profile</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-13</div>
+            <h1>Update subject record</h1>
+            <p>Edit the subject name, code, difficulty, color, and status without changing the timetable context.</p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Subject identity</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Name</label>
+                  <input class="setting-input" type="text" value="Mathematics" />
+                </div>
+                <div class="setting-row">
+                  <label>Subject code</label>
+                  <input class="setting-input" type="text" value="SUB-01" />
+                </div>
+                <div class="setting-row">
+                  <label>Difficulty</label>
+                  <select class="setting-input">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option selected>4</option>
+                    <option>5</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Color</label>
+                  <input class="setting-input" type="color" value="#4a78d3" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Load settings</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Weekly periods</label>
+                  <input class="setting-input" type="text" value="5" />
+                </div>
+                <div class="setting-row">
+                  <label>Spread</label>
+                  <select class="setting-input">
+                    <option selected>Even spread</option>
+                    <option>Clustered</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Editing SUB-01</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./subject-management.html">Cancel</a>
+              <button class="action-btn" type="button">Deactivate</button>
+              <button class="action-btn primary" type="button">Update subject</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="preview-card">
+            <label>Minimum update set</label>
+            <strong>Name, code, difficulty, color, and status</strong>
+            <span>Keep the edit form focused on the values that drive scheduling.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

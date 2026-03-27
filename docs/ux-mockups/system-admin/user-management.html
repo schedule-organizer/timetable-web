@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - User Management</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./index.html" aria-label="Back to admin workflows">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="User management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4a3 3 0 1 1 0 6a3 3 0 0 1 0-6Z" /><path d="M4.5 16c1.2-2.4 3-3.5 5.5-3.5S14.3 13.6 15.5 16" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">User management</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Filter users">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12l-4.5 5.1V15l-3 1V10.1Z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Import CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4h8v5H6z" /><path d="M5 12h10v4H5z" /><path d="M8 7h4" /></svg>
+          </button>
+          <a class="icon-btn" href="#invite-user" aria-label="Invite teacher">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Access control</strong>
+            <span class="pill">AUTH-14</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item active" type="button"><span>User management</span><span>Current</span></button>
+            <a class="config-item" href="./teacher-management.html"><span>Teacher management</span><span>Profile</span></a>
+            <a class="config-item" href="../auth-login.html"><span>Shared login</span><span>Root</span></a>
+            <a class="config-item" href="../profile-management.html"><span>Shared profile</span><span>Root</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 1 / AUTH-14</div>
+            <h1>Invites, approvals, and role control</h1>
+            <p>
+              Manage pending teachers, promote existing teachers to higher roles, and keep the first sys admin
+              account immutable.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>User list</label>
+              <div class="user-table">
+                <div class="user-table-head">
+                  <span>User</span>
+                  <span>Roles</span>
+                  <span>Status</span>
+                  <span>Code</span>
+                </div>
+                <div class="user-table-row active">
+                  <div class="user-title">
+                    <strong>A. Petrosyan</strong>
+                    <span>a.petrosyan@school.edu</span>
+                  </div>
+                  <div class="action-group">
+                    <span class="role-chip teacher">Teacher</span>
+                    <span class="role-chip moderator">Moderator</span>
+                  </div>
+                  <span class="status-chip pending">Pending</span>
+                  <span>TC-104</span>
+                </div>
+                <div class="user-table-row">
+                  <div class="user-title">
+                    <strong>M. Sargsyan</strong>
+                    <span>m.sargsyan@school.edu</span>
+                  </div>
+                  <div class="action-group">
+                    <span class="role-chip sysadmin">Sys Admin</span>
+                  </div>
+                  <span class="status-chip active">Active</span>
+                  <span>SA-001</span>
+                </div>
+                <div class="user-table-row">
+                  <div class="user-title">
+                    <strong>L. Aramyan</strong>
+                    <span>l.aramyan@school.edu</span>
+                  </div>
+                  <div class="action-group">
+                    <span class="role-chip teacher">Teacher</span>
+                  </div>
+                  <span class="status-chip active">Active</span>
+                  <span>TC-207</span>
+                </div>
+                <div class="user-table-row">
+                  <div class="user-title">
+                    <strong>R. Davtyan</strong>
+                    <span>r.davtyan@school.edu</span>
+                  </div>
+                  <div class="action-group">
+                    <span class="role-chip teacher">Teacher</span>
+                  </div>
+                  <span class="role-chip deactivated">Deactivated</span>
+                  <span>TC-318</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card" id="invite-user">
+              <label>Edit selected user</label>
+              <div class="auth-card-head">
+                <div class="eyebrow">Selected user</div>
+                <h2>A. Petrosyan</h2>
+                <p>a.petrosyan@school.edu · Pending teacher request</p>
+              </div>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Email</label>
+                  <input class="setting-input" type="email" value="a.petrosyan@school.edu" />
+                </div>
+                <div class="setting-row">
+                  <label>Name</label>
+                  <input class="setting-input" type="text" value="A. Petrosyan" />
+                </div>
+                <div class="setting-row">
+                  <label>Role</label>
+                  <select class="setting-input">
+                    <option selected>Teacher</option>
+                    <option>Moderator</option>
+                    <option>Sys Admin</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Teacher code</label>
+                  <input class="setting-input" type="text" value="TC-104" />
+                </div>
+              </div>
+              <div class="setting-row">
+                <label>Approval state</label>
+                <select class="setting-input">
+                  <option selected>Pending</option>
+                  <option>Active</option>
+                  <option>Deactivated</option>
+                </select>
+              </div>
+              <div class="pill-row">
+                <button class="action-btn primary" type="button">Save user</button>
+                <button class="action-btn" type="button">Approve request</button>
+                <button class="action-btn" type="button">Grant moderator</button>
+                <button class="action-btn" type="button">Grant sys-admin</button>
+                <button class="action-btn" type="button">Deactivate</button>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Role rules</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>First sys admin</span><span>Immutable</span></div>
+                <div class="mini-preview-row"><span>Teacher code</span><span>Sys Admin only</span></div>
+                <div class="mini-preview-row"><span>Default login role</span><span>Highest role</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Summary</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>Pending</span><span>3</span></div>
+                <div class="mini-preview-row"><span>Active</span><span>24</span></div>
+                <div class="mini-preview-row"><span>Multi-role</span><span>8</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">AUTH-14</span>
+              <span class="pill">Approval queue</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./index.html">Back</a>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Admin</span>
+          </div>
+          <div class="preview-card">
+            <label>Primary action</label>
+            <strong>Approve teachers and promote roles carefully</strong>
+            <span>The first sys admin cannot be reassigned, while teachers can gain moderator or sys admin access later.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

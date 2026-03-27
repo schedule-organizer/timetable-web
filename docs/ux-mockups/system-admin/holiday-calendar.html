@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Holiday Calendar</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./bell-schedule-builder.html" aria-label="Back to bell schedule builder">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+          <button class="icon-btn" type="button" aria-label="Holiday calendar">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12v10H4z" /><path d="M7 4v4M13 4v4M4 9h12" /><path d="M6 13l2 2 4-5" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Import holidays">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v8" /><path d="M7.5 9.5 10 12l2.5-2.5" /><path d="M4.5 15.5h11" /></svg>
+          </button>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Holiday calendar</strong>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" type="button" aria-label="Add holiday">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /><path d="M6 4h8v3H6z" /></svg>
+          </button>
+          <button class="icon-btn" type="button" aria-label="Save holiday calendar">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4h10l2 2v10H4z" /><path d="M7 4v5h6V4" /><path d="M7 14h6" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Configuration map</strong>
+            <span class="pill">HOL-06</span>
+          </div>
+          <div class="config-list">
+            <button class="config-item" type="button"><span>Institution basics</span><span>Done</span></button>
+            <button class="config-item" type="button"><span>Academic years</span><span>Done</span></button>
+            <button class="config-item" type="button"><span>Bell schedule</span><span>Done</span></button>
+            <button class="config-item active" type="button"><span>Holiday calendar</span><span>Current</span></button>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 2 / HOL-06</div>
+            <h1>Holiday calendar setup</h1>
+            <p>
+              Define holidays and exception days on top of the academic calendar and bell schedule. This gives the
+              timetable engine the non-teaching days it needs for real planning and reporting.
+            </p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Imported holidays</label>
+              <div class="mini-preview">
+                <div class="mini-preview-row"><span>1 Jan 2026</span><span>New Year holiday</span></div>
+                <div class="mini-preview-row"><span>24 Apr 2026</span><span>School closure</span></div>
+                <div class="mini-preview-row"><span>28 Apr 2026</span><span>Make-up closure</span></div>
+                <div class="mini-preview-row"><span>24 May 2026</span><span>National holiday</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Import options</label>
+              <div class="pill-row">
+                <span class="pill active">ICS import</span>
+                <span class="pill">CSV upload</span>
+                <span class="pill">Manual entry</span>
+              </div>
+              <div class="setting-row">
+                <label>Calendar scope</label>
+                <div class="setting-input">Academic year 2025-2026</div>
+              </div>
+              <div class="setting-row">
+                <label>Validation</label>
+                <div class="setting-input">Holiday dates cannot overlap active instruction days without a warning.</div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Manual edit preview</label>
+              <div class="calendar-strip">
+                <div class="calendar-label">Month</div>
+                <div class="calendar-cell active"><strong>Jan</strong><span>Holiday</span></div>
+                <div class="calendar-cell"><strong>Feb</strong><span>Teaching</span></div>
+                <div class="calendar-cell"><strong>Mar</strong><span>Teaching</span></div>
+                <div class="calendar-cell"><strong>Apr</strong><span>Closure</span></div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Sync notes</label>
+              <div class="pill-row">
+                <span class="pill active">Feeds timetable engine</span>
+                <span class="pill">Feeds reports</span>
+                <span class="pill">Feeds exports</span>
+              </div>
+              <div class="setting-row">
+                <label>Exception handling</label>
+                <div class="setting-input">Use holiday data to hide unavailable days from planning and utilization views.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">4 dates</span>
+              <span class="pill">1 import source</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./bell-schedule-builder.html">Back to bell schedule</a>
+              <button class="action-btn" type="button">Import holidays</button>
+              <button class="action-btn primary" type="button">Save calendar</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Holiday setup</span>
+          </div>
+          <div class="preview-card">
+            <label>Workflow position</label>
+            <strong>After bell schedule</strong>
+            <span>Holidays need the academic year and period structure already defined so the timetable engine can calculate available days.</span>
+          </div>
+          <div class="preview-card">
+            <label>Next page</label>
+            <strong>Teachers view</strong>
+            <span>Once calendar exceptions are defined, resource pages can use the same system shell and shared navigation.</span>
+            <a class="workflow-link" href="./teachers-view.html">Open teachers view</a>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

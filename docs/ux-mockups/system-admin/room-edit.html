@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Edit Room</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./room-management.html" aria-label="Back to room management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Edit room</strong>
+        </div>
+        <div class="topbar-right"></div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Room workflow</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./room-management.html"><span>Room management</span><span>List</span></a>
+            <a class="config-item" href="./room-add.html"><span>Add room</span><span>Create</span></a>
+            <button class="config-item active" type="button"><span>Edit room</span><span>Current</span></button>
+            <a class="config-item" href="./room-detail.html"><span>Room detail</span><span>Slots</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-12</div>
+            <h1>Update room record</h1>
+            <p>Edit the room identity and blocked times without changing the underlying room slot model.</p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Room identity</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Room name</label>
+                  <input class="setting-input" type="text" value="Room 101" />
+                </div>
+                <div class="setting-row">
+                  <label>Room code</label>
+                  <input class="setting-input" type="text" value="R-101" />
+                </div>
+                <div class="setting-row">
+                  <label>Type</label>
+                  <select class="setting-input">
+                    <option selected>Classroom</option>
+                    <option>Lab</option>
+                    <option>Hall</option>
+                    <option>Sports</option>
+                  </select>
+                </div>
+                <div class="setting-row">
+                  <label>Capacity</label>
+                  <input class="setting-input" type="text" value="28" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Forbidden slots</label>
+              <div class="slot-grid">
+                <div class="slot-head">
+                  <span>Day</span>
+                  <span>P1</span>
+                  <span>P2</span>
+                  <span>P3</span>
+                  <span>P4</span>
+                  <span>P5</span>
+                </div>
+                <div class="slot-row">
+                  <span>Mon</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell active">Blocked</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                </div>
+                <div class="slot-row">
+                  <span>Tue</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell active">Blocked</span>
+                  <span class="slot-cell">Open</span>
+                  <span class="slot-cell">Open</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Editing R-101</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./room-management.html">Cancel</a>
+              <button class="action-btn" type="button">Deactivate</button>
+              <button class="action-btn primary" type="button">Update room</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="preview-card">
+            <label>Minimum update set</label>
+            <strong>Name, code, type, capacity, and blocked slots</strong>
+            <span>Only the room fields that affect timetable placement belong here.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

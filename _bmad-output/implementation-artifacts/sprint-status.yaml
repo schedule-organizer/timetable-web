@@ -1,0 +1,79 @@
+# generated: batch create-story
+# last_updated: 2026-03-27T21:44:13Z
+# project: timetable-web
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: {project-root}/_bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created
+#   - in-progress: Developer actively working
+#   - review: Ready for code review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional / done
+
+development_status:
+  epic-1: in-progress
+  1-1-institution-registration-and-application-shell: ready-for-dev
+  1-2-institution-terminology-configuration: ready-for-dev
+  1-3-bell-schedule-definition: ready-for-dev
+  1-4-cycle-and-academic-term-configuration: ready-for-dev
+  1-5-pre-built-institution-templates-and-onboarding-wizard: ready-for-dev
+  1-6-teacher-invitation-and-magic-link-onboarding: ready-for-dev
+  1-7-role-management-rbac-and-subscription-tier-limits: ready-for-dev
+  epic-1-retrospective: optional
+
+  epic-2: backlog
+  2-1-teacher-management-manual-entry: ready-for-dev
+  2-2-bulk-teacher-import-via-csv: ready-for-dev
+  2-3-class-management: ready-for-dev
+  2-4-subject-management-with-difficulty-levels: ready-for-dev
+  2-5-room-management: ready-for-dev
+  2-6-teacher-self-profile-management: ready-for-dev
+  epic-2-retrospective: optional
+
+  epic-3: backlog
+  3-1-hard-constraint-definition: ready-for-dev
+  3-2-soft-preference-configuration-with-weights: ready-for-dev
+  3-3-subject-level-scheduling-rules: ready-for-dev
+  3-4-teacher-availability-submission-availability-grid: ready-for-dev
+  3-5-timetabler-availability-overview-and-override: ready-for-dev
+  epic-3-retrospective: optional
+
+  epic-4: backlog
+  4-1-schedule-generator-run: ready-for-dev
+  4-2-constraint-satisfaction-report: ready-for-dev
+  4-3-conflict-detection-and-plain-language-explanation: ready-for-dev
+  4-4-constraint-sensitivity-adjustment: ready-for-dev
+  epic-4-retrospective: optional
+
+  epic-5: backlog
+  5-1-timetable-grid-view: ready-for-dev
+  5-2-slot-pinning: ready-for-dev
+  5-3-manual-slot-assignment: ready-for-dev
+  5-4-conflict-detection-on-manual-assignment: ready-for-dev
+  5-5-partial-re-generation-on-unpinned-slots: ready-for-dev
+  epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-timetable-publishing: ready-for-dev
+  6-2-email-notifications-on-publish-and-changes: ready-for-dev
+  6-3-teacher-personal-timetable-view: ready-for-dev
+  6-4-teacher-full-school-read-only-grid-view: ready-for-dev
+  6-5-pdf-timetable-export: ready-for-dev
+  epic-6-retrospective: optional
+
+  epic-7: backlog
+  7-1-workload-report: ready-for-dev
+  7-2-constraint-satisfaction-summary: ready-for-dev
+  epic-7-retrospective: optional

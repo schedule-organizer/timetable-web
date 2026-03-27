@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Admin - Edit Class</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="admin-app">
+      <section class="topbar">
+        <div class="topbar-left">
+          <a class="icon-btn" href="./class-management.html" aria-label="Back to class management">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 6 10l6.5 6" /><path d="M4 10h8" /></svg>
+          </a>
+        </div>
+        <div class="topbar-center">
+          <strong class="toolbar-title">Edit class</strong>
+        </div>
+        <div class="topbar-right"></div>
+      </section>
+
+      <section class="config-layout">
+        <aside class="config-sidebar">
+          <div class="panel-head">
+            <strong>Class workflow</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="config-list">
+            <a class="config-item" href="./class-management.html"><span>Class management</span><span>List</span></a>
+            <a class="config-item" href="./class-add.html"><span>Add class</span><span>Create</span></a>
+            <button class="config-item active" type="button"><span>Edit class</span><span>Current</span></button>
+            <a class="config-item" href="./class-detail.html"><span>Class detail</span><span>Matrix</span></a>
+          </div>
+        </aside>
+
+        <section class="config-main">
+          <div class="config-hero">
+            <div class="eyebrow">Epic 3 / RES-14</div>
+            <h1>Update class record</h1>
+            <p>Edit the class identity and adjust the subject-hours matrix without changing the rest of the setup.</p>
+          </div>
+
+          <div class="config-grid">
+            <article class="setting-card">
+              <label>Class identity</label>
+              <div class="form-grid">
+                <div class="setting-row">
+                  <label>Class name</label>
+                  <input class="setting-input" type="text" value="Class 8A" />
+                </div>
+                <div class="setting-row">
+                  <label>Class code</label>
+                  <input class="setting-input" type="text" value="C-08A" />
+                </div>
+                <div class="setting-row">
+                  <label>Grade</label>
+                  <input class="setting-input" type="text" value="8" />
+                </div>
+                <div class="setting-row">
+                  <label>Students</label>
+                  <input class="setting-input" type="text" value="28" />
+                </div>
+                <div class="setting-row">
+                  <label>Status</label>
+                  <select class="setting-input">
+                    <option selected>Active</option>
+                    <option>Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </article>
+
+            <article class="setting-card">
+              <label>Subject-hours matrix</label>
+              <div class="matrix-grid">
+                <div class="matrix-head">
+                  <span>Subject</span>
+                  <span>P1</span>
+                  <span>P2</span>
+                  <span>P3</span>
+                  <span>P4</span>
+                </div>
+                <div class="matrix-row">
+                  <span>Math</span>
+                  <input class="matrix-cell active" type="text" value="5" />
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell" type="text" value="4" />
+                </div>
+                <div class="matrix-row">
+                  <span>English</span>
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell active" type="text" value="4" />
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell" type="text" value="4" />
+                </div>
+                <div class="matrix-row">
+                  <span>Science</span>
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell" type="text" value="4" />
+                  <input class="matrix-cell active" type="text" value="5" />
+                  <input class="matrix-cell" type="text" value="4" />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="footer-actions">
+            <div class="action-group">
+              <span class="pill active">Editing C-08A</span>
+            </div>
+            <div class="action-group">
+              <a class="action-btn" href="./class-management.html">Cancel</a>
+              <button class="action-btn" type="button">Deactivate</button>
+              <button class="action-btn primary" type="button">Update class</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="config-insight">
+          <div class="panel-head">
+            <strong>Guidance</strong>
+            <span class="pill">Update</span>
+          </div>
+          <div class="preview-card">
+            <label>Minimum update set</label>
+            <strong>Name, code, grade, students, and matrix</strong>
+            <span>Use the matrix to adjust hours without changing the class identity.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Notification Center</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="shared">
+    <main class="notifications-app">
+      <section class="notifications-grid">
+        <article class="notifications-panel">
+          <div class="notif-toolbar">
+            <span class="candidate-tag">10 recent</span>
+            <button class="action-btn" type="button">Mark all as read</button>
+            <span class="scope-pill active">All</span>
+            <span class="scope-pill">Unread</span>
+            <span class="scope-pill">Timetable</span>
+            <span class="scope-pill">Cover</span>
+            <span class="scope-pill">Delegation</span>
+          </div>
+          <div class="notif-list">
+            <div class="notif-row unread">
+              <div class="notif-dot"></div>
+              <div>
+                <strong>Timetable published for Week 12</strong>
+                <span>8 minutes ago · Tap to open published timetable</span>
+              </div>
+              <button class="action-btn primary" type="button">Open</button>
+            </div>
+            <div class="notif-row unread">
+              <div class="notif-dot"></div>
+              <div>
+                <strong>Cover assigned to your lesson</strong>
+                <span>20 minutes ago · Tap to review the cover assignment</span>
+              </div>
+              <button class="action-btn primary" type="button">Open</button>
+            </div>
+            <div class="notif-row">
+              <div class="notif-dot read"></div>
+              <div>
+                <strong>Delegation approved</strong>
+                <span>Yesterday · The approved request has been applied</span>
+              </div>
+              <button class="action-btn" type="button">Open</button>
+            </div>
+            <div class="notif-row">
+              <div class="notif-dot read"></div>
+              <div>
+                <strong>System message</strong>
+                <span>Yesterday · Bell schedule was updated for the next term</span>
+              </div>
+              <button class="action-btn" type="button">Open</button>
+            </div>
+          </div>
+        </article>
+
+        <aside class="notifications-panel">
+          <div class="workflow-head">
+            <div>
+              <div class="eyebrow">Bell dropdown</div>
+              <h2>No unread notifications</h2>
+            </div>
+            <span class="status-tag good">0 unread</span>
+          </div>
+          <div class="empty-state">
+            <strong>You're all caught up</strong>
+            <span>New events will appear here and in the bell icon badge when they arrive.</span>
+          </div>
+          <div class="workflow-banner">
+            <strong>Delivery rule</strong>
+            <span>Real-time notifications arrive via WebSocket, then stay available here for review and navigation.</span>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

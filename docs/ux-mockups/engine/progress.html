@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Engine Progress</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="moderator">
+    <main class="engine-app">
+      <section class="engine-grid">
+        <article class="engine-panel">
+          <div class="engine-head">
+            <div>
+              <div class="eyebrow">E6-003</div>
+              <h1>Runtime progress</h1>
+              <p>Live job status with score movement, elapsed time, and a visible cancel path.</p>
+            </div>
+            <span class="status-tag warn">Running</span>
+          </div>
+
+          <div class="engine-stats">
+            <div class="engine-stat"><label>Elapsed</label><strong>00:03:28</strong></div>
+            <div class="engine-stat"><label>Score</label><strong>82</strong></div>
+            <div class="engine-stat"><label>Hard</label><strong class="danger">1</strong></div>
+            <div class="engine-stat"><label>ETA</label><strong>01:24</strong></div>
+          </div>
+
+          <div class="engine-note">
+            <strong>Progress</strong>
+            <span>The solver is improving the draft while keeping pinned lessons untouched.</span>
+          </div>
+
+          <div class="engine-progress-bar" aria-label="Progress 68 percent">
+            <div class="engine-progress-fill" style="width: 68%"></div>
+          </div>
+
+          <div class="engine-rows">
+            <div class="engine-row">
+              <strong>Iteration</strong>
+              <span>12,480 / 18,400</span>
+              <span class="status-tag">Live</span>
+            </div>
+            <div class="engine-row">
+              <strong>Last improvement</strong>
+              <span>Teacher load balanced in 10A and 10B</span>
+              <span class="status-tag good">New</span>
+            </div>
+          </div>
+        </article>
+
+        <aside class="engine-panel">
+          <div class="engine-head">
+            <div>
+              <div class="eyebrow">Live timetable</div>
+              <h2>What the engine is filling</h2>
+            </div>
+            <button class="action-btn" type="button">Cancel job</button>
+          </div>
+          <div class="engine-rows">
+            <div class="engine-row">
+              <strong>Locked lesson</strong>
+              <span>Preserved as-is</span>
+              <span class="status-tag good">Pinned</span>
+            </div>
+            <div class="engine-row">
+              <strong>Fresh fill</strong>
+              <span>Placed by solver</span>
+              <span class="status-tag">New</span>
+            </div>
+            <div class="engine-row">
+              <strong>Still free</strong>
+              <span>Needs more iterations</span>
+              <span class="status-tag warn">Pending</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+    <script src="../session-shell.js"></script>
+  </body>
+</html>

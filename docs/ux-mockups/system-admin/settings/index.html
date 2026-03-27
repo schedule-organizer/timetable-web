@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SchediFlow - Settings Hub</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body data-session-role="system-admin">
+    <main class="settings-app">
+      <section class="settings-grid">
+        <article class="settings-panel">
+          <div class="settings-head">
+            <div>
+              <div class="eyebrow">Start here</div>
+              <h2>Institution setup</h2>
+            </div>
+            <span class="status-tag good">Shared</span>
+          </div>
+          <div class="settings-link-grid">
+            <a class="settings-card" href="../institution-settings.html">
+              <strong>Institution settings</strong>
+              <span>Identity, locale, and timezone.</span>
+            </a>
+            <a class="settings-card" href="../labels-configuration.html">
+              <strong>Labels</strong>
+              <span>Class, term, teacher, subject, room.</span>
+            </a>
+            <a class="settings-card" href="../difficulty-scale.html">
+              <strong>Difficulty scale</strong>
+              <span>Subject difficulty names and colors.</span>
+            </a>
+            <a class="settings-card" href="../room-types.html">
+              <strong>Room types</strong>
+              <span>Classroom, lab, gym, and more.</span>
+            </a>
+            <a class="settings-card" href="../academic-years-terms.html">
+              <strong>Academic years</strong>
+              <span>Years, terms, and current term.</span>
+            </a>
+            <a class="settings-card" href="../bell-schedule-builder.html">
+              <strong>Bell schedule</strong>
+              <span>Periods, breaks, lunch, and variants.</span>
+            </a>
+          </div>
+        </article>
+
+        <article class="settings-panel">
+          <div class="settings-head">
+            <div>
+              <div class="eyebrow">Current focus</div>
+              <h2>Constraint weights</h2>
+            </div>
+            <a class="action-btn" href="./constraints.html">Open editor</a>
+          </div>
+          <div class="settings-banner">
+            <strong>Engine priorities</strong>
+            <span>Adjust soft constraints without changing hard rules. Use this when the engine is valid but not ideal.</span>
+          </div>
+          <div class="settings-rows">
+            <div class="settings-row">
+              <strong>Teacher spread</strong>
+              <span>Balance lessons across the week</span>
+              <span class="status-tag good">Default 75</span>
+            </div>
+            <div class="settings-row">
+              <strong>Room utilization</strong>
+              <span>Prefer efficient use of specialist rooms</span>
+              <span class="status-tag good">Default 60</span>
+            </div>
+            <div class="settings-row">
+              <strong>Subject spread</strong>
+              <span>Avoid clustering hard subjects</span>
+              <span class="status-tag good">Default 70</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script src="../../session-shell.js"></script>
+  </body>
+</html>
