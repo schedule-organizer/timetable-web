@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+/* ─────────────────────────────────────────────
+   Tailwind v4 @theme — exposes design tokens as
+   first-class utilities: bg-brand-accent, text-color-error, etc.
+───────────────────────────────────────────── */
+
+@theme {
+  --color-brand-primary: #1e3a5f;
+  --color-brand-accent: #2e75b6;
+  --color-brand-light: #d6e4f0;
+
+  --color-surface: #f5f7fa;
+  --color-border: #e2e8f0;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  --color-success: #27ae60;
+  --color-warning: #e67e22;
+  --color-error: #e74c3c;
+  --color-info: #2e75b6;
+
+  --color-sidebar: #1a2740;
+  --color-workspace: #f3f4f6;
+  --color-topbar: #ffffff;
+  --color-focus-ring: #4a78d3;
+}
+
+/* ─────────────────────────────────────────────
+   Design Tokens — UX-DR1–3 (SchediFlow)
+   Raw CSS variables for inline styles and non-Tailwind usage.
+───────────────────────────────────────────── */
+
+:root {
+  /* Brand */
+  --brand-primary: #1e3a5f;
+  --brand-accent: #2e75b6;
+  --brand-light: #d6e4f0;
+
+  /* Semantic surfaces */
+  --color-background: #ffffff;
+  --color-surface: #f5f7fa;
+  --color-border: #e2e8f0;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+
+  /* Subject difficulty levels — configurable per institution via settings */
+  --difficulty-1: #22c55e;
+  --difficulty-2: #86efac;
+  --difficulty-3: #facc15;
+  --difficulty-4: #f97316;
+  --difficulty-5: #ef4444;
+
+  /* Status */
+  --color-success: #27ae60;
+  --color-warning: #e67e22;
+  --color-error: #e74c3c;
+  --color-info: #2e75b6;
+
+  /* Typography (UX-DR2) */
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Focus ring — 2px solid #4a78d3, all interactive elements (UX-DR4, UX-DR17) */
+  --color-focus-ring: #4a78d3;
+
+  /* Layout shell */
+  --topbar-height: 48px;
+  --sidebar-width: 160px;
+  --sidebar-width-collapsed: 48px;
+  --color-topbar: #ffffff;
+  --color-sidebar: #1a2740;
+  --color-workspace: #f3f4f6;
+}
+
+.dark {
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-border: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+}
+
+/* ─── Base resets ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus ring — UX-DR4, UX-DR17 */
+:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}

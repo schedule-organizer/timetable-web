@@ -1,0 +1,113 @@
+import { lazy, Suspense } from 'react'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { AppShell } from '@/components/layout/AppShell'
+import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
+import { RouteFallback } from '@/components/layout/RouteFallback'
+
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
+const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'))
+const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
+const PlaceholderPage = lazy(() => import('@/features/shell/pages/PlaceholderPage'))
+
+export const router = createBrowserRouter([
+  // Public auth routes
+  {
+    path: '/auth/login',
+    element: (
+      <Suspense fallback={<RouteFallback />}>
+        <LoginPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/auth/register',
+    element: (
+      <Suspense fallback={<RouteFallback />}>
+        <RegisterPage />
+      </Suspense>
+    ),
+  },
+  // Protected app shell — all child routes require authentication
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <AppShell />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      {
+        path: 'dashboard',
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <DashboardPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'timetable',
+        handle: { title: 'Timetable' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'teachers',
+        handle: { title: 'Teachers' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'classes',
+        handle: { title: 'Classes' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'subjects',
+        handle: { title: 'Subjects' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'rooms',
+        handle: { title: 'Rooms' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'engine',
+        handle: { title: 'Engine' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'settings',
+        handle: { title: 'Settings' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <PlaceholderPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+])

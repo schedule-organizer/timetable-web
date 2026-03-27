@@ -1,6 +1,6 @@
 # Story 1.1: Institution Registration & Application Shell
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -32,11 +32,11 @@ So that my school has a secure, isolated workspace in SchediFlow ready to config
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -64,13 +64,109 @@ First story in the backlog (Epic 1.1) — no predecessor.
 
 ### Agent Model Used
 
-_(filled by dev agent)_
+claude-sonnet-4-6
 
 ### Debug Log References
 
+- `FormControl` initially wrapped input in a `<div>`, breaking label/input accessibility association. Fixed by switching to Radix `Slot` so the `id` is stamped directly onto the input element, enabling `htmlFor` ↔ `id` linkage for RTL `getByLabelText`/`getByRole` queries.
+
 ### Completion Notes List
+
+- Greenfield project scaffolded from scratch: Vite 6 + React 18 + TypeScript strict + Tailwind v4 + MSW v2.
+- **AC (Registration):** `POST /api/v1/auth/register` → `RegisterPage` (full name, institution, email, password) → sets `authStore` + `tenantStore` → navigates to `/dashboard`. MSW handler returns mock `AuthResponse`.
+- **AC (Application Shell):** `AppShell` implements white topbar (48px, `--color-topbar`), dark sidebar (`--color-sidebar: #1a2740`, 160px on desktop), light-grey workspace (`--color-workspace: #f3f4f6`). Responsive: desktop sidebar shows icon+label; ≤768px collapses to icon strip via `hidden lg:block`; <768px shows fixed bottom tab bar (5 primary links). Focus rings: `:focus-visible { outline: 2px solid var(--color-focus-ring); }` where `--color-focus-ring: #4a78d3`. Inter font loaded from Google Fonts.
+- **AC (Isolation/Tenant):** `tenant_id` never sent in request bodies; resolved from JWT on backend. `accessToken` stored in-memory (`authStore`, Zustand only — no localStorage).
+- **AC (Trial):** `useRegister` sets `subscriptionTier: 'TRIAL'` in `tenantStore` on success.
+- **AC (Password hashing):** Backend concern; frontend stores no password; noted in `useRegister` — backend is sole authority on bcrypt/Argon2.
+- **Zod schemas:** `registerSchema` + `loginSchema` in `src/features/auth/auth.schemas.ts`; types inferred via `z.infer<>`.
+- **React Query hooks:** `useRegister`, `useLogin`, `useLogout`, `useLabels` in `src/api/hooks/useAuth.ts`. `onSuccess`/`onError` used only in `useMutation` callbacks (v5 compliant — no `useQuery` callbacks).
+- **MSW mock layer:** handlers for all `/api/v1/auth/*` and `/api/v1/settings/labels` routes in `src/mocks/handlers/auth.handlers.ts`. Browser entrypoint in `src/mocks/browser.ts`. Page-level mock data in `src/mocks/pages/auth-page.mock.ts`.
+- **Tests:** 23/23 passing. RTL queries use role/label (no CSS class queries). MSW `setupServer` used in test files.
+- **Token refresh:** Axios interceptor handles 401 → refresh transparently; no manual 401 handling in feature code.
+- **Important setup note:** Run `npx msw init public/` once after clone to generate the service worker for browser MSW.
 
 ### File List
 
+- `package.json`
+- `vite.config.ts`
+- `tsconfig.json`
+- `tsconfig.app.json`
+- `tsconfig.node.json`
+- `index.html`
+- `.env.example`
+- `src/styles/globals.css`
+- `src/lib/utils.ts`
+- `src/lib/axios.ts`
+- `src/lib/queryClient.ts`
+- `src/types/api.types.ts`
+- `src/types/auth.types.ts`
+- `src/store/authStore.ts`
+- `src/store/tenantStore.ts`
+- `src/store/timetableStore.ts`
+- `src/store/notificationStore.ts`
+- `src/mocks/fixtures/auth.fixtures.ts`
+- `src/mocks/pages/auth-page.mock.ts`
+- `src/mocks/handlers/auth.handlers.ts`
+- `src/mocks/handlers/index.ts`
+- `src/mocks/browser.ts`
+- `src/mocks/pages/README.md` (pre-existing)
+- `src/api/hooks/useAuth.ts`
+- `src/hooks/useCurrentUser.ts`
+- `src/hooks/useCurrentTenant.ts`
+- `src/hooks/useLabels.ts`
+- `src/hooks/usePermission.ts`
+- `src/components/ui/button.tsx`
+- `src/components/ui/input.tsx`
+- `src/components/ui/label.tsx`
+- `src/components/ui/card.tsx`
+- `src/components/ui/form.tsx`
+- `src/components/layout/AppShell.tsx`
+- `src/components/layout/RouteFallback.tsx`
+- `src/components/layout/Topbar.tsx`
+- `src/components/layout/Sidebar.tsx`
+- `src/components/layout/ProtectedRoute.tsx`
+- `src/features/auth/auth.schemas.ts`
+- `src/features/auth/components/RegisterForm.tsx`
+- `src/features/auth/components/LoginForm.tsx`
+- `src/features/auth/pages/RegisterPage.tsx`
+- `src/features/auth/pages/LoginPage.tsx`
+- `src/features/dashboard/pages/DashboardPage.tsx`
+- `src/routes.tsx`
+- `src/features/shell/pages/PlaceholderPage.tsx`
+- `src/App.tsx`
+- `src/main.tsx`
+- `src/test/setup.ts`
+- `src/test/test-utils.tsx`
+- `src/features/auth/pages/RegisterPage.test.tsx`
+- `src/features/auth/pages/LoginPage.test.tsx`
+- `src/components/layout/AppShell.test.tsx`
+
+### Change Log
+
+- 2026-03-28: Story 1.1 implemented from scratch. Full greenfield project scaffold, auth feature (register + login), application shell layout, MSW mock layer, Zustand stores, React Query hooks, Zod schemas, all tests passing (23/23).
+
+### Review Findings
+
+#### decision-needed
+
+- [x] [Review][Decision] Shell navigation links to routes not yet implemented — **Resolved (2026-03-28):** option 3 — `PlaceholderPage` at `src/features/shell/pages/PlaceholderPage.tsx` with route `handle.title`; child routes in `src/routes.tsx` for `/timetable`, `/teachers`, `/classes`, `/subjects`, `/rooms`, `/engine`, `/settings`.
+
+#### patch
+
+- [x] [Review][Patch] 401 refresh interceptor may leave `accessToken` stale in the store when `user` is unexpectedly null — **Fixed (2026-03-28):** [`src/lib/axios.ts`](src/lib/axios.ts) clears auth and rejects when refresh succeeds but `user` is missing (no inconsistent replay).
+- [x] [Review][Patch] Login does not hydrate `tenantStore` — **Fixed (2026-03-28):** [`src/api/hooks/useAuth.ts`](src/api/hooks/useAuth.ts) `useLogin` calls `setTenant` with minimal `TRIAL` bootstrap like register.
+- [x] [Review][Patch] Registration success sets `institutionName: ''` in `tenantStore` — **Fixed (2026-03-28):** `useRegister` `onSuccess` uses `variables.institutionName` in `TenantSettings`.
+- [x] [Review][Patch] Sidebar width does not collapse to 48px icon strip — **Fixed (2026-03-28):** [`src/components/layout/Sidebar.tsx`](src/components/layout/Sidebar.tsx) uses `md:w-[var(--sidebar-width-collapsed)] lg:w-[var(--sidebar-width)]` with centered icons until `lg`.
+- [x] [Review][Patch] Responsive breakpoints use `sm` (640px) and `lg` (1024px) instead of the story’s 768px split — **Fixed (2026-03-28):** `md` (768px) for sidebar vs bottom bar; [`src/components/layout/AppShell.tsx`](src/components/layout/AppShell.tsx) `pb-14 md:pb-0` aligned.
+- [x] [Review][Patch] Lazy route `Suspense` fallbacks are `null` — **Fixed (2026-03-28):** [`src/components/layout/RouteFallback.tsx`](src/components/layout/RouteFallback.tsx) + all `Suspense` in [`src/routes.tsx`](src/routes.tsx).
+
+#### deferred
+
+- [x] [Review][Defer] MSW dev `onUnhandledRequest: 'bypass'` — [`src/main.tsx:11`](src/main.tsx) — deferred, pre-existing (see `deferred-work.md`).
+
+- [x] [Review][Defer] Password hashing, 24h inactivity session (NFR) — deferred, pre-existing (backend).
+
+- [x] [Review][Defer] Same-email second institution AC — deferred, pre-existing (backend / MSW contract).
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done
