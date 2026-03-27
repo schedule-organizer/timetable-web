@@ -28,7 +28,6 @@ cmake-build-*/
 
 # BMAD Method (npx bmad-method install)
 _bmad/
-_bmad-output/
 .agents/
 .claude/
 

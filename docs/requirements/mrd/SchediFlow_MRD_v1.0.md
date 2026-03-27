@@ -75,7 +75,7 @@ Groups of schools under centralized administration represent a significant enter
 |---|---|---|
 | **Tier 1** | United Kingdom, Ireland, Australia, New Zealand, Canada | English-language markets, mature SaaS adoption, established timetabling culture, high willingness to pay for cloud tools |
 | **Tier 2** | United States | Large market but fragmented by state; strong competition from ERP-bundled solutions; approach via independent and charter school segment first |
-| **Tier 3** | Western Europe (Germany, Netherlands, Scandinavia) | Sophisticated education systems, strong data privacy expectations (GDPR expertise required), moderate timetabling software awareness |
+| **Tier 3** | Western Europe (Germany, Netherlands, Scandinavia) | Sophisticated education systems, strong data privacy expectations, moderate timetabling software awareness |
 | **Tier 4** | Southeast Asia, India, Middle East | High growth in private education, large class sizes, price-sensitive, strong opportunity for a modern cloud tool with appropriate localization |
 
 ---
@@ -486,7 +486,7 @@ The following requirements are derived from market research and reflect what eac
 |---|---|---|---|
 | Scheduling engine fails to produce valid schedules for complex institutions | Medium | High | Generator Sensitivity dial; clear user feedback; partial regeneration mode |
 | Price sensitivity in target markets prevents conversion | Medium | High | Generous free trial; Starter tier at low price point; demonstrate clear time savings in onboarding |
-| Data privacy concerns (GDPR, student data) delay adoption | Medium | Medium | GDPR compliance from day 1; data residency options; clear privacy policy |
+| Data privacy concerns (student data) delay adoption | Medium | Medium | Standard data privacy practices; clear privacy policy |
 | A well-funded competitor launches a similar product | Low | High | Speed to market; community and word-of-mouth moat; Template Library as defensible library asset |
 | Timetabling is "solved" by an existing SIS for the target customer | Medium | Medium | Focus on institutions where SIS timetabling module is absent or inadequate; integration partnership rather than competition |
 | AI Scheduling Assistant (Phase 2) does not meet quality bar | Low | Medium | Phase 2 is explicitly decoupled from MVP; AI depends on stable MVP foundation; internal testing before release |
@@ -522,7 +522,7 @@ The following requirements are derived from market research and reflect what eac
 | Version | 1.0 |
 | Date | March 2026 |
 | Status | Draft |
-| Related Documents | SchediFlow PRD v3.0 |
+| Related Documents | SchediFlow PRD v1.0 |
 
 ---
 
