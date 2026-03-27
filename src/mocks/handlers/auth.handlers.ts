@@ -1,6 +1,5 @@
 import { http, HttpResponse } from 'msw'
 import type { RegisterRequest, LoginRequest } from '@/types/auth.types'
-import { mockLabels, mockPublicSettings } from '@/mocks/pages/auth-page.mock'
 
 let _tokenId = 0
 
@@ -49,13 +48,5 @@ export const authHandlers = [
 
   http.post('/api/v1/auth/logout', () => {
     return new HttpResponse(null, { status: 204 })
-  }),
-
-  http.get('/api/v1/settings/labels', () => {
-    return HttpResponse.json(mockLabels)
-  }),
-
-  http.get('/api/v1/settings/public', () => {
-    return HttpResponse.json(mockPublicSettings)
   }),
 ]

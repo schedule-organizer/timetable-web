@@ -1,12 +1,8 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { api } from '@/lib/axios'
 import { useAuthStore } from '@/store/authStore'
 import { useTenantStore } from '@/store/tenantStore'
 import type { RegisterRequest, LoginRequest, AuthResponse, TenantSettings } from '@/types/auth.types'
-
-export const authQueryKeys = {
-  labels: () => ['settings', 'labels'] as const,
-}
 
 export function useRegister() {
   const { setAuth } = useAuthStore()
@@ -57,14 +53,5 @@ export function useLogout() {
       clearAuth()
       clearTenant()
     },
-  })
-}
-
-export function useLabels() {
-  return useQuery({
-    queryKey: authQueryKeys.labels(),
-    queryFn: () =>
-      api.get<Record<string, string>>('/api/v1/settings/labels').then((res) => res.data),
-    staleTime: Infinity, // Labels change only when an admin updates terminology.
   })
 }

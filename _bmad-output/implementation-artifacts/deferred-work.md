@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of 1-2-institution-terminology-configuration.md (2026-03-28)
+
+- AC2 multi-user / cross-tab terminology sync depends on backend or client polling beyond single-tab Zustand + React Query; track when real API and collaboration requirements land.
+
+- Vitest/Vite require a modern Node (≥18); enforce via `engines` / CI image / `.nvmrc` so contributors do not hit `crypto.getRandomValues` startup errors.
+
 ## Deferred from: code review of 1-1-institution-registration-and-application-shell.md (2026-03-28)
 
 - [x] [Review][Defer] MSW dev bypass — `worker.start({ onUnhandledRequest: 'bypass' })` in `src/main.tsx` can send unmatched paths to the real network when `VITE_API_BASE_URL` points at a backend; stricter `warn`/`error` or path-scoped handlers reduce surprise during integration. — deferred, pre-existing

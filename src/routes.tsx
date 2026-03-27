@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'))
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
 const PlaceholderPage = lazy(() => import('@/features/shell/pages/PlaceholderPage'))
+const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -101,10 +102,9 @@ export const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        handle: { title: 'Settings' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <SettingsPage />
           </Suspense>
         ),
       },
