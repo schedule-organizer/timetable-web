@@ -2,11 +2,19 @@ import { http, HttpResponse } from 'msw'
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
 import { mockAcademicTerms, mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
 import { mockTerminologyLabels } from '@/mocks/pages/settings-page.mock'
+import {
+  mockInstitutionTemplates,
+  mockTemplateBellSchedules,
+  mockTemplateCycles,
+  mockTemplateTerminologyOverrides,
+} from '@/mocks/pages/onboarding-page.mock'
 import { padDayLabels } from '@/lib/cycle-term-utils'
 import { findFirstOverlappingPair } from '@/lib/bell-schedule-utils'
 import type { AcademicTermsDto, CycleSettingsDto } from '@/types/cycle-term.types'
 import type { BellScheduleDto } from '@/types/bell-schedule.types'
 import type { TerminologyLabels } from '@/types/settings.types'
+import { applyTemplateRequestSchema } from '@/types/template.schemas'
+import type { AppliedTemplateSettings } from '@/types/template.types'
 
 // In-memory store for terminology labels; reset between MSW server resets.
 let currentLabels: TerminologyLabels = { ...mockTerminologyLabels }
@@ -56,6 +64,80 @@ export function resetAllSettingsMocks() {
 }
 
 export const settingsHandlers = [
+  http.get('/api/v1/settings/templates', () => {
+    return HttpResponse.json(mockInstitutionTemplates)
+  }),
+
+  http.post('/api/v1/settings/apply-template', async ({ request }) => {
+    let raw: unknown
+    try {
+      raw = await request.json()
+    } catch {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_JSON', message: 'Invalid JSON body.' },
+        { status: 400 },
+      )
+    }
+    const parsed = applyTemplateRequestSchema.safeParse(raw)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_BODY', message: 'Invalid apply-template request.' },
+        { status: 400 },
+      )
+    }
+    const body = parsed.data
+    const template = mockInstitutionTemplates.templates.find((t) => t.id === body.templateId)
+    if (!template) {
+      return HttpResponse.json(
+        { status: 404, code: 'TEMPLATE_NOT_FOUND', message: 'Template not found.' },
+        { status: 404 },
+      )
+    }
+
+    const bellPeriodsRaw = mockTemplateBellSchedules[body.templateId] ?? []
+    const cycleConfig = mockTemplateCycles[body.templateId]
+    const terminologyOverrides = mockTemplateTerminologyOverrides[body.templateId] ?? {}
+
+    // Apply bell schedule
+    currentBellSchedule = {
+      periods: bellPeriodsRaw.map((p, i) => ({
+        id: `period-tpl-${i + 1}`,
+        ...p,
+      })),
+    }
+
+    // Apply cycle
+    if (cycleConfig) {
+      currentCycle = {
+        cycleLengthDays: cycleConfig.cycleLengthDays,
+        dayLabels: padDayLabels(cycleConfig.dayLabels, cycleConfig.cycleLengthDays),
+      }
+    }
+
+    // Apply terminology
+    currentLabels = { ...mockTerminologyLabels, ...terminologyOverrides } as TerminologyLabels
+
+    const response: AppliedTemplateSettings = {
+      templateId: template.id,
+      templateName: template.name,
+      bellSchedule: {
+        periodsApplied: bellPeriodsRaw.length,
+        firstPeriodStart: bellPeriodsRaw[0]?.startTime ?? '',
+        lastPeriodEnd: bellPeriodsRaw[bellPeriodsRaw.length - 1]?.endTime ?? '',
+      },
+      cycle: {
+        cycleLengthDays: cycleConfig?.cycleLengthDays ?? 5,
+        cycleDescription: template.previewDetails.cycleDescription,
+      },
+      terminology: {
+        overridesApplied: Object.keys(terminologyOverrides),
+      },
+    }
+
+    return HttpResponse.json(response)
+  }),
+
+
   http.get('/api/v1/settings/labels', () => {
     return HttpResponse.json(currentLabels)
   }),

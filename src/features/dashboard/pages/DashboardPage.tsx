@@ -1,18 +1,22 @@
-import { useAuthStore } from '@/store/authStore'
+import { useOnboardingStore } from '@/store/onboardingStore'
+import { OnboardingWizard } from '@/features/onboarding/components/OnboardingWizard'
+import { SetupChecklist } from '@/features/onboarding/components/SetupChecklist'
 
-// Institution setup dashboard — landing page after registration.
-// Populated with setup wizard content in Story 1.5.
+// Institution setup dashboard.
+// Shows the onboarding wizard until it is completed, then shows the setup checklist.
 export default function DashboardPage() {
-  const user = useAuthStore((s) => s.user)
+  const wizardCompleted = useOnboardingStore((s) => s.wizardCompleted)
+
+  if (!wizardCompleted) {
+    return <OnboardingWizard />
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold" style={{ color: 'var(--color-text-primary)' }}>
-        Welcome, {user?.fullName ?? 'Timetabler'}!
+    <div className="mx-auto max-w-2xl px-4 py-8">
+      <h1 className="mb-6 text-2xl font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+        Setup Dashboard
       </h1>
-      <p className="mt-2" style={{ color: 'var(--color-text-secondary)' }}>
-        Your institution is ready. Use the sidebar to configure your school.
-      </p>
+      <SetupChecklist />
     </div>
   )
 }
