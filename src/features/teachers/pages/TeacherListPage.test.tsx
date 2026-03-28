@@ -1,130 +1,162 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from 'vitest'
-import { screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { setupServer } from 'msw/node'
 import { http, HttpResponse } from 'msw'
 import { render } from '@/test/test-utils'
 import TeacherListPage from '@/features/teachers/pages/TeacherListPage'
-import type { InvitedTeachersDto, SendInvitationsResponse } from '@/types/invitation.types'
+import {
+  invitationHandlers,
+  resetInvitationMocks,
+} from '@/mocks/handlers/invitation.handlers'
+import {
+  teacherHandlers,
+  resetTeacherMocks,
+} from '@/mocks/handlers/teacher.handlers'
 
-const mockTeachers: InvitedTeachersDto = {
-  content: [
-    {
-      id: 'teacher-1',
-      email: 'alice@school.edu',
-      fullName: 'Alice Chen',
-      status: 'ACTIVE',
-      invitedAt: '2026-03-20T10:00:00Z',
-      expiresAt: '2026-03-21T10:00:00Z',
-    },
-    {
-      id: 'teacher-2',
-      email: 'bob@school.edu',
-      fullName: null,
-      status: 'INVITED',
-      invitedAt: '2026-03-27T09:00:00Z',
-      expiresAt: '2026-03-28T09:00:00Z',
-    },
-    {
-      id: 'teacher-3',
-      email: 'carol@school.edu',
-      fullName: null,
-      status: 'EXPIRED',
-      invitedAt: '2026-03-10T08:00:00Z',
-      expiresAt: '2026-03-11T08:00:00Z',
-    },
-  ],
-}
-
-const sentResponse: SendInvitationsResponse = {
-  sent: [
-    {
-      id: 'teacher-new',
-      email: 'new@school.edu',
-      fullName: null,
-      status: 'INVITED',
-      invitedAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 86400000).toISOString(),
-    },
-  ],
-}
-
-const server = setupServer(
-  http.get('/api/v1/invitations', () => HttpResponse.json(mockTeachers)),
-  http.post('/api/v1/invitations', () => HttpResponse.json(sentResponse)),
-  http.post('/api/v1/invitations/:id/resend', ({ params }) =>
-    HttpResponse.json({
-      teacher: mockTeachers.content.find((t) => t.id === params.id),
-    }),
-  ),
-)
+const server = setupServer(...invitationHandlers, ...teacherHandlers)
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }))
-afterEach(() => server.resetHandlers())
+afterEach(() => {
+  server.resetHandlers()
+  resetInvitationMocks()
+  resetTeacherMocks()
+})
 afterAll(() => server.close())
 
-describe('TeacherListPage', () => {
-  it('renders page heading and invite button', async () => {
+describe('TeacherListPage manual roster', () => {
+  it('renders roster and invitations sections', async () => {
     render(<TeacherListPage />)
-
-    expect(screen.getByRole('heading', { name: /teachers/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /invite teachers/i })).toBeInTheDocument()
-  })
-
-  it('shows loading state initially', () => {
-    render(<TeacherListPage />)
-    expect(screen.getByRole('status')).toBeInTheDocument()
-  })
-
-  it('renders teacher list with emails and status badges', async () => {
-    render(<TeacherListPage />)
+    const roster = screen.getByLabelText('Manual teacher roster')
 
     await waitFor(() => {
-      expect(screen.getByText('alice@school.edu')).toBeInTheDocument()
+      expect(within(roster).getByText('Alice Chen')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('bob@school.edu')).toBeInTheDocument()
-    expect(screen.getByText('carol@school.edu')).toBeInTheDocument()
-
-    expect(screen.getByText('Active')).toBeInTheDocument()
-    expect(screen.getByText('Invited')).toBeInTheDocument()
-    expect(screen.getByText('Expired')).toBeInTheDocument()
-  })
-
-  it('shows teacher fullName when available', async () => {
-    render(<TeacherListPage />)
-
-    await waitFor(() => {
-      expect(screen.getByText('Alice Chen')).toBeInTheDocument()
-    })
-  })
-
-  it('shows resend button for INVITED and EXPIRED teachers, not for ACTIVE', async () => {
-    render(<TeacherListPage />)
-
-    await waitFor(() => {
-      expect(screen.getByText('alice@school.edu')).toBeInTheDocument()
-    })
-
-    // bob (INVITED) and carol (EXPIRED) should have resend buttons
-    expect(screen.getByRole('button', { name: /resend invite to bob@school.edu/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /resend invite to carol@school.edu/i })).toBeInTheDocument()
-
-    // alice (ACTIVE) should NOT have a resend button
-    expect(screen.queryByRole('button', { name: /resend invite to alice@school.edu/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Teacher roster/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Teacher invitations/i })).toBeInTheDocument()
   })
 
   it('shows empty state when no teachers exist', async () => {
-    server.use(http.get('/api/v1/invitations', () => HttpResponse.json({ content: [] })))
+    server.use(
+      http.get('/api/v1/teachers', () =>
+        HttpResponse.json({ content: [], page: 0, size: 0, totalElements: 0, totalPages: 0 }),
+      ),
+    )
 
     render(<TeacherListPage />)
 
+    const roster = screen.getByLabelText('Manual teacher roster')
     await waitFor(() => {
-      expect(screen.getByText(/no teachers yet/i)).toBeInTheDocument()
+      expect(within(roster).getByText(/No teachers yet/i)).toBeInTheDocument()
+    })
+
+    expect(within(roster).getByRole('button', { name: /Import via CSV/i })).toBeInTheDocument()
+    expect(within(roster).getAllByRole('button', { name: /^Add teacher$/i })).toHaveLength(1)
+  })
+
+  it('adds a teacher via the manual form', async () => {
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    const roster = screen.getByLabelText('Manual teacher roster')
+    await waitFor(() => {
+      expect(within(roster).getByText('Alice Chen')).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /Add teacher manually/i }))
+
+    await user.type(screen.getByLabelText(/First name/i), 'Cara')
+    await user.type(screen.getByLabelText(/Last name/i), 'Lee')
+    await user.type(screen.getByLabelText(/Email/i), 'cara@school.edu')
+    await user.type(screen.getByLabelText(/Phone/i), '+44 20 1111 2222')
+    await user.type(
+      screen.getByLabelText(/Subject qualifications/i),
+      'Biology, Chemistry',
+    )
+    await user.click(screen.getByRole('button', { name: /Create teacher/i }))
+
+    await waitFor(() => {
+      expect(within(roster).getByText('cara@school.edu')).toBeInTheDocument()
     })
   })
 
-  it('shows error when API fails to load teachers', async () => {
+  it('edits a teacher from the roster', async () => {
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    const roster = screen.getByLabelText('Manual teacher roster')
+    await waitFor(() => {
+      expect(within(roster).getByText('Alice Chen')).toBeInTheDocument()
+    })
+
+    const row = within(roster).getByText('Alice Chen').closest('tr')
+    expect(row).toBeTruthy()
+    if (!row) return
+
+    await user.click(within(row).getByRole('button', { name: /Edit/i }))
+    const phoneInput = screen.getByLabelText(/Phone/i)
+    await user.clear(phoneInput)
+    await user.type(phoneInput, '+44 20 9999 8888')
+    await user.click(screen.getByRole('button', { name: /Save changes/i }))
+
+    await waitFor(() => {
+      expect(within(roster).getByText('+44 20 9999 8888')).toBeInTheDocument()
+    })
+  })
+
+  it('deletes a teacher after confirmation', async () => {
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    const roster = screen.getByLabelText('Manual teacher roster')
+    await waitFor(() => {
+      expect(within(roster).getByText('Alice Chen')).toBeInTheDocument()
+    })
+
+    const row = within(roster).getByText('Alice Chen').closest('tr')
+    expect(row).toBeTruthy()
+    if (!row) return
+
+    await user.click(within(row).getByRole('button', { name: /Delete/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Are you sure you want to remove/i)).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /Delete teacher/i }))
+
+    await waitFor(() => {
+      expect(within(roster).queryByText('Alice Chen')).not.toBeInTheDocument()
+    })
+
+    expect(within(roster).getByText(/Alice Chen was removed from the roster/i)).toBeInTheDocument()
+    expect(within(roster).getByText(/review the schedule/i)).toBeInTheDocument()
+  })
+})
+
+describe('TeacherListPage invitations', () => {
+  it('renders invitation list with resend buttons', async () => {
+    render(<TeacherListPage />)
+
+    const invitations = screen.getByLabelText('Teacher invitations')
+    await waitFor(() => {
+      expect(within(invitations).getByText('alice@school.edu')).toBeInTheDocument()
+    })
+
+    expect(
+      within(invitations).getByRole('button', {
+        name: /resend invite to bob@school.edu/i,
+      }),
+    ).toBeInTheDocument()
+    expect(
+      within(invitations).getByRole('button', {
+        name: /resend invite to carol@school.edu/i,
+      }),
+    ).toBeInTheDocument()
+  })
+
+  it('handles invitation errors gracefully', async () => {
     server.use(
       http.get('/api/v1/invitations', () =>
         HttpResponse.json(
@@ -136,102 +168,41 @@ describe('TeacherListPage', () => {
 
     render(<TeacherListPage />)
 
+    const invitations = screen.getByLabelText('Teacher invitations')
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toBeInTheDocument()
+      expect(within(invitations).getByText(/Server error/i)).toBeInTheDocument()
     })
   })
 
-  it('opens the invite dialog when "Invite Teachers" is clicked', async () => {
-    const user = userEvent.setup()
+  it('shows empty invitation state', async () => {
+    server.use(
+      http.get('/api/v1/invitations', () =>
+        HttpResponse.json({ content: [] }, { status: 200 }),
+      ),
+    )
+
     render(<TeacherListPage />)
 
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-
-    expect(screen.getByRole('dialog', { name: /invite teachers/i })).toBeInTheDocument()
-  })
-
-  it('closes the invite dialog when Cancel is clicked', async () => {
-    const user = userEvent.setup()
-    render(<TeacherListPage />)
-
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-    expect(screen.getByRole('dialog', { name: /invite teachers/i })).toBeInTheDocument()
-
-    await user.click(screen.getByRole('button', { name: /cancel/i }))
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  })
-
-  it('validates that at least one valid email is entered before sending', async () => {
-    const user = userEvent.setup()
-    render(<TeacherListPage />)
-
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-    await user.click(screen.getByRole('button', { name: /send invitations/i }))
-
+    const invitations = screen.getByLabelText('Teacher invitations')
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toBeInTheDocument()
+      expect(within(invitations).getByText(/No teacher invitations yet/i)).toBeInTheDocument()
     })
   })
 
-  it('validates that entered text is valid email format', async () => {
-    const user = userEvent.setup()
-    render(<TeacherListPage />)
-
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-    await user.type(screen.getByLabelText(/email addresses/i), 'not-an-email')
-    await user.click(screen.getByRole('button', { name: /send invitations/i }))
-
-    await waitFor(() => {
-      expect(screen.getByRole('alert')).toBeInTheDocument()
-    })
-  })
-
-  it('sends invitations for valid emails and shows success', async () => {
-    const user = userEvent.setup()
-    render(<TeacherListPage />)
-
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-    await user.type(screen.getByLabelText(/email addresses/i), 'new@school.edu')
-    await user.click(screen.getByRole('button', { name: /send invitations/i }))
-
-    await waitFor(() => {
-      expect(screen.getByRole('status')).toBeInTheDocument()
-    })
-    expect(screen.getByText(/invitations sent successfully/i)).toBeInTheDocument()
-  })
-
-  it('sends invitations for multiple comma-separated emails', async () => {
-    const user = userEvent.setup()
-    render(<TeacherListPage />)
-
-    await waitFor(() => expect(screen.getByText('alice@school.edu')).toBeInTheDocument())
-
-    await user.click(screen.getByRole('button', { name: /invite teachers/i }))
-    await user.type(screen.getByLabelText(/email addresses/i), 'a@x.com, b@x.com')
-    await user.click(screen.getByRole('button', { name: /send invitations/i }))
-
-    await waitFor(() => {
-      expect(screen.getByText(/invitations sent successfully/i)).toBeInTheDocument()
-    })
-  })
-
-  it('calls resend API when Resend button is clicked', async () => {
+  it('calls resend API when Resend is clicked', async () => {
     let resendCalled = false
     server.use(
       http.post('/api/v1/invitations/:id/resend', ({ params }) => {
         resendCalled = true
         return HttpResponse.json({
-          teacher: { ...mockTeachers.content[1], id: params.id },
+          teacher: {
+            id: params.id,
+            email: 'bob@school.edu',
+            fullName: null,
+            status: 'INVITED',
+            invitedAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 86400000).toISOString(),
+          },
         })
       }),
     )
@@ -239,9 +210,14 @@ describe('TeacherListPage', () => {
     const user = userEvent.setup()
     render(<TeacherListPage />)
 
-    await waitFor(() => expect(screen.getByText('bob@school.edu')).toBeInTheDocument())
+    const invitations = screen.getByLabelText('Teacher invitations')
+    await waitFor(() => {
+      expect(within(invitations).getByText('bob@school.edu')).toBeInTheDocument()
+    })
 
-    await user.click(screen.getByRole('button', { name: /resend invite to bob@school.edu/i }))
+    await user.click(
+      within(invitations).getByRole('button', { name: /resend invite to bob@school.edu/i }),
+    )
 
     await waitFor(() => {
       expect(resendCalled).toBe(true)

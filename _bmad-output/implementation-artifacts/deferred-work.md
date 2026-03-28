@@ -1,5 +1,9 @@
 # Deferred work
 
+## Deferred from: code review of 2-1-teacher-management-manual-entry.md (2026-03-29)
+
+- No dedicated Vitest case for `GET /api/v1/teachers` failure on the manual roster (error banner path); add when stabilizing error UX or E2E.
+
 ## Deferred from: code review of 1-7-role-management-rbac-and-subscription-tier-limits.md (2026-03-28)
 
 - Cross-tenant isolation and 403 responses (FR37): frontend mocks and client checks are supplementary; full enforcement belongs to the API — confirm with contract/integration tests when the real backend is wired.
