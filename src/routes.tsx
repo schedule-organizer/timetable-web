@@ -12,6 +12,8 @@ const SettingsLayout = lazy(() => import('@/features/settings/pages/SettingsLayo
 const TerminologySettingsPage = lazy(() => import('@/features/settings/pages/TerminologySettingsPage'))
 const BellSchedulePage = lazy(() => import('@/features/settings/pages/BellSchedulePage'))
 const CycleSettingsPage = lazy(() => import('@/features/settings/pages/CycleSettingsPage'))
+const TeacherListPage = lazy(() => import('@/features/teachers/pages/TeacherListPage'))
+const MagicLinkOnboardingPage = lazy(() => import('@/features/teachers/pages/MagicLinkOnboardingPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -28,6 +30,14 @@ export const router = createBrowserRouter([
     element: (
       <Suspense fallback={<RouteFallback />}>
         <RegisterPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/auth/magic-link',
+    element: (
+      <Suspense fallback={<RouteFallback />}>
+        <MagicLinkOnboardingPage />
       </Suspense>
     ),
   },
@@ -63,7 +73,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Teachers' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <TeacherListPage />
           </Suspense>
         ),
       },

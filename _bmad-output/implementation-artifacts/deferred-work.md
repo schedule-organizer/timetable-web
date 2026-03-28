@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of 1-6-teacher-invitation-and-magic-link-onboarding.md (2026-03-28)
+
+- AC1: Per-teacher email delivery and message content are backend/email-system concerns; the web app posts invitations and shows success. Confirm end-to-end when the real API and mailer exist.
+
+- MSW `POST /api/v1/auth/magic-link/complete` could use `magicLinkCompleteRequestSchema` for parity with production validation and with `POST /api/v1/invitations`; low priority for local mocks.
+
 ## Deferred from: code review of 1-4-cycle-and-academic-term-configuration.md (2026-03-28)
 
 - Schedule generator acceptance criterion (use active term date range + cycle when generator runs) — UI wiring belongs to Epic 4; pure helpers are in place per story notes.
