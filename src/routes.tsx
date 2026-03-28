@@ -16,6 +16,7 @@ const TeacherListPage = lazy(() => import('@/features/teachers/pages/TeacherList
 const MagicLinkOnboardingPage = lazy(() => import('@/features/teachers/pages/MagicLinkOnboardingPage'))
 const ClassManagementPage = lazy(() => import('@/features/classes/pages/ClassManagementPage'))
 const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleManagementPage'))
+const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -93,7 +94,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Subjects' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <SubjectManagementPage />
           </Suspense>
         ),
       },

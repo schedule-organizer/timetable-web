@@ -2,6 +2,7 @@ import { authHandlers } from './auth.handlers'
 import { settingsHandlers } from './settings.handlers'
 import { invitationHandlers } from './invitation.handlers'
 import { rbacHandlers } from './rbac.handlers'
+import { subjectHandlers } from './subject.handlers'
 import { teacherHandlers } from './teacher.handlers'
 import { classHandlers } from './class.handlers'
 
@@ -11,5 +12,6 @@ export const handlers = [
   ...invitationHandlers,
   ...rbacHandlers,
   ...classHandlers,
+  ...subjectHandlers,
   ...teacherHandlers,
 ]
