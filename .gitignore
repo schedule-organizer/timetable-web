@@ -101,6 +101,9 @@ bower_components/
 .pnp
 .pnp.js
 
+# TypeScript incremental
+*.tsbuildinfo
+
 # Build output
 dist/
 build/
@@ -150,6 +153,17 @@ coverage/
 htmlcov/
 .tox/
 .pytest_cache/
+
+# Playwright
+output/playwright/
+test-results/
+playwright-report/
+
+# MSW service worker (regenerate with: npx msw init public/)
+public/mockServiceWorker.js
+
+# Storybook
+storybook-static/
 
 # =============================================================================
 # Misc
