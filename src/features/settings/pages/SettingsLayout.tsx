@@ -34,6 +34,9 @@ export default function SettingsLayout() {
         <NavLink to="bell-schedule" className={linkClass}>
           {label('bellSchedule')}
         </NavLink>
+        <NavLink to="cycle" className={linkClass}>
+          {label('cycle')}
+        </NavLink>
       </nav>
 
       <Outlet />

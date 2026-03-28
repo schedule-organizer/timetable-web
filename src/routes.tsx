@@ -11,6 +11,7 @@ const PlaceholderPage = lazy(() => import('@/features/shell/pages/PlaceholderPag
 const SettingsLayout = lazy(() => import('@/features/settings/pages/SettingsLayout'))
 const TerminologySettingsPage = lazy(() => import('@/features/settings/pages/TerminologySettingsPage'))
 const BellSchedulePage = lazy(() => import('@/features/settings/pages/BellSchedulePage'))
+const CycleSettingsPage = lazy(() => import('@/features/settings/pages/CycleSettingsPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -124,6 +125,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<RouteFallback />}>
                 <BellSchedulePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'cycle',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <CycleSettingsPage />
               </Suspense>
             ),
           },

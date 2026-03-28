@@ -101,6 +101,9 @@ bower_components/
 .pnp
 .pnp.js
 
+# TypeScript incremental
+*.tsbuildinfo
+
 # Build output
 dist/
 build/

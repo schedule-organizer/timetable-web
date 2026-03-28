@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import axios from 'axios'
 import { useForm, useFieldArray, type UseFormRegister } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -20,22 +19,13 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical } from 'lucide-react'
 import { bellScheduleFormSchema, type BellScheduleFormValues } from '@/features/settings/bell-schedule.schemas'
+import { getApiErrorMessage } from '@/lib/api-error-message'
 import { findFirstOverlappingPair } from '@/lib/bell-schedule-utils'
 import { useBellSchedule, useUpdateBellSchedule } from '@/api/hooks/useBellSchedule'
 import { useLabels } from '@/hooks/useLabels'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-
-function getApiErrorMessage(error: unknown): string {
-  if (axios.isAxiosError(error) && error.response?.data && typeof error.response.data === 'object') {
-    const data = error.response.data as { message?: string }
-    if (typeof data.message === 'string' && data.message.length > 0) {
-      return data.message
-    }
-  }
-  return error instanceof Error ? error.message : 'An unexpected error occurred.'
-}
 
 type SortableRowProps = {
   periodId: string

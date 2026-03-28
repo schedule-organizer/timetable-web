@@ -1,7 +1,10 @@
 import { http, HttpResponse } from 'msw'
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
+import { mockAcademicTerms, mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
 import { mockTerminologyLabels } from '@/mocks/pages/settings-page.mock'
+import { padDayLabels } from '@/lib/cycle-term-utils'
 import { findFirstOverlappingPair } from '@/lib/bell-schedule-utils'
+import type { AcademicTermsDto, CycleSettingsDto } from '@/types/cycle-term.types'
 import type { BellScheduleDto } from '@/types/bell-schedule.types'
 import type { TerminologyLabels } from '@/types/settings.types'
 
@@ -10,6 +13,15 @@ let currentLabels: TerminologyLabels = { ...mockTerminologyLabels }
 
 let currentBellSchedule: BellScheduleDto = {
   periods: mockBellSchedule.periods.map((p) => ({ ...p })),
+}
+
+let currentCycle: CycleSettingsDto = {
+  cycleLengthDays: mockCycleSettings.cycleLengthDays,
+  dayLabels: padDayLabels(mockCycleSettings.dayLabels, mockCycleSettings.cycleLengthDays),
+}
+
+let currentAcademicTerms: AcademicTermsDto = {
+  terms: mockAcademicTerms.terms.map((t) => ({ ...t })),
 }
 
 export function resetTerminologyLabels() {
@@ -22,10 +34,25 @@ export function resetBellScheduleMock() {
   }
 }
 
+export function resetCycleSettingsMock() {
+  currentCycle = {
+    cycleLengthDays: mockCycleSettings.cycleLengthDays,
+    dayLabels: padDayLabels(mockCycleSettings.dayLabels, mockCycleSettings.cycleLengthDays),
+  }
+}
+
+export function resetAcademicTermsMock() {
+  currentAcademicTerms = {
+    terms: mockAcademicTerms.terms.map((t) => ({ ...t })),
+  }
+}
+
 /** Call in afterEach when using settingsHandlers in a shared MSW server. */
 export function resetAllSettingsMocks() {
   resetTerminologyLabels()
   resetBellScheduleMock()
+  resetCycleSettingsMock()
+  resetAcademicTermsMock()
 }
 
 export const settingsHandlers = [
@@ -80,5 +107,52 @@ export const settingsHandlers = [
     }
     currentBellSchedule = { periods: body.periods.map((p) => ({ ...p })) }
     return HttpResponse.json(currentBellSchedule)
+  }),
+
+  http.get('/api/v1/settings/cycle', () => {
+    return HttpResponse.json(currentCycle)
+  }),
+
+  http.put('/api/v1/settings/cycle', async ({ request }) => {
+    const body = (await request.json()) as CycleSettingsDto
+    if (body.dayLabels.length !== body.cycleLengthDays) {
+      return HttpResponse.json(
+        {
+          status: 400,
+          code: 'CYCLE_LABEL_COUNT',
+          message: `Day labels must match cycle length (${body.cycleLengthDays} positions).`,
+        },
+        { status: 400 },
+      )
+    }
+    currentCycle = {
+      cycleLengthDays: body.cycleLengthDays,
+      dayLabels: padDayLabels(body.dayLabels, body.cycleLengthDays),
+    }
+    return HttpResponse.json(currentCycle)
+  }),
+
+  http.get('/api/v1/settings/academic-terms', () => {
+    return HttpResponse.json(currentAcademicTerms)
+  }),
+
+  http.put('/api/v1/settings/academic-terms', async ({ request }) => {
+    const body = (await request.json()) as AcademicTermsDto
+    for (const t of body.terms) {
+      if (t.endDate < t.startDate) {
+        return HttpResponse.json(
+          {
+            status: 400,
+            code: 'TERM_DATE_ORDER',
+            message: 'End date must be on or after the start date.',
+          },
+          { status: 400 },
+        )
+      }
+    }
+    currentAcademicTerms = {
+      terms: body.terms.map((t) => ({ ...t })),
+    }
+    return HttpResponse.json(currentAcademicTerms)
   }),
 ]

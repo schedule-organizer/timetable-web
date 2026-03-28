@@ -1,5 +1,9 @@
 # Deferred work
 
+## Deferred from: code review of 1-4-cycle-and-academic-term-configuration.md (2026-03-28)
+
+- Schedule generator acceptance criterion (use active term date range + cycle when generator runs) — UI wiring belongs to Epic 4; pure helpers are in place per story notes.
+
 ## Deferred from: code review of 1-3-bell-schedule-definition.md (2026-03-28)
 
 - D1: BellPeriod.id typed as plain string with no uniqueness enforcement — duplicate IDs from a buggy server would cause silent wrong-index moves in onDragEnd; acceptable given current API contract. Track when API contract is formalised.
