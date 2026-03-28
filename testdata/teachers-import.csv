@@ -1,0 +1,7 @@
+  Name,Email,Phone,Subjects
+  Alice Chen,alice@school.edu,+44 20 7946 0000,"Mathematics, Physics"
+  Brian Owens,brian@school.edu,+44 20 7946 0001,History
+  Cara Lee,cara@school.edu,,Biology
+  Duplicate Existing,alice@school.edu,,Science
+  Missing Email,,+44 20 3333 4444,Art
+  Missing Name,missing-name@school.edu,,Geography

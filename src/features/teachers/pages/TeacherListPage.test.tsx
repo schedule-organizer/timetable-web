@@ -51,7 +51,7 @@ describe('TeacherListPage manual roster', () => {
       expect(within(roster).getByText(/No teachers yet/i)).toBeInTheDocument()
     })
 
-    expect(within(roster).getByRole('button', { name: /Import via CSV/i })).toBeInTheDocument()
+    expect(within(roster).getAllByRole('button', { name: /Import via CSV/i })).toHaveLength(2)
     expect(within(roster).getAllByRole('button', { name: /^Add teacher$/i })).toHaveLength(1)
   })
 
@@ -132,6 +132,91 @@ describe('TeacherListPage manual roster', () => {
 
     expect(within(roster).getByText(/Alice Chen was removed from the roster/i)).toBeInTheDocument()
     expect(within(roster).getByText(/review the schedule/i)).toBeInTheDocument()
+  })
+})
+
+describe('TeacherListPage import flow', () => {
+  it('parses uploaded CSV rows and highlights duplicates/invalid entries', async () => {
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    await user.click(screen.getByRole('button', { name: /Import via CSV/i }))
+
+    const fileInput = screen.getByLabelText(/CSV file/i)
+    const csv = [
+      'Name,Email,Subjects',
+      'New Teacher,new@school.edu,"Math, Science"',
+      'Missing Email,,Science',
+      'Existing Teacher,alice@school.edu,History',
+    ].join('\n')
+    const file = new File([csv], 'teachers.csv', { type: 'text/csv' })
+
+    await user.upload(fileInput, file)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Preview: 3 rows/i)).toBeInTheDocument()
+    })
+    expect(screen.getByText(/Missing email address\./i)).toBeInTheDocument()
+    expect(screen.getByText(/Teacher already exists\./i)).toBeInTheDocument()
+  })
+
+  it('imports valid rows and reports the remaining quota', async () => {
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    await user.click(screen.getByRole('button', { name: /Import via CSV/i }))
+
+    const fileInput = screen.getByLabelText(/CSV file/i)
+    const csv = ['Name,Email', 'Fresh Teacher,fresh@school.edu'].join('\n')
+    const file = new File([csv], 'teachers.csv', { type: 'text/csv' })
+
+    await user.upload(fileInput, file)
+
+    await waitFor(() => {
+      expect(screen.getByText(/Preview: 1 row/i)).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /Import valid rows/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Imported 1 teacher/i)).toBeInTheDocument()
+      expect(screen.getByText(/slot\(s\) remain/i)).toBeInTheDocument()
+    })
+  })
+
+  it('shows a subscription-limit alert when the import is blocked', async () => {
+    server.use(
+      http.post('/api/v1/teachers/import', () =>
+        HttpResponse.json(
+          {
+            status: 400,
+            code: 'SUBSCRIPTION_LIMIT',
+            message: 'Import blocked — you can only add 0 more teacher(s).',
+          },
+          { status: 400 },
+        ),
+      ),
+    )
+
+    const user = userEvent.setup()
+    render(<TeacherListPage />)
+
+    await user.click(screen.getByRole('button', { name: /Import via CSV/i }))
+
+    const fileInput = screen.getByLabelText(/CSV file/i)
+    const csv = ['Name,Email', 'Blocked Teacher,blocked@school.edu'].join('\n')
+    const file = new File([csv], 'teachers.csv', { type: 'text/csv' })
+
+    await user.upload(fileInput, file)
+    await waitFor(() => {
+      expect(screen.getByText(/Preview: 1 row/i)).toBeInTheDocument()
+    })
+
+    await user.click(screen.getByRole('button', { name: /Import valid rows/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/Import blocked — you can only add 0 more teacher\(s\)\./i)).toBeInTheDocument()
+    })
   })
 })
 

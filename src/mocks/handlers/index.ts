@@ -3,11 +3,13 @@ import { settingsHandlers } from './settings.handlers'
 import { invitationHandlers } from './invitation.handlers'
 import { rbacHandlers } from './rbac.handlers'
 import { teacherHandlers } from './teacher.handlers'
+import { classHandlers } from './class.handlers'
 
 export const handlers = [
   ...authHandlers,
   ...settingsHandlers,
   ...invitationHandlers,
   ...rbacHandlers,
+  ...classHandlers,
   ...teacherHandlers,
 ]

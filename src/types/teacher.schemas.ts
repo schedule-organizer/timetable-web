@@ -35,3 +35,7 @@ export const createTeacherRequestSchema = z.object({
   phone: z.string().optional().nullable(),
   subjectQualifications: z.array(z.string()),
 })
+
+export const bulkImportTeachersRequestSchema = z.object({
+  teachers: z.array(createTeacherRequestSchema),
+})

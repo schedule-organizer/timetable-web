@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/axios'
-import type { CreateTeacherRequest, TeacherDto, TeachersDto } from '@/types/teacher.types'
+import type {
+  BulkImportTeachersRequest,
+  CreateTeacherRequest,
+  ImportTeachersResponse,
+  TeacherDto,
+  TeachersDto,
+} from '@/types/teacher.types'
 
 export const TEACHERS_QUERY_KEY = ['teachers'] as const
 
@@ -39,6 +45,19 @@ export function useDeleteTeacher() {
   return useMutation({
     mutationFn: (teacherId: string) =>
       api.delete(`/api/v1/teachers/${teacherId}`).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: TEACHERS_QUERY_KEY })
+    },
+  })
+}
+
+export function useImportTeachers() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: BulkImportTeachersRequest) =>
+      api
+        .post<ImportTeachersResponse>('/api/v1/teachers/import', data)
+        .then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TEACHERS_QUERY_KEY })
     },

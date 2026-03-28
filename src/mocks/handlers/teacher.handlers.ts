@@ -1,6 +1,9 @@
 import { http, HttpResponse } from 'msw'
 import { mockTeachers } from '@/mocks/fixtures/teachers.fixtures'
-import { createTeacherRequestSchema } from '@/types/teacher.schemas'
+import {
+  bulkImportTeachersRequestSchema,
+  createTeacherRequestSchema,
+} from '@/types/teacher.schemas'
 import type { TeacherDto } from '@/types/teacher.types'
 
 let teachers: TeacherDto[] = []
@@ -12,6 +15,8 @@ export function resetTeacherMocks() {
 }
 
 resetTeacherMocks()
+
+const TEACHER_LIMIT = 30
 
 function emptyPaginationResponse() {
   return {
@@ -60,6 +65,83 @@ export const teacherHandlers = [
     teachers = [...teachers, newTeacher]
 
     return HttpResponse.json(newTeacher)
+  }),
+
+  http.post('/api/v1/teachers/import', async ({ request }) => {
+    let raw: unknown
+    try {
+      raw = await request.json()
+    } catch {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_JSON', message: 'Invalid JSON body.' },
+        { status: 400 },
+      )
+    }
+
+    const parsed = bulkImportTeachersRequestSchema.safeParse(raw)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_BODY', message: 'Invalid teacher data.' },
+        { status: 400 },
+      )
+    }
+
+    const { teachers: incoming } = parsed.data
+    const existingEmails = new Set(teachers.map((teacher) => teacher.email.toLowerCase()))
+    const seenEmails = new Set<string>()
+    const skipped: { email: string; reason: string }[] = []
+    const toCreate: Array<typeof incoming[number]> = []
+
+    for (const row of incoming) {
+      const normalizedEmail = row.email.toLowerCase()
+
+      if (seenEmails.has(normalizedEmail)) {
+        skipped.push({ email: row.email, reason: 'Duplicate row in the file.' })
+        continue
+      }
+
+      seenEmails.add(normalizedEmail)
+
+      if (existingEmails.has(normalizedEmail)) {
+        skipped.push({ email: row.email, reason: 'Teacher already exists.' })
+        continue
+      }
+
+      toCreate.push(row)
+    }
+
+    if (teachers.length + toCreate.length > TEACHER_LIMIT) {
+      const roomLeft = Math.max(TEACHER_LIMIT - teachers.length, 0)
+      return HttpResponse.json(
+        {
+          status: 400,
+          code: 'SUBSCRIPTION_LIMIT',
+          message: `Import blocked — you can only add ${roomLeft} more teacher(s).`,
+        },
+        { status: 400 },
+      )
+    }
+
+    const imported: TeacherDto[] = []
+
+    for (const row of toCreate) {
+      const now = new Date().toISOString()
+      const teacher: TeacherDto = {
+        id: `teacher-roster-${++idCounter}`,
+        status: 'ACTIVE',
+        createdAt: now,
+        updatedAt: now,
+        ...row,
+      }
+      teachers = [...teachers, teacher]
+      imported.push(teacher)
+    }
+
+    return HttpResponse.json({
+      imported,
+      skipped,
+      remainingQuota: Math.max(TEACHER_LIMIT - teachers.length, 0),
+    })
   }),
 
   http.patch('/api/v1/teachers/:id', async ({ params, request }) => {

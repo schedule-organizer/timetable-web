@@ -1,12 +1,16 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { InviteTeachersDialog } from '@/features/teachers/components/InviteTeachersDialog'
 import { TeacherForm } from '@/features/teachers/components/TeacherForm'
 import { TeacherStatusBadge } from '@/features/teachers/components/TeacherStatusBadge'
-import { useCreateTeacher, useDeleteTeacher, useTeachers, useUpdateTeacher } from '@/api/hooks/useTeachers'
+import { useCreateTeacher, useDeleteTeacher, useImportTeachers, useTeachers, useUpdateTeacher } from '@/api/hooks/useTeachers'
 import { useInvitations, useResendInvitation } from '@/api/hooks/useInvitations'
 import { getApiErrorMessage } from '@/lib/api-error-message'
+import { parseTeacherCsv, type TeacherImportPreviewRow } from '@/features/teachers/utils/parse-teacher-csv'
 import type { TeacherDto, TeacherFormValues } from '@/types/teacher.types'
+
+/** CSV uploads are parsed fully in memory; cap size to avoid freezing the tab. */
+const MAX_TEACHER_CSV_BYTES = 2 * 1024 * 1024
 
 function normalizeSubjects(raw?: string) {
   if (!raw) return []
@@ -49,6 +53,23 @@ export default function TeacherListPage() {
   const isFormSubmitting = isCreating || isUpdating
   const mutationError = createError ?? updateError ?? deleteError
   const operationErrorMessage = mutationError ? getApiErrorMessage(mutationError) : null
+
+  const [isImportPanelOpen, setIsImportPanelOpen] = useState(false)
+  const [importPreview, setImportPreview] = useState<TeacherImportPreviewRow[]>([])
+  const [csvParsingError, setCsvParsingError] = useState<string | null>(null)
+  const [importFeedback, setImportFeedback] = useState<string | null>(null)
+  const [importFileKey, setImportFileKey] = useState(0)
+
+  const {
+    mutate: importTeachers,
+    isPending: isImporting,
+    error: importError,
+  } = useImportTeachers()
+
+  const validPreviewRows = importPreview.filter((row) => row.status === 'valid')
+  const duplicatePreviewRows = importPreview.filter((row) => row.status === 'duplicate')
+  const invalidPreviewRows = importPreview.filter((row) => row.status === 'invalid')
+  const importErrorMessage = importError ? getApiErrorMessage(importError) : null
 
   const handleFormClose = () => {
     setIsRosterFormOpen(false)
@@ -109,8 +130,87 @@ export default function TeacherListPage() {
     })
   }
 
-  const handleImportClick = () => {
-    setStatusMessage('CSV import is coming soon. Stay tuned.')
+  const resetImportPreview = () => {
+    setImportPreview([])
+    setCsvParsingError(null)
+    setImportFeedback(null)
+    setImportFileKey((key) => key + 1)
+  }
+
+  const openImportPanel = () => {
+    resetImportPreview()
+    setIsImportPanelOpen(true)
+  }
+
+  const closeImportPanel = () => {
+    resetImportPreview()
+    setIsImportPanelOpen(false)
+  }
+
+  const handleCsvUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    if (file.size > MAX_TEACHER_CSV_BYTES) {
+      setCsvParsingError(
+        `File is too large (max ${Math.floor(MAX_TEACHER_CSV_BYTES / 1024 / 1024)} MB). Split the CSV or remove unneeded columns.`,
+      )
+      setImportPreview([])
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        setCsvParsingError('Unable to read the selected CSV file.')
+        setImportPreview([])
+        return
+      }
+
+      try {
+        const preview = parseTeacherCsv(reader.result, teachers.map((teacher) => teacher.email))
+        setImportPreview(preview)
+        setCsvParsingError(null)
+        setImportFeedback(null)
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'The CSV file could not be parsed.'
+        setCsvParsingError(message)
+        setImportPreview([])
+      }
+    }
+    reader.onerror = () => {
+      setCsvParsingError('Unable to read the selected CSV file.')
+      setImportPreview([])
+    }
+    reader.readAsText(file)
+  }
+
+  const handleImportSubmit = () => {
+    if (validPreviewRows.length === 0) return
+
+    const payload = {
+      teachers: validPreviewRows.map((row) => ({
+        firstName: row.firstName ?? '',
+        lastName: row.lastName ?? '',
+        email: row.email ?? '',
+        phone: row.phone ?? null,
+        subjectQualifications: [...row.subjectQualifications],
+      })),
+    }
+
+    importTeachers(payload, {
+      onSuccess: (response) => {
+        const skipped = response.skipped.length
+        const skippedPhrase =
+          skipped === 0 ? 'None were skipped.' : `${skipped} duplicate or existing row(s) were skipped.`
+        setImportFeedback(
+          `Imported ${response.imported.length} teacher(s). ${skippedPhrase} ${response.remainingQuota} slot(s) remain.`,
+        )
+        setImportPreview((prev) => prev.filter((row) => row.status !== 'valid'))
+        setImportFileKey((key) => key + 1)
+      },
+    })
   }
 
   const formInitialValues: TeacherFormValues | undefined = editingTeacher
@@ -161,10 +261,189 @@ export default function TeacherListPage() {
               Add, update, and remove teacher records that feed into scheduling flows.
             </p>
           </div>
-          <Button type="button" variant="ghost" onClick={handleAddTeacherClick}>
-            {editingTeacher ? 'Add another teacher' : 'Add teacher manually'}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={openImportPanel}
+              aria-label={isImportPanelOpen ? 'Hide CSV import' : 'Import via CSV (from roster)'}
+            >
+              {isImportPanelOpen ? 'Hide CSV import' : 'Import via CSV'}
+            </Button>
+            <Button type="button" variant="ghost" onClick={handleAddTeacherClick}>
+              {editingTeacher ? 'Add another teacher' : 'Add teacher manually'}
+            </Button>
+          </div>
         </div>
+
+        {isImportPanelOpen && (
+          <div className="mt-3 rounded-xl border border-[--color-border] bg-[--color-surface] p-5 shadow-sm">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-base font-semibold" style={{ color: 'var(--color-text-primary)' }}>
+                  Import teachers via CSV
+                </h3>
+                <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                  Upload a CSV with Name (or First/Last name) and Email columns. Optional fields: Phone, Subjects (comma separated).
+                  If you use a single <strong>Name</strong> column, include at least two words (given name and family name); for one-word names, use separate <strong>First name</strong> and <strong>Last name</strong> columns instead.
+                  Invalid rows stay highlighted so you can fix them before importing.
+                </p>
+              </div>
+              <Button type="button" size="sm" variant="outline" onClick={closeImportPanel}>
+                Close
+              </Button>
+            </div>
+
+            <label htmlFor="teacher-import-file" className="text-sm font-medium" style={{ color: 'var(--color-text-primary)' }}>
+              CSV file
+            </label>
+            <input
+              id="teacher-import-file"
+              key={importFileKey}
+              type="file"
+              accept=".csv,text/csv"
+              className="mt-1 w-full rounded-md border border-[--color-border] bg-transparent px-3 py-2 text-sm text-[--color-text-primary]"
+              onChange={handleCsvUpload}
+            />
+            <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+              Required columns: Name/email or First name, Last name, and Email. Phone and Subjects can be present to enrich each record.
+              A lone <code>Name</code> value must split into first and last (two or more words); otherwise use First name and Last name columns.
+            </p>
+
+            {csvParsingError && (
+              <div
+                role="alert"
+                className="mt-3 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800"
+              >
+                {csvParsingError}
+              </div>
+            )}
+
+            {importPreview.length > 0 && (
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                    Preview: {importPreview.length} row{importPreview.length === 1 ? '' : 's'} · {validPreviewRows.length}{' '}
+                    ready · {duplicatePreviewRows.length} duplicates · {invalidPreviewRows.length} invalid
+                  </p>
+                  <Button type="button" variant="outline" size="sm" onClick={resetImportPreview}>
+                    Reset preview
+                  </Button>
+                </div>
+                <div className="max-h-64 overflow-y-auto rounded-lg border border-[--color-border]">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr
+                        className="bg-[--color-surface] text-[--color-text-secondary]"
+                      >
+                        <th className="px-3 py-2 text-left font-medium">Row</th>
+                        <th className="px-3 py-2 text-left font-medium">Name</th>
+                        <th className="px-3 py-2 text-left font-medium">Email</th>
+                        <th className="px-3 py-2 text-left font-medium">Subjects</th>
+                        <th className="px-3 py-2 text-left font-medium">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {importPreview.map((row) => (
+                        <tr
+                          key={`preview-${row.rowNumber}`}
+                          className={`border-b border-[--color-border] ${
+                            row.status === 'invalid'
+                              ? 'bg-red-50'
+                              : row.status === 'duplicate'
+                              ? 'bg-orange-50'
+                              : 'bg-[--color-surface]'
+                          }`}
+                        >
+                          <td className="px-3 py-2" style={{ color: 'var(--color-text-secondary)' }}>
+                            {row.rowNumber}
+                          </td>
+                          <td className="px-3 py-2" style={{ color: 'var(--color-text-primary)' }}>
+                            {row.fullName || '—'}
+                          </td>
+                          <td className="px-3 py-2" style={{ color: 'var(--color-text-secondary)' }}>
+                            {row.email || '—'}
+                          </td>
+                          <td className="px-3 py-2" style={{ color: 'var(--color-text-secondary)' }}>
+                            {row.subjectQualifications.length > 0 ? row.subjectQualifications.join(', ') : '—'}
+                          </td>
+                          <td className="px-3 py-2">
+                            <span
+                              className={`text-xs font-semibold ${
+                                row.status === 'valid'
+                                  ? 'text-emerald-700'
+                                  : row.status === 'duplicate'
+                                  ? 'text-orange-700'
+                                  : 'text-red-700'
+                              }`}
+                            >
+                              {row.status === 'valid'
+                                ? 'Ready'
+                                : row.status === 'duplicate'
+                                ? 'Duplicate'
+                                : 'Invalid'}
+                            </span>
+                            {row.status === 'duplicate' && (
+                              <p className="text-xs text-orange-700">Teacher already exists.</p>
+                            )}
+                            {row.errors.map((error, index) => (
+                              <p key={`${row.rowNumber}-error-${index}`} className="text-xs text-red-700">
+                                {error}
+                              </p>
+                            ))}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {importPreview.length === 0 && !csvParsingError && (
+              <p className="mt-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                Upload a CSV to preview records before importing them.
+              </p>
+            )}
+
+            {importErrorMessage && (
+              <div
+                role="alert"
+                className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-800"
+              >
+                {importErrorMessage}
+              </div>
+            )}
+
+            {importFeedback && (
+              <div
+                role="status"
+                className="mt-4 rounded-md border border-green-100 bg-green-50 px-4 py-2 text-sm text-green-900"
+              >
+                {importFeedback}
+              </div>
+            )}
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Button
+                type="button"
+                onClick={handleImportSubmit}
+                disabled={validPreviewRows.length === 0 || isImporting}
+              >
+                {isImporting ? 'Importing…' : 'Import valid rows'}
+              </Button>
+              <Button type="button" variant="ghost" onClick={resetImportPreview}>
+                Clear preview
+              </Button>
+            </div>
+
+            {importPreview.length > 0 && validPreviewRows.length === 0 && (
+              <p className="mt-2 text-sm text-orange-700">
+                Only duplicates or invalid rows remain. Fix the errors or try a different file.
+              </p>
+            )}
+          </div>
+        )}
 
         {isRosterFormOpen && (
           <div
@@ -229,7 +508,12 @@ export default function TeacherListPage() {
               <Button type="button" onClick={handleAddTeacherClick}>
                 Add teacher
               </Button>
-              <Button type="button" variant="ghost" onClick={handleImportClick}>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={openImportPanel}
+                aria-label="Import via CSV (empty roster)"
+              >
                 Import via CSV
               </Button>
             </div>
