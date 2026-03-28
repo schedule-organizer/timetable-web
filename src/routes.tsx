@@ -14,6 +14,7 @@ const BellSchedulePage = lazy(() => import('@/features/settings/pages/BellSchedu
 const CycleSettingsPage = lazy(() => import('@/features/settings/pages/CycleSettingsPage'))
 const TeacherListPage = lazy(() => import('@/features/teachers/pages/TeacherListPage'))
 const MagicLinkOnboardingPage = lazy(() => import('@/features/teachers/pages/MagicLinkOnboardingPage'))
+const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleManagementPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -143,6 +144,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<RouteFallback />}>
                 <CycleSettingsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'roles',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <RoleManagementPage />
               </Suspense>
             ),
           },

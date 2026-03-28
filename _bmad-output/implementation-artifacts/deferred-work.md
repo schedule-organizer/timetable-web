@@ -1,5 +1,9 @@
 # Deferred work
 
+## Deferred from: code review of 1-7-role-management-rbac-and-subscription-tier-limits.md (2026-03-28)
+
+- Cross-tenant isolation and 403 responses (FR37): frontend mocks and client checks are supplementary; full enforcement belongs to the API — confirm with contract/integration tests when the real backend is wired.
+
 ## Deferred from: code review of 1-6-teacher-invitation-and-magic-link-onboarding.md (2026-03-28)
 
 - AC1: Per-teacher email delivery and message content are backend/email-system concerns; the web app posts invitations and shows success. Confirm end-to-end when the real API and mailer exist.

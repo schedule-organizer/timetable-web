@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useLabels } from '@/hooks/useLabels'
+import { useInstitutionPermission } from '@/hooks/usePermission'
 import { cn } from '@/lib/utils'
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
@@ -13,6 +14,7 @@ const linkClass = ({ isActive }: { isActive: boolean }) =>
 // Institution Settings — sub-routes for terminology, bell schedule, and future setup sections.
 export default function SettingsLayout() {
   const label = useLabels()
+  const canAssignRoles = useInstitutionPermission('roles:assign')
 
   return (
     <div className="p-6">
@@ -37,6 +39,11 @@ export default function SettingsLayout() {
         <NavLink to="cycle" className={linkClass}>
           {label('cycle')}
         </NavLink>
+        {canAssignRoles && (
+          <NavLink to="roles" className={linkClass}>
+            Roles &amp; Access
+          </NavLink>
+        )}
       </nav>
 
       <Outlet />

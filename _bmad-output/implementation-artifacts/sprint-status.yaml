@@ -1,5 +1,5 @@
 # generated: batch create-story
-# last_updated: 2026-03-28T12:00:00Z
+# last_updated: 2026-03-28T22:05:00Z
 # project: timetable-web
 # project_key: NOKEY
 # tracking_system: file-system
@@ -30,7 +30,7 @@ development_status:
   1-4-cycle-and-academic-term-configuration: done
   1-5-pre-built-institution-templates-and-onboarding-wizard: done
   1-6-teacher-invitation-and-magic-link-onboarding: done
-  1-7-role-management-rbac-and-subscription-tier-limits: ready-for-dev
+  1-7-role-management-rbac-and-subscription-tier-limits: done
   epic-1-retrospective: optional
 
   epic-2: backlog

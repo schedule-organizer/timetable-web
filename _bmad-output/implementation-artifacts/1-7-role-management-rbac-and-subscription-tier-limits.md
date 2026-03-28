@@ -1,6 +1,6 @@
 # Story 1.7: Role Management, RBAC & Subscription Tier Limits
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -40,11 +40,23 @@ A Timetabler can build out the full school data model — add teachers manually 
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
+
+### Review Findings
+
+- [x] [Review][Patch] Gate role management UI with `useInstitutionPermission('roles:assign')` — hide or redirect `/settings/roles`, hide “Roles & Access” nav, and/or disable edit actions when the permission is absent so client-side gating matches AC (NFR8 / “UI does not render controls for unpermitted actions”). [`src/routes.tsx`, `src/features/settings/pages/SettingsLayout.tsx`, `src/features/settings/pages/RoleManagementPage.tsx`]
+
+- [x] [Review][Patch] Subscription limits card uses client `TIER_LIMITS[tier]` for max values while the API returns `limits`; if server and client ever diverge, usage display is wrong. Prefer `data.limits` for max and handle `useSubscriptionLimits` error state (currently `!data` renders nothing after load). [`src/features/settings/pages/RoleManagementPage.tsx` — `SubscriptionLimitsCard`]
+
+- [x] [Review][Patch] Copy says role changes take effect on “next login”; story AC says “next authenticated request”. Align wording with FR34. [`src/features/settings/pages/RoleManagementPage.tsx` ~256]
+
+- [x] [Review][Patch] `setTimeout(onClose, 600)` after successful role save has no unmount cleanup; navigation away could theoretically call `onClose` after unmount. Prefer cleanup or closing without arbitrary delay. [`src/features/settings/pages/RoleManagementPage.tsx` ~140]
+
+- [x] [Review][Defer] Cross-tenant 403 and authoritative denial (FR37) — MSW cannot replace full server enforcement; verify with integration/API tests when backend exists. — deferred, pre-existing
 
 ## Dev Notes
 
@@ -71,14 +83,40 @@ Build on patterns from `1-6-teacher-invitation-and-magic-link-onboarding.md` (pr
 ## Dev Agent Record
 
 ### Agent Model Used
-
-_(filled by dev agent)_
+claude-sonnet-4-6
 
 ### Debug Log References
+- Fixed "shows loading state initially" test: page renders two concurrent `role="status"` elements (subscription limits loading + users loading); updated test to use `getAllByRole('status')`.
+- Fixed "displays subscription limits card with tier and usage" test: `waitFor` was matching the loading skeleton's `aria-label` before data arrived; switched to await the usage text content instead.
 
 ### Completion Notes List
+- Implemented composable multi-role system: `InstitutionRole` = TIMETABLER | TEACHER | MODERATOR | PRINCIPAL with permission map in `src/types/rbac.types.ts`.
+- Extended `UserDto` with optional `roles?: InstitutionRole[]` field (backward compatible); updated auth mock handlers to include `roles: ['TIMETABLER']` for registered/logged-in users.
+- Extended `usePermission.ts` with `useInstitutionPermission(permission)` and `useUserPermissions()` hooks for supplementary client-side RBAC (NFR8).
+- Added `GET /api/v1/users` endpoint (list users with roles), `PUT /api/v1/users/:id/roles` (assign roles with Zod validation), and `GET /api/v1/subscription/limits` (tier + usage) MSW handlers.
+- Subscription limits card shows tier badge, used/max counts for classes/teachers/terms; at-limit entries highlighted with upgrade prompt (FR38).
+- Role Management page at `/settings/roles` lists all institution users with role badges; "Edit Roles" dialog with checkboxes supports assigning multiple roles simultaneously (FR34).
+- 117 tests pass: 18 RoleManagementPage + 99 regression.
 
 ### File List
+- src/types/rbac.types.ts (new)
+- src/types/rbac.schemas.ts (new)
+- src/types/auth.types.ts (modified — added `roles?: InstitutionRole[]` to UserDto)
+- src/hooks/usePermission.ts (modified — added `useInstitutionPermission` and `useUserPermissions`)
+- src/mocks/pages/rbac-page.mock.ts (new)
+- src/mocks/handlers/rbac.handlers.ts (new)
+- src/mocks/handlers/index.ts (modified — added rbacHandlers)
+- src/mocks/handlers/auth.handlers.ts (modified — added `roles: ['TIMETABLER']` to mock user)
+- src/api/hooks/useRoles.ts (new)
+- src/features/settings/pages/RoleManagementPage.tsx (new)
+- src/features/settings/pages/RoleManagementPage.test.tsx (new)
+- src/features/settings/pages/SettingsLayout.tsx (modified — added "Roles & Access" nav link)
+- src/routes.tsx (modified — added /settings/roles route)
+
+## Change Log
+
+- 2026-03-28: Implemented Story 1.7 — Role Management, RBAC & Subscription Tier Limits. Added composable InstitutionRole types, permission map, MSW handlers for user roles and subscription limits, React Query hooks, RoleManagementPage with role assignment dialog and subscription limits card. All 116 tests pass.
+- 2026-03-28: Code review batch fixes — gated `/settings/roles` and nav with `roles:assign`; subscription card uses API `limits` and shows query errors; FR34 copy; `useEffect` + cleared timeout for post-save dialog close; tests seed auth with `TIMETABLER` and cover redirect without permission.
 
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done

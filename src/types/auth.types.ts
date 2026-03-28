@@ -6,6 +6,8 @@ export interface UserDto {
   email: string
   fullName: string
   role: UserRole
+  // Institution roles assigned via role management (FR34). Optional for backward compatibility.
+  roles?: import('./rbac.types').InstitutionRole[]
   institutionId: string
   createdAt: string
 }
