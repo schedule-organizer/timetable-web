@@ -8,7 +8,9 @@ const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const RegisterPage = lazy(() => import('@/features/auth/pages/RegisterPage'))
 const DashboardPage = lazy(() => import('@/features/dashboard/pages/DashboardPage'))
 const PlaceholderPage = lazy(() => import('@/features/shell/pages/PlaceholderPage'))
-const SettingsPage = lazy(() => import('@/features/settings/pages/SettingsPage'))
+const SettingsLayout = lazy(() => import('@/features/settings/pages/SettingsLayout'))
+const TerminologySettingsPage = lazy(() => import('@/features/settings/pages/TerminologySettingsPage'))
+const BellSchedulePage = lazy(() => import('@/features/settings/pages/BellSchedulePage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -104,9 +106,28 @@ export const router = createBrowserRouter([
         path: 'settings',
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <SettingsPage />
+            <SettingsLayout />
           </Suspense>
         ),
+        children: [
+          { index: true, element: <Navigate to="terminology" replace /> },
+          {
+            path: 'terminology',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <TerminologySettingsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'bell-schedule',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <BellSchedulePage />
+              </Suspense>
+            ),
+          },
+        ],
       },
     ],
   },

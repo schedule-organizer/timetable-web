@@ -5,7 +5,7 @@ import { setupServer } from 'msw/node'
 import { http, HttpResponse } from 'msw'
 import { render } from '@/test/test-utils'
 import { useTenantStore } from '@/store/tenantStore'
-import SettingsPage from './SettingsPage'
+import TerminologySettingsPage from './TerminologySettingsPage'
 import type { TerminologyLabels } from '@/types/settings.types'
 
 // In-memory labels for test server — reset on each test
@@ -44,19 +44,19 @@ afterEach(() => {
 })
 afterAll(() => server.close())
 
-describe('SettingsPage — Terminology', () => {
-  it('renders the Institution Settings heading', async () => {
-    render(<SettingsPage />)
-    expect(screen.getByRole('heading', { name: /institution settings/i })).toBeInTheDocument()
+describe('TerminologySettingsPage — Terminology', () => {
+  it('renders the Terminology section as the page title', async () => {
+    render(<TerminologySettingsPage />)
+    expect(screen.getByRole('heading', { name: /terminology/i })).toBeInTheDocument()
   })
 
   it('renders the Terminology section heading', async () => {
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
     expect(screen.getByRole('heading', { name: /terminology/i })).toBeInTheDocument()
   })
 
   it('renders editable fields for all 7 configurable terms', async () => {
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: /period/i })).toBeInTheDocument()
@@ -70,7 +70,7 @@ describe('SettingsPage — Terminology', () => {
   })
 
   it('renders a Save Terminology button', async () => {
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /save terminology/i })).toBeInTheDocument()
     })
@@ -79,7 +79,7 @@ describe('SettingsPage — Terminology', () => {
   it('populates fields with existing custom labels on load', async () => {
     serverLabels = { ...serverLabels, period: 'Lesson', class: 'Year Group' }
 
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: /period/i })).toHaveValue('Lesson')
@@ -89,7 +89,7 @@ describe('SettingsPage — Terminology', () => {
 
   it('saves updated terminology and shows success message', async () => {
     const user = userEvent.setup()
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: /period/i })).toBeInTheDocument()
@@ -109,7 +109,7 @@ describe('SettingsPage — Terminology', () => {
 
   it('updates tenantStore labels after save', async () => {
     const user = userEvent.setup()
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: /period/i })).toBeInTheDocument()
@@ -130,7 +130,7 @@ describe('SettingsPage — Terminology', () => {
     serverLabels = { ...serverLabels, period: 'Lesson' }
     const user = userEvent.setup()
 
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('textbox', { name: /period/i })).toHaveValue('Lesson')
@@ -158,7 +158,7 @@ describe('SettingsPage — Terminology', () => {
     )
 
     const user = userEvent.setup()
-    render(<SettingsPage />)
+    render(<TerminologySettingsPage />)
 
     await waitFor(() => {
       expect(screen.getByRole('button', { name: /save terminology/i })).toBeInTheDocument()

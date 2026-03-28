@@ -10,6 +10,8 @@ const defaults: Record<string, string> = {
   room: 'Room',
   subject: 'Subject',
   teacher: 'Teacher',
+  institutionSettings: 'Institution Settings',
+  terminology: 'Terminology',
 }
 
 // Usage: const label = useLabels(); label('period') → e.g. "Lesson"
