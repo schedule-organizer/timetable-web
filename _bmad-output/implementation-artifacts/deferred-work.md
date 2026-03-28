@@ -1,5 +1,9 @@
 # Deferred work
 
+## Deferred from: code review of 2-5-room-management.md (2026-03-29)
+
+- AC3 “scheduled slots flagged”: MSW does not model slot entities or flagging; success copy matches product intent — verify with real API and integration tests when scheduling data exists.
+
 ## Deferred from: code review of 2-2-bulk-teacher-import-via-csv.md (2026-03-29) follow-up
 
 - CSV files saved in a legacy encoding (not UTF-8) may mis-parse; document “UTF-8 only” in UI or add detection when product requires it.

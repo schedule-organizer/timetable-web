@@ -17,6 +17,7 @@ const MagicLinkOnboardingPage = lazy(() => import('@/features/teachers/pages/Mag
 const ClassManagementPage = lazy(() => import('@/features/classes/pages/ClassManagementPage'))
 const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleManagementPage'))
 const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
+const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -103,7 +104,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Rooms' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <RoomManagementPage />
           </Suspense>
         ),
       },

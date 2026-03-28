@@ -5,6 +5,7 @@ import { rbacHandlers } from './rbac.handlers'
 import { subjectHandlers } from './subject.handlers'
 import { teacherHandlers } from './teacher.handlers'
 import { classHandlers } from './class.handlers'
+import { roomHandlers } from './room.handlers'
 
 export const handlers = [
   ...authHandlers,
@@ -14,4 +15,5 @@ export const handlers = [
   ...classHandlers,
   ...subjectHandlers,
   ...teacherHandlers,
+  ...roomHandlers,
 ]
