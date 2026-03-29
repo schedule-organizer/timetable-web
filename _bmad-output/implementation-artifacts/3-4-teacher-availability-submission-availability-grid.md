@@ -1,6 +1,6 @@
 # Story 3.4: Teacher Availability Submission (Availability Grid)
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -32,11 +32,11 @@ So that the scheduler respects my working constraints and preferences.
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -64,13 +64,36 @@ Build on patterns from `3-3-subject-level-scheduling-rules.md` (previous story i
 
 ### Agent Model Used
 
-_(filled by dev agent)_
+Composer (Cursor agent)
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Implemented `GET/PUT /api/v1/teachers/:id/availability` with Zod-validated DTOs (`unavailable` / `preferred` slot lists); MSW handlers persist per teacher in `teacher.handlers.ts`.
+- Added `MyAvailabilityPage` at `/availability` with `AvailabilityGrid`: cycle days as rows, bell periods as columns; three-state tap cycle (white / `#fef2f2` / `#f0fdf4`); mobile `min-h-11 min-w-11` cells; horizontal swipe on a day row (left = mark day unavailable, right = clear to available).
+- "Mark all as available" uses a confirmation modal (same overlay pattern as room delete). Successful submit shows a summary with unavailable/preferred counts and lists.
+- React Query: `useTeacherAvailability` / `useUpdateTeacherAvailability`; PUT updates cache via `setQueryData` for the teacher availability key.
+- Mock login grants `TEACHER` alongside `TIMETABLER` so `availability:declare` works in local MSW auth.
+- Unit tests: `availability-utils`, `AvailabilityGrid`, `MyAvailabilityPage` (mocked data hooks).
+
 ### File List
 
+- `src/types/teacher-availability.schemas.ts`
+- `src/types/teacher-availability.types.ts`
+- `src/lib/availability-utils.ts`
+- `src/lib/availability-utils.test.ts`
+- `src/api/hooks/useTeacherAvailability.ts`
+- `src/components/domain/availability-grid.tsx`
+- `src/components/domain/availability-grid.test.tsx`
+- `src/components/domain/availability-grid.stories.tsx`
+- `src/features/teachers/pages/MyAvailabilityPage.tsx`
+- `src/features/teachers/pages/MyAvailabilityPage.test.tsx`
+- `src/mocks/handlers/teacher.handlers.ts`
+- `src/mocks/handlers/auth.handlers.ts`
+- `src/routes.tsx`
+- `src/components/layout/Sidebar.tsx`
+- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done — Code review passed; story complete

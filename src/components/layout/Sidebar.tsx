@@ -9,6 +9,7 @@ import {
   Shield,
   Zap,
   UserCircle,
+  CalendarRange,
   Settings,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -29,6 +30,7 @@ const navItems: NavItem[] = [
   { to: '/constraints', label: 'Constraints', icon: Shield },
   { to: '/engine', label: 'Engine', icon: Zap },
   { to: '/profile', label: 'My Profile', icon: UserCircle },
+  { to: '/availability', label: 'My Availability', icon: CalendarRange },
   { to: '/settings', label: 'Settings', icon: Settings },
 ]
 

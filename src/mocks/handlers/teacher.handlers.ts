@@ -4,14 +4,19 @@ import {
   bulkImportTeachersRequestSchema,
   createTeacherRequestSchema,
 } from '@/types/teacher.schemas'
+import { teacherAvailabilityDtoSchema } from '@/types/teacher-availability.schemas'
+import type { TeacherAvailabilityDto } from '@/types/teacher-availability.types'
 import type { TeacherDto } from '@/types/teacher.types'
 
 let teachers: TeacherDto[] = []
 let idCounter = 0
 
+let availabilityByTeacherId: Record<string, TeacherAvailabilityDto> = {}
+
 export function resetTeacherMocks() {
   teachers = mockTeachers.map((teacher) => ({ ...teacher }))
   idCounter = teachers.length
+  availabilityByTeacherId = {}
 }
 
 resetTeacherMocks()
@@ -79,6 +84,51 @@ export const teacherHandlers = [
     teachers = teachers.map((t) => (t.id === MOCK_CURRENT_TEACHER_ID ? updatedTeacher : t))
 
     return HttpResponse.json(updatedTeacher)
+  }),
+
+  http.get('/api/v1/teachers/:id/availability', ({ params }) => {
+    const id = params.id as string
+    const teacher = teachers.find((t) => t.id === id)
+    if (!teacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Teacher not found.' },
+        { status: 404 },
+      )
+    }
+    const data = availabilityByTeacherId[id]
+    return HttpResponse.json(data ?? { unavailable: [], preferred: [] })
+  }),
+
+  http.put('/api/v1/teachers/:id/availability', async ({ params, request }) => {
+    const id = params.id as string
+    const teacher = teachers.find((t) => t.id === id)
+    if (!teacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Teacher not found.' },
+        { status: 404 },
+      )
+    }
+
+    let raw: unknown
+    try {
+      raw = await request.json()
+    } catch {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_JSON', message: 'Invalid JSON body.' },
+        { status: 400 },
+      )
+    }
+
+    const parsed = teacherAvailabilityDtoSchema.safeParse(raw)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_BODY', message: 'Invalid availability data.' },
+        { status: 400 },
+      )
+    }
+
+    availabilityByTeacherId[id] = parsed.data
+    return HttpResponse.json(parsed.data)
   }),
 
   http.get('/api/v1/teachers', () => {

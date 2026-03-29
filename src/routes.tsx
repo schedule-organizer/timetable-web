@@ -19,6 +19,7 @@ const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleMana
 const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
 const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
 const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
+const MyAvailabilityPage = lazy(() => import('@/features/teachers/pages/MyAvailabilityPage'))
 const ConstraintsLayout = lazy(() => import('@/features/constraints/pages/ConstraintsLayout'))
 const HardConstraintsPage = lazy(() => import('@/features/constraints/pages/HardConstraintsPage'))
 const SoftPreferencesPage = lazy(() => import('@/features/constraints/pages/SoftPreferencesPage'))
@@ -155,6 +156,15 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<RouteFallback />}>
             <MyProfilePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'availability',
+        handle: { title: 'My Availability' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <MyAvailabilityPage />
           </Suspense>
         ),
       },
