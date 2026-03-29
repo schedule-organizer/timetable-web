@@ -14,7 +14,11 @@ const BellSchedulePage = lazy(() => import('@/features/settings/pages/BellSchedu
 const CycleSettingsPage = lazy(() => import('@/features/settings/pages/CycleSettingsPage'))
 const TeacherListPage = lazy(() => import('@/features/teachers/pages/TeacherListPage'))
 const MagicLinkOnboardingPage = lazy(() => import('@/features/teachers/pages/MagicLinkOnboardingPage'))
+const ClassManagementPage = lazy(() => import('@/features/classes/pages/ClassManagementPage'))
 const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleManagementPage'))
+const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
+const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
+const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -83,7 +87,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Classes' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <ClassManagementPage />
           </Suspense>
         ),
       },
@@ -92,7 +96,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Subjects' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <SubjectManagementPage />
           </Suspense>
         ),
       },
@@ -101,7 +105,16 @@ export const router = createBrowserRouter([
         handle: { title: 'Rooms' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <RoomManagementPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'profile',
+        handle: { title: 'My Profile' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <MyProfilePage />
           </Suspense>
         ),
       },

@@ -1,5 +1,25 @@
 # Deferred work
 
+## Deferred from: code review of 2-6-teacher-self-profile-management.md (2026-03-29)
+
+- No TEACHER-only route wrapper for `/profile`: consistent with auth-only `ProtectedRoute` across the app; API enforces `/me` permissions.
+
+- AC3 test could assert the forbidden message string from `getApiErrorMessage`; low priority polish.
+
+## Deferred from: code review of 2-5-room-management.md (2026-03-29)
+
+- AC3 “scheduled slots flagged”: MSW does not model slot entities or flagging; success copy matches product intent — verify with real API and integration tests when scheduling data exists.
+
+## Deferred from: code review of 2-2-bulk-teacher-import-via-csv.md (2026-03-29) follow-up
+
+- CSV files saved in a legacy encoding (not UTF-8) may mis-parse; document “UTF-8 only” in UI or add detection when product requires it.
+
+- Import preview `<table>` could use a `<caption>` for screen readers; optional a11y polish.
+
+## Deferred from: code review of 2-1-teacher-management-manual-entry.md (2026-03-29)
+
+- No dedicated Vitest case for `GET /api/v1/teachers` failure on the manual roster (error banner path); add when stabilizing error UX or E2E.
+
 ## Deferred from: code review of 1-7-role-management-rbac-and-subscription-tier-limits.md (2026-03-28)
 
 - Cross-tenant isolation and 403 responses (FR37): frontend mocks and client checks are supplementary; full enforcement belongs to the API — confirm with contract/integration tests when the real backend is wired.

@@ -1,5 +1,5 @@
 # generated: batch create-story
-# last_updated: 2026-03-28T22:05:00Z
+# last_updated: 2026-03-29T23:45:00Z
 # project: timetable-web
 # project_key: NOKEY
 # tracking_system: file-system
@@ -34,12 +34,12 @@ development_status:
   epic-1-retrospective: optional
 
   epic-2: backlog
-  2-1-teacher-management-manual-entry: ready-for-dev
-  2-2-bulk-teacher-import-via-csv: ready-for-dev
-  2-3-class-management: ready-for-dev
-  2-4-subject-management-with-difficulty-levels: ready-for-dev
-  2-5-room-management: ready-for-dev
-  2-6-teacher-self-profile-management: ready-for-dev
+  2-1-teacher-management-manual-entry: done
+  2-2-bulk-teacher-import-via-csv: done
+  2-3-class-management: done
+  2-4-subject-management-with-difficulty-levels: done
+  2-5-room-management: done
+  2-6-teacher-self-profile-management: done
   epic-2-retrospective: optional
 
   epic-3: backlog

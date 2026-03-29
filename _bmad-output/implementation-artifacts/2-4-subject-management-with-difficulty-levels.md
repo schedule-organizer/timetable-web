@@ -1,6 +1,6 @@
 # Story 2.4: Subject Management with Difficulty Levels
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -22,11 +22,11 @@ So that the scheduler can apply difficulty-based distribution rules when generat
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -58,9 +58,45 @@ _(filled by dev agent)_
 
 ### Debug Log References
 
+- AC1/AC2 are backed by `useCreateSubject`/`useUpdateSubject` hitting `/api/v1/subjects` (`POST`/`PATCH`) while the `SubjectForm` overlay translates form values into trimmed payloads before the mutations fire.
+- AC3 maps to `SubjectManagementPage`'s roster table plus filter/select controls and the `DifficultyBadge`, giving a sortable, filterable surface for the scheduler to view subjects and difficulty metadata; the `useSubjects` hook keeps the list fresh.
+- The subject Zod schemas/DTOs define `difficulty` as `LOW|MEDIUM|HIGH`, the paginated envelope, and drive both the API hooks and the MSW `subjectHandlers`, which mirror the same contract and invalidate `SUBJECTS_QUERY_KEY` after mutations.
+- Vitest coverage for `SubjectManagementPage` exercises the filter, add, and edit flows using mocked hooks so the page can be proven accessible while remaining firmly in the existing mock-first surface.
+
 ### Completion Notes List
+
+- Added the subject management UI (list, filter, sort, add/edit form, difficulty badges) under `src/features/subjects`, wired to TanStack Query and Axios hooks so the scheduler can create and update difficulty-tagged subjects.
+- Introduced Zod schemas, DTOs, React Query hooks, and MSW fixtures/handlers for `/api/v1/subjects`, plus the `setup.ts` polyfill import, so the mock server can serve the new resource with the same envelope and cache invalidation semantics.
+- Wrote Vitest coverage (`SubjectManagementPage.test.tsx`) that mocks the hooks to prove filtering, creation, and editing flows and verifies the user messages, keeping the feature test-friendly while polyfills guard MSW interceptors.
 
 ### File List
 
+- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `_bmad-output/implementation-artifacts/2-4-subject-management-with-difficulty-levels.md`
+- `src/api/hooks/useSubjects.ts`
+- `src/features/subjects/components/SubjectForm.tsx`
+- `src/features/subjects/components/DifficultyBadge.tsx`
+- `src/features/subjects/pages/SubjectManagementPage.tsx`
+- `src/features/subjects/pages/SubjectManagementPage.test.tsx`
+- `src/mocks/fixtures/subjects.fixtures.ts`
+- `src/mocks/handlers/subject.handlers.ts`
+- `src/mocks/handlers/index.ts`
+- `src/routes.tsx`
+- `src/test/setup.ts`
+- `src/types/subject.schemas.ts`
+- `src/types/subject.types.ts`
+
+### Change Log
+
+- Added the subject management page (list, filters, sort controls, difficulty badges) and form wired to `useSubjects`/`useCreateSubject`/`useUpdateSubject` so AC1–AC3 can operate against the UI.
+- Introduced subject Zod schemas, DTOs, React Query hooks, and MSW fixtures/handlers that expose `/api/v1/subjects` with the paginated envelope and cache invalidation pattern borrowed from the class feature.
+- Expanded Vitest coverage for the page and ensured the global `Response` polyfill loads via `src/test/setup.ts` so MSW-based tests keep working.
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done — Subject management CRUD UI, hooks, mocks, and tests cover the ACs; code review patches applied (filtered-empty copy, trimmed name validation, test setup).
+
+### Review Findings
+
+- [x] [Review][Patch] Roster empty copy conflates “no subjects” and “no matches for filter” [`src/features/subjects/pages/SubjectManagementPage.tsx` ~229–232]
+- [x] [Review][Patch] Whitespace-only subject names pass client validation (`min(1)` before trim); trim or refine in `subjectFormSchema` / submit path [`src/types/subject.schemas.ts`, `SubjectManagementPage` `handleFormSubmit`]
+- [x] [Review][Patch] Redundant `@/test/polyfills` import in page test now that `src/test/setup.ts` loads polyfills globally [`src/features/subjects/pages/SubjectManagementPage.test.tsx`]
