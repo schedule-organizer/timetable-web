@@ -6,6 +6,7 @@ import { subjectHandlers } from './subject.handlers'
 import { teacherHandlers } from './teacher.handlers'
 import { classHandlers } from './class.handlers'
 import { roomHandlers } from './room.handlers'
+import { hardConstraintHandlers } from './hard-constraint.handlers'
 
 export const handlers = [
   ...authHandlers,
@@ -16,4 +17,5 @@ export const handlers = [
   ...subjectHandlers,
   ...teacherHandlers,
   ...roomHandlers,
+  ...hardConstraintHandlers,
 ]

@@ -19,6 +19,8 @@ const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleMana
 const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
 const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
 const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
+const ConstraintsLayout = lazy(() => import('@/features/constraints/pages/ConstraintsLayout'))
+const HardConstraintsPage = lazy(() => import('@/features/constraints/pages/HardConstraintsPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -108,6 +110,26 @@ export const router = createBrowserRouter([
             <RoomManagementPage />
           </Suspense>
         ),
+      },
+      {
+        path: 'constraints',
+        handle: { title: 'Constraints' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <ConstraintsLayout />
+          </Suspense>
+        ),
+        children: [
+          { index: true, element: <Navigate to="hard" replace /> },
+          {
+            path: 'hard',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <HardConstraintsPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: 'profile',
