@@ -7,6 +7,7 @@ import {
   Building2,
   FlaskConical,
   Zap,
+  UserCircle,
   Settings,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -25,6 +26,7 @@ const navItems: NavItem[] = [
   { to: '/subjects', label: 'Subjects', icon: FlaskConical },
   { to: '/rooms', label: 'Rooms', icon: Building2 },
   { to: '/engine', label: 'Engine', icon: Zap },
+  { to: '/profile', label: 'My Profile', icon: UserCircle },
   { to: '/settings', label: 'Settings', icon: Settings },
 ]
 

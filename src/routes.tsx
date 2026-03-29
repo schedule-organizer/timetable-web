@@ -18,6 +18,7 @@ const ClassManagementPage = lazy(() => import('@/features/classes/pages/ClassMan
 const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleManagementPage'))
 const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
 const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
+const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -105,6 +106,15 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<RouteFallback />}>
             <RoomManagementPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'profile',
+        handle: { title: 'My Profile' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <MyProfilePage />
           </Suspense>
         ),
       },

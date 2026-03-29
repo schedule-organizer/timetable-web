@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of 2-6-teacher-self-profile-management.md (2026-03-29)
+
+- No TEACHER-only route wrapper for `/profile`: consistent with auth-only `ProtectedRoute` across the app; API enforces `/me` permissions.
+
+- AC3 test could assert the forbidden message string from `getApiErrorMessage`; low priority polish.
+
 ## Deferred from: code review of 2-5-room-management.md (2026-03-29)
 
 - AC3 “scheduled slots flagged”: MSW does not model slot entities or flagging; success copy matches product intent — verify with real API and integration tests when scheduling data exists.

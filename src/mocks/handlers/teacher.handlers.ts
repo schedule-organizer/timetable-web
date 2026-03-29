@@ -27,7 +27,60 @@ function emptyPaginationResponse() {
   }
 }
 
+// The ID of the teacher treated as the currently authenticated teacher in mock mode.
+export const MOCK_CURRENT_TEACHER_ID = 'teacher-roster-1'
+
 export const teacherHandlers = [
+  // /me routes must be registered before /:id to avoid wildcard capture
+  http.get('/api/v1/teachers/me', () => {
+    const currentTeacher = teachers.find((t) => t.id === MOCK_CURRENT_TEACHER_ID)
+    if (!currentTeacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Profile not found.' },
+        { status: 404 },
+      )
+    }
+    return HttpResponse.json(currentTeacher)
+  }),
+
+  http.patch('/api/v1/teachers/me', async ({ request }) => {
+    const currentTeacher = teachers.find((t) => t.id === MOCK_CURRENT_TEACHER_ID)
+    if (!currentTeacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Profile not found.' },
+        { status: 404 },
+      )
+    }
+
+    let raw: unknown
+    try {
+      raw = await request.json()
+    } catch {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_JSON', message: 'Invalid JSON body.' },
+        { status: 400 },
+      )
+    }
+
+    const parsed = createTeacherRequestSchema.safeParse(raw)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_BODY', message: 'Invalid profile data.' },
+        { status: 400 },
+      )
+    }
+
+    const updatedTeacher: TeacherDto = {
+      ...currentTeacher,
+      ...parsed.data,
+      updatedAt: new Date().toISOString(),
+    }
+
+    teachers = teachers.map((t) => (t.id === MOCK_CURRENT_TEACHER_ID ? updatedTeacher : t))
+
+    return HttpResponse.json(updatedTeacher)
+  }),
+
   http.get('/api/v1/teachers', () => {
     return HttpResponse.json({
       content: teachers,

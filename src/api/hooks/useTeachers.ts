@@ -9,6 +9,7 @@ import type {
 } from '@/types/teacher.types'
 
 export const TEACHERS_QUERY_KEY = ['teachers'] as const
+export const MY_PROFILE_QUERY_KEY = ['teachers', 'me'] as const
 
 export function useTeachers() {
   return useQuery({
@@ -46,6 +47,25 @@ export function useDeleteTeacher() {
     mutationFn: (teacherId: string) =>
       api.delete(`/api/v1/teachers/${teacherId}`).then((res) => res.data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: TEACHERS_QUERY_KEY })
+    },
+  })
+}
+
+export function useMyProfile() {
+  return useQuery({
+    queryKey: MY_PROFILE_QUERY_KEY,
+    queryFn: () => api.get<TeacherDto>('/api/v1/teachers/me').then((res) => res.data),
+  })
+}
+
+export function useUpdateMyProfile() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: CreateTeacherRequest) =>
+      api.patch<TeacherDto>('/api/v1/teachers/me', data).then((res) => res.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: MY_PROFILE_QUERY_KEY })
       queryClient.invalidateQueries({ queryKey: TEACHERS_QUERY_KEY })
     },
   })
