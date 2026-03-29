@@ -21,6 +21,7 @@ const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagem
 const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
 const ConstraintsLayout = lazy(() => import('@/features/constraints/pages/ConstraintsLayout'))
 const HardConstraintsPage = lazy(() => import('@/features/constraints/pages/HardConstraintsPage'))
+const SoftPreferencesPage = lazy(() => import('@/features/constraints/pages/SoftPreferencesPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -126,6 +127,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<RouteFallback />}>
                 <HardConstraintsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'soft',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <SoftPreferencesPage />
               </Suspense>
             ),
           },

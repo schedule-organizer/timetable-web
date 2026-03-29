@@ -30,6 +30,9 @@ export default function ConstraintsLayout() {
           <NavLink to="/constraints/hard" className={linkClass}>
             Hard constraints
           </NavLink>
+          <NavLink to="/constraints/soft" className={linkClass}>
+            Soft preferences
+          </NavLink>
         </nav>
       </div>
       <Outlet />
