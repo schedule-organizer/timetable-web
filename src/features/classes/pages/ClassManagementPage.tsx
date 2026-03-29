@@ -220,14 +220,22 @@ export default function ClassManagementPage() {
             className="rounded-lg border border-dashed border-[--color-border] p-6 text-center"
             style={{ backgroundColor: 'var(--color-surface)' }}
           >
-            <p className="text-sm text-[--color-text-secondary]">
-              No classes yet. Use the form above to add your first student groups.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <Button type="button" onClick={handleAddClassClick}>
-                Add class
-              </Button>
-            </div>
+            {classes.length === 0 ? (
+              <>
+                <p className="text-sm text-[--color-text-secondary]">
+                  No classes yet. Use the form above to add your first student groups.
+                </p>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  <Button type="button" onClick={handleAddClassClick}>
+                    Add class
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-[--color-text-secondary]">
+                No classes match the selected year group filter.
+              </p>
+            )}
           </div>
         ) : (
           <div className="overflow-hidden rounded-lg border border-[--color-border]">

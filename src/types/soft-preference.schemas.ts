@@ -42,7 +42,7 @@ export const updateSoftPreferenceRequestSchema = z.object({
 })
 
 export const softPreferenceFormSchema = z.object({
-  name: z.string().min(1, 'Name is required.').max(200, 'Name must be at most 200 characters.'),
+  name: z.string().trim().min(1, 'Name is required.').max(200, 'Name must be at most 200 characters.'),
   description: z.string().max(2000, 'Notes must be at most 2000 characters.').optional(),
   weight: z.number().int().min(1).max(10),
   enabled: z.boolean(),

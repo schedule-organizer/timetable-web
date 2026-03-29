@@ -121,6 +121,15 @@ export default function RoomManagementPage() {
     deleteDialogCancelRef.current?.focus()
   }, [roomToDelete])
 
+  useEffect(() => {
+    if (!roomToDelete) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setRoomToDelete(null)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [roomToDelete])
+
   return (
     <div className="p-6">
       <header className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -277,35 +286,43 @@ export default function RoomManagementPage() {
 
         {roomToDelete && (
           <div
-            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
             role="dialog"
             aria-modal="true"
             aria-labelledby="room-delete-dialog-title"
+            className="fixed inset-0 z-50 flex items-center justify-center"
           >
-            <h2 id="room-delete-dialog-title" className="text-base font-semibold text-red-950">
-              Delete room?
-            </h2>
-            <p className="mt-2">
-              Are you sure you want to delete {roomToDelete.name}? Any scheduled slots assigned to
-              this room will be flagged for reassignment.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Button
-                ref={deleteDialogCancelRef}
-                type="button"
-                variant="secondary"
-                onClick={() => setRoomToDelete(null)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={handleDeleteConfirm}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting…' : 'Delete room'}
-              </Button>
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setRoomToDelete(null)}
+              aria-hidden="true"
+            />
+            <div className="relative z-10 w-full max-w-sm rounded-lg border border-[--color-border] bg-[--color-surface] p-6 shadow-xl">
+              <h2 id="room-delete-dialog-title" className="text-base font-semibold text-red-950">
+                Delete room?
+              </h2>
+              <p className="mt-2 text-sm text-red-900">
+                Are you sure you want to delete {roomToDelete.name}? Any scheduled slots assigned to
+                this room will be flagged for reassignment.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                  ref={deleteDialogCancelRef}
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setRoomToDelete(null)}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDeleteConfirm}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting…' : 'Delete room'}
+                </Button>
+              </div>
             </div>
           </div>
         )}

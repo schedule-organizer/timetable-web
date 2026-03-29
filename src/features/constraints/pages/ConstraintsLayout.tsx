@@ -33,6 +33,9 @@ export default function ConstraintsLayout() {
           <NavLink to="/constraints/soft" className={linkClass}>
             Soft preferences
           </NavLink>
+          <NavLink to="/constraints/subject-rules" className={linkClass}>
+            Subject rules
+          </NavLink>
         </nav>
       </div>
       <Outlet />

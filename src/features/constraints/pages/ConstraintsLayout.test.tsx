@@ -10,4 +10,12 @@ describe('ConstraintsLayout', () => {
     expect(link).toBeInTheDocument()
     expect(link).toHaveAttribute('href', '/constraints/soft')
   })
+
+  it('renders the subject rules nav tab', () => {
+    render(<ConstraintsLayout />, { initialEntries: ['/constraints/hard'] })
+
+    const link = screen.getByRole('link', { name: /subject rules/i })
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', '/constraints/subject-rules')
+  })
 })

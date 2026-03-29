@@ -137,6 +137,15 @@ export default function HardConstraintsPage() {
     deleteDialogCancelRef.current?.focus()
   }, [toDelete])
 
+  useEffect(() => {
+    if (!toDelete) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setToDelete(null)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [toDelete])
+
   const definedTypes = new Set(rows.map((r) => r.ruleType))
   const canAddMore = definedTypes.size < hardConstraintRuleOptions.length
 
@@ -279,34 +288,43 @@ export default function HardConstraintsPage() {
 
         {toDelete && (
           <div
-            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
             role="dialog"
             aria-modal="true"
             aria-labelledby="hard-constraint-delete-title"
+            className="fixed inset-0 z-50 flex items-center justify-center"
           >
-            <h2 id="hard-constraint-delete-title" className="text-base font-semibold text-red-950">
-              Delete hard constraint?
-            </h2>
-            <p className="mt-2">
-              Remove “{ruleLabel(toDelete.ruleType)}”? The next generator run will not apply this rule.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Button
-                ref={deleteDialogCancelRef}
-                type="button"
-                variant="secondary"
-                onClick={() => setToDelete(null)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={handleDeleteConfirm}
-                disabled={isDeleting}
-              >
-                {isDeleting ? 'Deleting…' : 'Delete constraint'}
-              </Button>
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setToDelete(null)}
+              aria-hidden="true"
+            />
+            <div className="relative z-10 w-full max-w-sm rounded-lg border border-[--color-border] bg-[--color-surface] p-6 shadow-xl">
+              <h2 id="hard-constraint-delete-title" className="text-base font-semibold text-red-950">
+                Delete hard constraint?
+              </h2>
+              <p className="mt-2 text-sm text-red-900">
+                Remove "{ruleLabel(toDelete.ruleType)}"? The next generator run will not apply this
+                rule.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                  ref={deleteDialogCancelRef}
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setToDelete(null)}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDeleteConfirm}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting…' : 'Delete constraint'}
+                </Button>
+              </div>
             </div>
           </div>
         )}

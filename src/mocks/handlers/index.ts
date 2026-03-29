@@ -8,6 +8,7 @@ import { classHandlers } from './class.handlers'
 import { roomHandlers } from './room.handlers'
 import { hardConstraintHandlers } from './hard-constraint.handlers'
 import { softPreferenceHandlers } from './soft-preference.handlers'
+import { subjectRuleHandlers } from './subject-rule.handlers'
 
 export const handlers = [
   ...authHandlers,
@@ -20,4 +21,5 @@ export const handlers = [
   ...roomHandlers,
   ...hardConstraintHandlers,
   ...softPreferenceHandlers,
+  ...subjectRuleHandlers,
 ]

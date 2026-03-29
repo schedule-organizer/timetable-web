@@ -8,4 +8,10 @@ describe('router', () => {
     expect(matches).toBeTruthy()
     expect(matches?.some((match) => match.route.path === 'soft')).toBe(true)
   })
+
+  it('includes the constraints subject-rules route', () => {
+    const matches = matchRoutes(router.routes, '/constraints/subject-rules')
+    expect(matches).toBeTruthy()
+    expect(matches?.some((match) => match.route.path === 'subject-rules')).toBe(true)
+  })
 })

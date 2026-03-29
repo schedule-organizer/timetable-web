@@ -65,23 +65,23 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Mobile bottom tab bar (below md / 768px) */}
+      {/* Mobile bottom tab bar (below md / 768px) — scrollable so all nav items are reachable */}
       <nav
         role="navigation"
         aria-label="Mobile navigation"
-        className="fixed bottom-0 left-0 right-0 flex justify-around border-t py-2 md:hidden"
+        className="fixed bottom-0 left-0 right-0 flex overflow-x-auto border-t py-2 md:hidden"
         style={{
           backgroundColor: 'var(--color-sidebar)',
           borderColor: 'rgba(255,255,255,0.1)',
         }}
       >
-        {navItems.slice(0, 5).map(({ to, label, icon: Icon }) => (
+        {navItems.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
               cn(
-                'flex flex-col items-center gap-0.5 px-2 py-1 text-xs',
+                'flex shrink-0 flex-col items-center gap-0.5 px-3 py-1 text-xs',
                 isActive ? 'text-white' : 'text-white/60',
               )
             }

@@ -1,5 +1,9 @@
 # Deferred work
 
+## Deferred from: code review of 3-3-subject-level-scheduling-rules.md (2026-03-30)
+
+- AC2/AC3 generator conflict and satisfaction reporting are only partly representable in the web app — hard-rule violation reports and live satisfaction rates depend on the generator/backend; this story covers rule CRUD and displaying `satisfactionRate` when present.
+
 ## Deferred from: code review of 2-6-teacher-self-profile-management.md (2026-03-29)
 
 - No TEACHER-only route wrapper for `/profile`: consistent with auth-only `ProtectedRoute` across the app; API enforces `/me` permissions.
