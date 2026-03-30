@@ -5,6 +5,30 @@ export const engineRunRequestSchema = z.object({
   termId: z.string().min(1),
 })
 
+export const conflictEntitySchema = z.object({
+  id: z.string(),
+  name: z.string(),
+})
+
+export const affectedSlotSchema = z.object({
+  cycleDayIndex: z.number().int().min(0),
+  periodId: z.string(),
+})
+
+export const conflictExplanationDtoSchema = z.object({
+  id: z.string(),
+  constraintId: z.string(),
+  constraintName: z.string(),
+  explanation: z.string(),
+  affectedTeachers: z.array(conflictEntitySchema),
+  affectedClasses: z.array(conflictEntitySchema),
+  affectedSlots: z.array(affectedSlotSchema),
+})
+
+export const conflictReportDtoSchema = z.object({
+  conflicts: z.array(conflictExplanationDtoSchema),
+})
+
 export const engineJobStatusSchema = z.enum([
   'queued',
   'running',
@@ -48,6 +72,7 @@ export const engineJobDtoSchema = z.object({
   statusMessage: z.string(),
   result: draftScheduleSchema.optional(),
   constraintReport: constraintSatisfactionReportSchema.optional(),
+  conflictReport: conflictReportDtoSchema.optional(),
 })
 
 export const engineRunResponseSchema = z.object({

@@ -1,6 +1,6 @@
 # Story 4.3: Conflict Detection & Plain-Language Explanation
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -28,11 +28,11 @@ So that I understand exactly what is causing the problem and know my options —
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -60,13 +60,35 @@ Build on patterns from `4-2-constraint-satisfaction-report.md` (previous story i
 
 ### Agent Model Used
 
-_(filled by dev agent)_
+claude-sonnet-4-6
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Added `conflictEntitySchema`, `affectedSlotSchema`, `conflictExplanationDtoSchema`, `conflictReportDtoSchema` to `engine.schemas.ts`; updated `engineJobDtoSchema` with optional `conflictReport` field.
+- Added `ConflictEntity`, `AffectedSlot`, `ConflictExplanationDto`, `ConflictReportDto` types to `engine.types.ts`.
+- Updated MSW `engine.handlers.ts`: added `MOCK_CONFLICT_REPORT_DATA` fixture (2 conflicts — forbidden slots and double-booking), `setEngineMockMode('success'|'failure')` export, and failure path in job GET handler; `resetEngineMocks` now also resets mode.
+- `GeneratorStatusBar` updated: added `onViewConflicts?: () => void` prop; failed state now uses red (not amber, which is reserved for cancelled); added "View conflicts" button that appears only when phase='failed' and callback provided; added `data-phase` attribute for stable test assertions.
+- `ConflictExplainer` domain component: full-panel first-class screen (not a modal) rendered in place of the workspace section when job fails; shows conflict count in header; each conflict rendered as a `ConflictCard` with plain-language explanation, affected teacher/class chips, mini grid preview with affected slots highlighted red, three action buttons (Relax constraint / Assign manually / Edit source data), and expandable technical details (collapsed by default). Storybook stories: SingleConflict, MultipleConflicts, NoGridData.
+- `EnginePage.tsx` updated: `showConflictExplainer` state; `onOpenConflictExplainer`/`onCloseConflictExplainer`/`onRelaxConstraint`/`onAssignManually`/`onEditSourceData` callbacks (all useCallback); `GeneratorStatusBar` receives `onViewConflicts` when job has failed + conflictReport; workspace section replaced by `ConflictExplainer` when explainer is open.
+- 20 new tests: 11 for `ConflictExplainer` (rendering, entity chips, action buttons, mini grid a11y, expandable details) and 5 additional for `GeneratorStatusBar` failed state (data-phase, View conflicts button, click handler, absence in success state). All pass. 0 regressions.
+
 ### File List
 
+- `src/types/engine.schemas.ts` (modified)
+- `src/types/engine.types.ts` (modified)
+- `src/mocks/handlers/engine.handlers.ts` (modified)
+- `src/components/domain/generator-status-bar.tsx` (modified)
+- `src/components/domain/generator-status-bar.test.tsx` (modified)
+- `src/components/domain/conflict-explainer.tsx` (new)
+- `src/components/domain/conflict-explainer.test.tsx` (new)
+- `src/components/domain/conflict-explainer.stories.tsx` (new)
+- `src/features/engine/pages/EnginePage.tsx` (modified)
+
+## Change Log
+
+- 2026-03-31: Story 4.3 — conflict detection and plain-language explanation: ConflictExplainer component, conflict Zod schemas, MSW failure mock with setEngineMockMode, GeneratorStatusBar red failed state with "View conflicts" link, EnginePage wiring.
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done

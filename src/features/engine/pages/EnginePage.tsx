@@ -15,6 +15,7 @@ import {
 } from '@/components/domain/generator-status-bar'
 import { SatisfactionBanner } from '@/components/domain/satisfaction-banner'
 import { ConstraintSatisfactionSummary } from '@/components/domain/constraint-satisfaction-summary'
+import { ConflictExplainer } from '@/components/domain/conflict-explainer'
 import { Button } from '@/components/ui/button'
 import { padDayLabels } from '@/lib/cycle-term-utils'
 
@@ -45,6 +46,7 @@ export default function EnginePage() {
 
   const [jobId, setJobId] = useState<string | null>(null)
   const [showSatisfactionSummary, setShowSatisfactionSummary] = useState(false)
+  const [showConflictExplainer, setShowConflictExplainer] = useState(false)
   const runEngine = useRunEngine()
   const { data: job, isPending: jobPending } = useEngineJob(jobId)
   useSyncDraftFromEngineJob(termId, job)
@@ -92,6 +94,17 @@ export default function EnginePage() {
 
   const onOpenSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(true), [])
   const onCloseSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(false), [])
+  const onOpenConflictExplainer = useCallback(() => setShowConflictExplainer(true), [])
+  const onCloseConflictExplainer = useCallback(() => setShowConflictExplainer(false), [])
+  const onRelaxConstraint = useCallback((_conflictId: string) => {
+    // Story 4.4 — opens SensitivityPanel; placeholder for now
+  }, [])
+  const onAssignManually = useCallback(() => {
+    // Story 5 — navigates to timetable grid; placeholder for now
+  }, [])
+  const onEditSourceData = useCallback(() => {
+    // Navigates to teacher/class management; placeholder for now
+  }, [])
 
   const disableGenerate =
     prerequisitesLoading ||
@@ -138,34 +151,50 @@ export default function EnginePage() {
           />
         ) : null}
 
-        <section
-          className="min-h-0 flex-1 overflow-auto rounded-xl border border-[--color-border] bg-[--color-surface] p-4"
-          aria-label="Draft timetable workspace"
-        >
-          {bell && cycle && cycleLength > 0 ? (
-            <DraftTimetablePreview
-              cycleLengthDays={cycleLength}
-              dayLabels={dayLabels}
-              periods={bell.periods}
-              lessons={draft?.lessons ?? []}
-            />
-          ) : (
-            <p className="text-sm text-[--color-text-secondary]">
-              Loading bell schedule and cycle…
-            </p>
-          )}
-          {draft && draft.lessons.length === 0 && !jobId ? (
-            <p className="mt-4 text-sm text-[--color-text-secondary]">
-              Generated lessons will appear in this grid. Click Generate to build a draft for the
-              active term.
-            </p>
-          ) : null}
-        </section>
+        {showConflictExplainer && job?.status === 'failed' && job.conflictReport ? (
+          <ConflictExplainer
+            conflictReport={job.conflictReport}
+            cycleLengthDays={cycleLength}
+            dayLabels={dayLabels}
+            periods={bell?.periods ?? []}
+            onRelaxConstraint={onRelaxConstraint}
+            onAssignManually={onAssignManually}
+            onEditSourceData={onEditSourceData}
+            onClose={onCloseConflictExplainer}
+          />
+        ) : (
+          <section
+            className="min-h-0 flex-1 overflow-auto rounded-xl border border-[--color-border] bg-[--color-surface] p-4"
+            aria-label="Draft timetable workspace"
+          >
+            {bell && cycle && cycleLength > 0 ? (
+              <DraftTimetablePreview
+                cycleLengthDays={cycleLength}
+                dayLabels={dayLabels}
+                periods={bell.periods}
+                lessons={draft?.lessons ?? []}
+              />
+            ) : (
+              <p className="text-sm text-[--color-text-secondary]">
+                Loading bell schedule and cycle…
+              </p>
+            )}
+            {draft && draft.lessons.length === 0 && !jobId ? (
+              <p className="mt-4 text-sm text-[--color-text-secondary]">
+                Generated lessons will appear in this grid. Click Generate to build a draft for the
+                active term.
+              </p>
+            ) : null}
+          </section>
+        )}
       </div>
 
       <GeneratorStatusBar
         phase={statusPhase === 'idle' && !statusMessage ? 'idle' : statusPhase}
         message={statusMessage}
+        onViewConflicts={
+          job?.status === 'failed' && job.conflictReport ? onOpenConflictExplainer : undefined
+        }
       />
 
       {showSatisfactionSummary && job?.constraintReport ? (

@@ -7,7 +7,7 @@ import { mockSubjects } from '@/mocks/fixtures/subjects.fixtures'
 import { mockTeachers } from '@/mocks/fixtures/teachers.fixtures'
 import { engineRunRequestSchema } from '@/types/engine.schemas'
 import type { DraftScheduleDto } from '@/types/timetable-draft.types'
-import type { ConstraintSatisfactionReport, EngineJobDto } from '@/types/engine.types'
+import type { ConflictReportDto, ConstraintSatisfactionReport, EngineJobDto } from '@/types/engine.types'
 
 type JobRecord = {
   termId: string
@@ -18,6 +18,12 @@ type JobRecord = {
 const jobs = new Map<string, JobRecord>()
 const draftByTerm = new Map<string, DraftScheduleDto>()
 let jobSeq = 0
+let engineMockMode: 'success' | 'failure' = 'success'
+
+/** Switch the mock engine outcome for the next (and all subsequent) jobs. */
+export function setEngineMockMode(mode: 'success' | 'failure') {
+  engineMockMode = mode
+}
 
 const RUNNING_MESSAGES = [
   'Queued…',
@@ -94,10 +100,42 @@ export const MOCK_CONSTRAINT_REPORT: ConstraintSatisfactionReport = {
   ],
 }
 
+export const MOCK_CONFLICT_REPORT_DATA: ConflictReportDto = {
+  conflicts: [
+    {
+      id: 'conflict-1',
+      constraintId: 'hc-4',
+      constraintName: 'Teacher forbidden slots respected',
+      explanation:
+        'Jane Smith cannot cover Year 10B in any available slot because all valid windows overlap with her Forbidden Slot: Friday PM.',
+      affectedTeachers: [{ id: 'teacher-2', name: 'Jane Smith' }],
+      affectedClasses: [{ id: 'class-3', name: 'Year 10B' }],
+      affectedSlots: [
+        { cycleDayIndex: 4, periodId: 'period-3' },
+        { cycleDayIndex: 4, periodId: 'period-4' },
+      ],
+    },
+    {
+      id: 'conflict-2',
+      constraintId: 'hc-1',
+      constraintName: 'No teacher double-booking',
+      explanation:
+        'David Brown is double-booked: Year 9A (Maths) and Year 11C (Maths) are both assigned to Monday Period 2 with no valid alternative slots.',
+      affectedTeachers: [{ id: 'teacher-3', name: 'David Brown' }],
+      affectedClasses: [
+        { id: 'class-1', name: 'Year 9A' },
+        { id: 'class-5', name: 'Year 11C' },
+      ],
+      affectedSlots: [{ cycleDayIndex: 0, periodId: 'period-2' }],
+    },
+  ],
+}
+
 export function resetEngineMocks() {
   jobs.clear()
   draftByTerm.clear()
   jobSeq = 0
+  engineMockMode = 'success'
 }
 
 export const engineHandlers = [
@@ -161,6 +199,16 @@ export const engineHandlers = [
         id,
         status: 'running',
         statusMessage: RUNNING_MESSAGES[rec.pollCount - 1],
+      }
+      return HttpResponse.json(body)
+    }
+
+    if (engineMockMode === 'failure') {
+      const body: EngineJobDto = {
+        id,
+        status: 'failed',
+        statusMessage: 'Failed — hard constraint deadlock detected.',
+        conflictReport: MOCK_CONFLICT_REPORT_DATA,
       }
       return HttpResponse.json(body)
     }
