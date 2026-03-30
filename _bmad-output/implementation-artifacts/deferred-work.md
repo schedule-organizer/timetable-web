@@ -1,5 +1,17 @@
 # Deferred work
 
+## Deferred from: code review of 4-1-schedule-generator-run.md (2026-03-31)
+
+- Cancel run UX (`DELETE /api/v1/engine/jobs/{id}`, UI control): explicitly deferred out of 4.1; implement when a story owns long-running job cancellation. `useCancelEngineJob` may stay as a hook for that work.
+
+- NFR1 (draft timetable visible within 30 seconds at scale): not validated in frontend tests or telemetry; address with real API, profiling, or E2E when the engine is integrated.
+
+- Full-page MSW integration test for the engine flow: deferred until Vitest/MSW/axios interaction is reliable in this repo (per story completion notes).
+
+- Minor UX: clearing `jobId` before starting a new run may flash the status bar through a short idle state; polish if user feedback warrants it.
+
+- Engine page: no dedicated handling when draft/job queries or the run mutation error (including Zod parse failures on unexpected API shapes); user may see an idle or empty workspace. Address when hardening against the real API.
+
 ## Deferred from: code review of 3-3-subject-level-scheduling-rules.md (2026-03-30)
 
 - AC2/AC3 generator conflict and satisfaction reporting are only partly representable in the web app — hard-rule violation reports and live satisfaction rates depend on the generator/backend; this story covers rule CRUD and displaying `satisfactionRate` when present.

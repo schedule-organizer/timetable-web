@@ -1,5 +1,5 @@
 # generated: batch create-story
-# last_updated: 2026-03-30T20:00:00Z
+# last_updated: 2026-03-31T20:45:00Z
 # project: timetable-web
 # project_key: NOKEY
 # tracking_system: file-system
@@ -51,7 +51,7 @@ development_status:
   epic-3-retrospective: optional
 
   epic-4: backlog
-  4-1-schedule-generator-run: ready-for-dev
+  4-1-schedule-generator-run: done
   4-2-constraint-satisfaction-report: ready-for-dev
   4-3-conflict-detection-and-plain-language-explanation: ready-for-dev
   4-4-constraint-sensitivity-adjustment: ready-for-dev
