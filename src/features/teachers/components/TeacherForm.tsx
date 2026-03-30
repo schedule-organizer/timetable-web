@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
@@ -24,11 +25,16 @@ export function TeacherForm({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<TeacherFormValues>({
     resolver: zodResolver(teacherFormSchema),
     defaultValues: initialValues,
   })
+
+  useEffect(() => {
+    reset(initialValues)
+  }, [initialValues, reset])
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { InviteTeachersDialog } from '@/features/teachers/components/InviteTeachersDialog'
 import { TeacherForm } from '@/features/teachers/components/TeacherForm'
@@ -8,6 +8,7 @@ import { useInvitations, useResendInvitation } from '@/api/hooks/useInvitations'
 import { getApiErrorMessage } from '@/lib/api-error-message'
 import { parseTeacherCsv, type TeacherImportPreviewRow } from '@/features/teachers/utils/parse-teacher-csv'
 import type { TeacherDto, TeacherFormValues } from '@/types/teacher.types'
+import { useAuthStore } from '@/store/authStore'
 
 /** CSV uploads are parsed fully in memory; cap size to avoid freezing the tab. */
 const MAX_TEACHER_CSV_BYTES = 2 * 1024 * 1024
@@ -25,11 +26,27 @@ function formatName(teacher: TeacherDto) {
 }
 
 export default function TeacherListPage() {
+  const currentUser = useAuthStore((s) => s.user)
   const [showInviteDialog, setShowInviteDialog] = useState(false)
   const [isRosterFormOpen, setIsRosterFormOpen] = useState(false)
   const [editingTeacher, setEditingTeacher] = useState<TeacherDto | null>(null)
   const [teacherToDelete, setTeacherToDelete] = useState<TeacherDto | null>(null)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const deleteDialogCancelRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!teacherToDelete) return
+    deleteDialogCancelRef.current?.focus()
+  }, [teacherToDelete])
+
+  useEffect(() => {
+    if (!teacherToDelete) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setTeacherToDelete(null)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [teacherToDelete])
 
   const { data: rosterResponse, isLoading: isRosterLoading, error: rosterError } = useTeachers()
   const teachers = rosterResponse?.content ?? []
@@ -302,9 +319,16 @@ export default function TeacherListPage() {
               key={importFileKey}
               type="file"
               accept=".csv,text/csv"
-              className="mt-1 w-full rounded-md border border-[--color-border] bg-transparent px-3 py-2 text-sm text-[--color-text-primary]"
+              className="mt-1 w-full rounded-md border border-[--color-border] bg-transparent px-3 py-2 text-sm text-[--color-text-primary] disabled:opacity-50"
+              disabled={isRosterLoading}
+              aria-describedby={isRosterLoading ? 'import-roster-loading-note' : undefined}
               onChange={handleCsvUpload}
             />
+            {isRosterLoading && (
+              <p id="import-roster-loading-note" className="mt-1 text-xs text-[--color-text-secondary]">
+                Waiting for roster to load before checking for duplicates…
+              </p>
+            )}
             <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
               Required columns: Name/email or First name, Last name, and Email. Phone and Subjects can be present to enrich each record.
               A lone <code>Name</code> value must split into first and last (two or more words); otherwise use First name and Last name columns.
@@ -496,7 +520,7 @@ export default function TeacherListPage() {
           <div role="status" className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Loading roster…
           </div>
-        ) : teachers.length === 0 ? (
+        ) : !rosterError && teachers.length === 0 ? (
           <div
             className="rounded-lg border border-dashed border-[--color-border] p-6 text-center"
             style={{ backgroundColor: 'var(--color-surface)' }}
@@ -571,6 +595,8 @@ export default function TeacherListPage() {
                           variant="destructive"
                           size="sm"
                           onClick={() => setTeacherToDelete(teacher)}
+                          disabled={currentUser?.email === teacher.email}
+                          title={currentUser?.email === teacher.email ? 'You cannot delete your own account' : undefined}
                         >
                           Delete
                         </Button>
@@ -585,24 +611,46 @@ export default function TeacherListPage() {
 
         {teacherToDelete && (
           <div
-            className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
-            role="alert"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="teacher-delete-dialog-title"
+            className="fixed inset-0 z-50 flex items-center justify-center"
           >
-            <p>
-              Are you sure you want to remove {formatName(teacherToDelete)} from the roster?
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Button type="button" variant="ghost" onClick={() => setTeacherToDelete(null)}>
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={handleDeleteConfirm}
-                disabled={isDeleting}
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setTeacherToDelete(null)}
+              aria-hidden="true"
+            />
+            <div className="relative z-10 w-full max-w-sm rounded-lg border border-red-200 bg-white p-6 shadow-xl">
+              <h2
+                id="teacher-delete-dialog-title"
+                className="text-base font-semibold text-red-950"
               >
-                {isDeleting ? 'Deleting…' : 'Delete teacher'}
-              </Button>
+                Remove teacher?
+              </h2>
+              <p className="mt-2 text-sm text-red-900">
+                Are you sure you want to remove {formatName(teacherToDelete)} from the roster? If
+                they had timetable assignments, those slots may need attention before publish.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                  ref={deleteDialogCancelRef}
+                  type="button"
+                  variant="secondary"
+                  onClick={() => setTeacherToDelete(null)}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDeleteConfirm}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? 'Deleting…' : 'Delete teacher'}
+                </Button>
+              </div>
             </div>
           </div>
         )}

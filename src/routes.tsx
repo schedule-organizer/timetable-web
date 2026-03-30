@@ -19,6 +19,12 @@ const RoleManagementPage = lazy(() => import('@/features/settings/pages/RoleMana
 const SubjectManagementPage = lazy(() => import('@/features/subjects/pages/SubjectManagementPage'))
 const RoomManagementPage = lazy(() => import('@/features/rooms/pages/RoomManagementPage'))
 const MyProfilePage = lazy(() => import('@/features/teachers/pages/MyProfilePage'))
+const MyAvailabilityPage = lazy(() => import('@/features/teachers/pages/MyAvailabilityPage'))
+const ConstraintsLayout = lazy(() => import('@/features/constraints/pages/ConstraintsLayout'))
+const HardConstraintsPage = lazy(() => import('@/features/constraints/pages/HardConstraintsPage'))
+const SoftPreferencesPage = lazy(() => import('@/features/constraints/pages/SoftPreferencesPage'))
+const SubjectRulesPage = lazy(() => import('@/features/constraints/pages/SubjectRulesPage'))
+const AvailabilityOverviewPage = lazy(() => import('@/features/constraints/pages/AvailabilityOverviewPage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -110,11 +116,64 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'constraints',
+        handle: { title: 'Constraints' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <ConstraintsLayout />
+          </Suspense>
+        ),
+        children: [
+          { index: true, element: <Navigate to="hard" replace /> },
+          {
+            path: 'availability-overview',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <AvailabilityOverviewPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'hard',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <HardConstraintsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'soft',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <SoftPreferencesPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'subject-rules',
+            element: (
+              <Suspense fallback={<RouteFallback />}>
+                <SubjectRulesPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
+      {
         path: 'profile',
         handle: { title: 'My Profile' },
         element: (
           <Suspense fallback={<RouteFallback />}>
             <MyProfilePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'availability',
+        handle: { title: 'My Availability' },
+        element: (
+          <Suspense fallback={<RouteFallback />}>
+            <MyAvailabilityPage />
           </Suspense>
         ),
       },

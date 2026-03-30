@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-const CSV_LINE_SPLIT_RE = /\r?\n/
-
 const emailShape = z.string().email()
 
 const normalizeHeader = (value: string) =>
@@ -10,35 +8,58 @@ const normalizeHeader = (value: string) =>
     .toLowerCase()
     .replace(/[ _-]/g, '')
 
-const parseRow = (line: string) => {
-  const cells: string[] = []
+/**
+ * Parse a CSV text into an array of rows (each row is an array of cell strings).
+ * Handles quoted fields containing commas, double-quote escapes, and embedded newlines.
+ */
+function parseCsvRows(text: string): string[][] {
+  const rows: string[][] = []
+  let cells: string[] = []
   let current = ''
   let inQuotes = false
 
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i]
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i]
+
     if (char === '"') {
-      const next = line[i + 1]
-      if (inQuotes && next === '"') {
+      if (inQuotes && text[i + 1] === '"') {
         current += '"'
         i++
-        continue
+      } else {
+        inQuotes = !inQuotes
       }
-      inQuotes = !inQuotes
       continue
     }
 
-    if (char === ',' && !inQuotes) {
-      cells.push(current)
-      current = ''
-      continue
+    if (!inQuotes) {
+      if (char === ',') {
+        cells.push(current.trim())
+        current = ''
+        continue
+      }
+
+      if (char === '\r' || char === '\n') {
+        if (char === '\r' && text[i + 1] === '\n') i++
+        cells.push(current.trim())
+        if (cells.some((c) => c !== '')) {
+          rows.push(cells)
+        }
+        cells = []
+        current = ''
+        continue
+      }
     }
 
     current += char
   }
 
-  cells.push(current)
-  return cells.map((value) => value.trim())
+  // Flush last row
+  cells.push(current.trim())
+  if (cells.some((c) => c !== '')) {
+    rows.push(cells)
+  }
+
+  return rows
 }
 
 type ColumnKeys = Array<readonly string[]>
@@ -90,10 +111,10 @@ const REQUIRED_LAST_NAME_KEYS: ColumnKeys = [
 
 export function parseTeacherCsv(text: string, existingEmails: string[] = []) {
   const normalizedText = text.replace(/^\uFEFF/, '')
-  const lines = normalizedText.split(CSV_LINE_SPLIT_RE).filter((line) => line.trim().length > 0)
-  if (lines.length === 0) return []
+  const allRows = parseCsvRows(normalizedText)
+  if (allRows.length === 0) return []
 
-  const header = parseRow(lines[0])
+  const header = allRows[0]
   const emailIndex = findColumnIndex(header, [['email']])
   if (emailIndex === undefined) {
     throw new Error('CSV file must include an `email` column.')
@@ -117,9 +138,9 @@ export function parseTeacherCsv(text: string, existingEmails: string[] = []) {
 
   const columnCount = header.length
 
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = 1; i < allRows.length; i++) {
     const rowNumber = i + 1
-    const values = parseRow(lines[i])
+    const values = [...allRows[i]]
     while (values.length < columnCount) {
       values.push('')
     }

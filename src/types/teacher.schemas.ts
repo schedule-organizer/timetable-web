@@ -21,9 +21,9 @@ export const teachersDtoSchema = z.object({
 })
 
 export const teacherFormSchema = z.object({
-  firstName: z.string().min(1, 'First name is required.'),
-  lastName: z.string().min(1, 'Last name is required.'),
-  email: z.string().email('Enter a valid email address.'),
+  firstName: z.string().trim().min(1, 'First name is required.'),
+  lastName: z.string().trim().min(1, 'Last name is required.'),
+  email: z.string().trim().email('Enter a valid email address.'),
   phone: z.string().optional(),
   subjectQualifications: z.string().optional(),
 })

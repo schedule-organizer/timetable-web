@@ -39,7 +39,9 @@ class HeadersPolyfill {
   }
 
   append(name: string, value: string) {
-    this.#entries.set(name.toLowerCase(), value)
+    const key = name.toLowerCase()
+    const existing = this.#entries.get(key)
+    this.#entries.set(key, existing !== undefined ? `${existing}, ${value}` : value)
   }
 
   delete(name: string) {
@@ -136,11 +138,18 @@ class RequestPolyfill {
   readonly url: string
   readonly body: string | null
 
-  constructor(input: string, init: RequestInit = {}) {
-    this.url = input
-    this.method = init.method?.toUpperCase() ?? 'GET'
-    this.headers = new HeadersPolyfill(init.headers)
-    this.body = init.body ?? null
+  constructor(input: string | RequestPolyfill, init: RequestInit = {}) {
+    if (typeof input === 'string') {
+      this.url = input
+      this.method = init.method?.toUpperCase() ?? 'GET'
+      this.headers = new HeadersPolyfill(init.headers)
+      this.body = init.body ?? null
+    } else {
+      this.url = input.url
+      this.method = init.method?.toUpperCase() ?? input.method
+      this.headers = new HeadersPolyfill(init.headers ?? input.headers)
+      this.body = init.body ?? input.body
+    }
   }
 
   clone() {

@@ -4,6 +4,7 @@ import {
   teachersDtoSchema,
   createTeacherRequestSchema,
   teacherFormSchema,
+  bulkImportTeachersRequestSchema,
 } from '@/types/teacher.schemas'
 
 export type TeacherDto = z.infer<typeof teacherDtoSchema>

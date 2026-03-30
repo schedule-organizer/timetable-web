@@ -18,7 +18,7 @@ export const classesDtoSchema = z.object({
 })
 
 export const classFormSchema = z.object({
-  name: z.string().min(1, 'Class name is required.'),
+  name: z.string().trim().min(1, 'Class name is required.'),
   yearGroup: z.string().optional(),
 })
 
