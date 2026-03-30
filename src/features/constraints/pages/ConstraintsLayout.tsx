@@ -36,6 +36,9 @@ export default function ConstraintsLayout() {
           <NavLink to="/constraints/subject-rules" className={linkClass}>
             Subject rules
           </NavLink>
+          <NavLink to="/constraints/availability-overview" className={linkClass}>
+            Availability overview
+          </NavLink>
         </nav>
       </div>
       <Outlet />

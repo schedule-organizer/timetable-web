@@ -56,10 +56,7 @@ export default function MyAvailabilityPage() {
   const [slotMap, setSlotMap] = useState<Map<string, AvailabilitySlotState>>(() => new Map())
   const [hydrated, setHydrated] = useState(false)
   const [view, setView] = useState<ViewMode>('edit')
-  const [confirmResetOpen, setConfirmResetOpen] = useState(false)
-  const resetDialogCancelRef = useRef<HTMLButtonElement>(null)
-  const resetDialogRootRef = useRef<HTMLDivElement>(null)
-  const focusBeforeResetDialogRef = useRef<HTMLElement | null>(null)
+  const [confirmingReset, setConfirmingReset] = useState(false)
   const availabilitySyncedRef = useRef(false)
 
   useEffect(() => {
@@ -76,78 +73,6 @@ export default function MyAvailabilityPage() {
     availabilitySyncedRef.current = true
     setHydrated(true)
   }, [teacherId, availabilityDto, availabilityLoading])
-
-  useEffect(() => {
-    if (!confirmResetOpen) return
-
-    focusBeforeResetDialogRef.current = document.activeElement as HTMLElement | null
-
-    const focusFrame = requestAnimationFrame(() => {
-      resetDialogCancelRef.current?.focus()
-    })
-
-    const root = resetDialogRootRef.current
-    if (!root) {
-      return () => {
-        cancelAnimationFrame(focusFrame)
-        const prev = focusBeforeResetDialogRef.current
-        focusBeforeResetDialogRef.current = null
-        if (prev && typeof prev.focus === 'function') {
-          try {
-            prev.focus()
-          } catch {
-            /* ignore */
-          }
-        }
-      }
-    }
-
-    const focusableSelector =
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-
-    const getFocusable = () =>
-      Array.from(root.querySelectorAll<HTMLElement>(focusableSelector)).filter(
-        (n) => n.offsetParent !== null || root.contains(n),
-      )
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault()
-        setConfirmResetOpen(false)
-        return
-      }
-      if (e.key !== 'Tab') return
-      const nodes = getFocusable()
-      if (nodes.length === 0) return
-      const first = nodes[0]
-      const last = nodes[nodes.length - 1]
-      const active = document.activeElement
-      if (e.shiftKey) {
-        if (active === first || !root.contains(active)) {
-          e.preventDefault()
-          last.focus()
-        }
-      } else if (active === last) {
-        e.preventDefault()
-        first.focus()
-      }
-    }
-
-    root.addEventListener('keydown', onKeyDown)
-    return () => {
-      cancelAnimationFrame(focusFrame)
-      root.removeEventListener('keydown', onKeyDown)
-      const prev = focusBeforeResetDialogRef.current
-      focusBeforeResetDialogRef.current = null
-      if (prev && typeof prev.focus === 'function') {
-        try {
-          prev.focus()
-        } catch {
-          /* ignore */
-        }
-      }
-    }
-  }, [confirmResetOpen])
 
   const periods = bellSchedule?.periods ?? []
   const cycleLengthDays = cycleSettings?.cycleLengthDays ?? 0
@@ -189,7 +114,7 @@ export default function MyAvailabilityPage() {
 
   const handleConfirmReset = () => {
     setSlotMap(new Map())
-    setConfirmResetOpen(false)
+    setConfirmingReset(false)
   }
 
   const saveErrorMessage = saveError ? getApiErrorMessage(saveError) : null
@@ -252,14 +177,30 @@ export default function MyAvailabilityPage() {
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2">
-            <Button type="button" onClick={() => setConfirmResetOpen(true)}>
-              Mark all as available
-            </Button>
-            <Button type="button" onClick={handleSubmit} disabled={!hydrated || isSaving}>
-              {isSaving ? 'Submitting…' : 'Submit availability'}
-            </Button>
-          </div>
+          {confirmingReset ? (
+            <div className="flex flex-wrap items-center gap-3 rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
+              <span className="text-sm text-amber-800">
+                This clears every Unavailable and Preferred mark. Confirm?
+              </span>
+              <div className="flex gap-2">
+                <Button type="button" variant="secondary" onClick={() => setConfirmingReset(false)}>
+                  Cancel
+                </Button>
+                <Button type="button" onClick={handleConfirmReset}>
+                  Mark all as available
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" variant="secondary" onClick={() => setConfirmingReset(true)}>
+                Mark all as available
+              </Button>
+              <Button type="button" onClick={handleSubmit} disabled={!hydrated || isSaving}>
+                {isSaving ? 'Submitting…' : 'Submit availability'}
+              </Button>
+            </div>
+          )}
         </section>
       )}
 
@@ -306,43 +247,6 @@ export default function MyAvailabilityPage() {
             Back to grid
           </Button>
         </section>
-      )}
-
-      {confirmResetOpen && (
-        <div
-          ref={resetDialogRootRef}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="availability-reset-title"
-          className="fixed inset-0 z-50 flex items-center justify-center"
-        >
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setConfirmResetOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="relative z-10 w-full max-w-sm rounded-lg border border-[--color-border] bg-[--color-surface] p-6 shadow-xl">
-            <h2 id="availability-reset-title" className="text-base font-semibold text-[--color-text-primary]">
-              Mark all as available?
-            </h2>
-            <p className="mt-2 text-sm text-[--color-text-secondary]">
-              This clears every Unavailable and Preferred mark in one step.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Button
-                ref={resetDialogCancelRef}
-                type="button"
-                variant="secondary"
-                onClick={() => setConfirmResetOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="button" onClick={handleConfirmReset}>
-                Mark all as available
-              </Button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   )

@@ -15,6 +15,8 @@ export interface AvailabilityGridProps {
   value: Map<string, AvailabilitySlotState>
   onChange: (next: Map<string, AvailabilitySlotState>) => void
   disabled?: boolean
+  /** Keys (cycleDayIndex:periodId) whose slots have been overridden by a timetabler. Renders a visual indicator on those cells. */
+  overriddenKeys?: Set<string>
 }
 
 function cellBackground(state: AvailabilitySlotState): string {
@@ -36,6 +38,7 @@ export function AvailabilityGrid({
   value,
   onChange,
   disabled = false,
+  overriddenKeys,
 }: AvailabilityGridProps) {
   const gridLabelId = useId()
   const touchStartRef = useRef<{ x: number; y: number; dayIndex: number } | null>(null)
@@ -132,26 +135,37 @@ export function AvailabilityGrid({
     )
   }
 
+  const stickyCornerClass =
+    'sticky left-0 z-[3] border border-[--color-border] bg-[--color-surface] px-2 py-2 text-left font-medium text-[--color-text-secondary]'
+  const stickyRowClass =
+    'sticky left-0 z-[2] border border-[--color-border] bg-[--color-surface] px-2 py-2 text-left font-medium text-[--color-text-primary]'
+
   return (
     <div className="overflow-x-auto">
       <table
         role="grid"
         aria-labelledby={gridLabelId}
-        className="w-full min-w-[320px] border-collapse text-sm"
+        className="w-full min-w-[320px] table-fixed border-separate border-spacing-0 text-sm"
       >
         <caption id={gridLabelId} className="sr-only">
           Availability grid — tap a cell to cycle Available, Unavailable, and Preferred
         </caption>
+        <colgroup>
+          <col className="w-[8.5rem]" />
+          {periods.map((p) => (
+            <col key={p.id} className="min-w-[3rem]" />
+          ))}
+        </colgroup>
         <thead>
           <tr className="bg-[--color-surface] text-[--color-text-secondary]">
-            <th scope="col" className="sticky left-0 z-[1] border border-[--color-border] px-2 py-2 text-left font-medium">
+            <th scope="col" className={stickyCornerClass}>
               Cycle day
             </th>
             {periods.map((p) => (
               <th
                 key={p.id}
                 scope="col"
-                className="min-w-[3rem] border border-[--color-border] px-1 py-2 text-center font-medium"
+                className="border border-[--color-border] px-2 py-2 text-center font-medium"
               >
                 {p.name}
               </th>
@@ -165,16 +179,15 @@ export function AvailabilityGrid({
               onTouchStart={handleRowTouchStart(dayIndex)}
               onTouchEnd={handleRowTouchEnd(dayIndex)}
             >
-              <th
-                scope="row"
-                className="sticky left-0 z-[1] border border-[--color-border] bg-[--color-surface] px-2 py-1 text-left font-medium text-[--color-text-primary]"
-              >
+              <th scope="row" className={stickyRowClass}>
                 {dayLabel(dayIndex)}
               </th>
               {periods.map((p, periodIndex) => {
                 const state = getSlotState(value, dayIndex, p.id)
+                const cellKey = slotKey(dayIndex, p.id)
+                const isOverridden = overriddenKeys?.has(cellKey) ?? false
                 return (
-                  <td key={slotKey(dayIndex, p.id)} role="gridcell" className="border border-[--color-border] p-0">
+                  <td key={cellKey} role="gridcell" className="border border-[--color-border] p-0 align-top">
                     <button
                       type="button"
                       ref={(el) => {
@@ -183,9 +196,9 @@ export function AvailabilityGrid({
                       }}
                       tabIndex={focusedDay === dayIndex && focusedPeriod === periodIndex ? 0 : -1}
                       disabled={disabled}
-                      aria-label={`${dayLabel(dayIndex)}, ${p.name}, ${cellLabel(state)}`}
+                      aria-label={`${dayLabel(dayIndex)}, ${p.name}, ${cellLabel(state)}${isOverridden ? ', overridden' : ''}`}
                       className={cn(
-                        'flex h-12 w-full min-h-11 min-w-11 items-center justify-center border-0 transition-colors md:h-11 md:min-h-0 md:min-w-0',
+                        'relative flex h-12 w-full min-h-11 min-w-11 items-center justify-center border-0 transition-colors md:h-11 md:min-h-0 md:min-w-0',
                         cellBackground(state),
                         'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[--color-border]',
                         disabled && 'cursor-not-allowed opacity-60',
@@ -196,7 +209,14 @@ export function AvailabilityGrid({
                         setFocusedPeriod(periodIndex)
                       }}
                       onKeyDown={handleCellKeyDown(dayIndex, periodIndex, p.id)}
-                    />
+                    >
+                      {isOverridden && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute right-0.5 top-0.5 h-2 w-2 rounded-full bg-blue-500"
+                        />
+                      )}
+                    </button>
                   </td>
                 )
               })}

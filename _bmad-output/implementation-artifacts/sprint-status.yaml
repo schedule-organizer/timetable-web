@@ -47,7 +47,7 @@ development_status:
   3-2-soft-preference-configuration-with-weights: done
   3-3-subject-level-scheduling-rules: done
   3-4-teacher-availability-submission-availability-grid: done
-  3-5-timetabler-availability-overview-and-override: ready-for-dev
+  3-5-timetabler-availability-overview-and-override: review
   epic-3-retrospective: optional
 
   epic-4: backlog

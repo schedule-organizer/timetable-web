@@ -5,18 +5,31 @@ import {
   createTeacherRequestSchema,
 } from '@/types/teacher.schemas'
 import { teacherAvailabilityDtoSchema } from '@/types/teacher-availability.schemas'
+import { teacherAvailabilityOverrideDtoSchema } from '@/types/teacher-availability-override.schemas'
 import type { TeacherAvailabilityDto } from '@/types/teacher-availability.types'
+import type { TeacherAvailabilityOverrideDto, TeacherAvailabilitySummaryItem } from '@/types/teacher-availability-override.types'
 import type { TeacherDto } from '@/types/teacher.types'
 
 let teachers: TeacherDto[] = []
 let idCounter = 0
 
 let availabilityByTeacherId: Record<string, TeacherAvailabilityDto> = {}
+let availabilityOverrideByTeacherId: Record<string, TeacherAvailabilityOverrideDto> = {}
+
+// Seed Alice Chen (teacher-roster-1) with submitted availability: Day A periods 1-2 unavailable, Day C period 3 preferred.
+const SEED_ALICE_AVAILABILITY: TeacherAvailabilityDto = {
+  unavailable: [
+    { cycleDayIndex: 0, periodId: 'period-mock-1' },
+    { cycleDayIndex: 0, periodId: 'period-mock-2' },
+  ],
+  preferred: [{ cycleDayIndex: 2, periodId: 'period-mock-3' }],
+}
 
 export function resetTeacherMocks() {
   teachers = mockTeachers.map((teacher) => ({ ...teacher }))
   idCounter = teachers.length
-  availabilityByTeacherId = {}
+  availabilityByTeacherId = { 'teacher-roster-1': SEED_ALICE_AVAILABILITY }
+  availabilityOverrideByTeacherId = {}
 }
 
 resetTeacherMocks()
@@ -36,6 +49,22 @@ function emptyPaginationResponse() {
 export const MOCK_CURRENT_TEACHER_ID = 'teacher-roster-1'
 
 export const teacherHandlers = [
+  // Static paths must be registered before /:id wildcard routes
+  http.get('/api/v1/teachers/availability-summary', () => {
+    const summary: TeacherAvailabilitySummaryItem[] = teachers.map((t) => {
+      const avail = availabilityByTeacherId[t.id]
+      const override = availabilityOverrideByTeacherId[t.id]
+      return {
+        teacherId: t.id,
+        submitted: Boolean(avail),
+        unavailableCount: avail?.unavailable.length ?? 0,
+        preferredCount: avail?.preferred.length ?? 0,
+        overrideCount: override?.overriddenSlots.length ?? 0,
+      }
+    })
+    return HttpResponse.json(summary)
+  }),
+
   // /me routes must be registered before /:id to avoid wildcard capture
   http.get('/api/v1/teachers/me', () => {
     const currentTeacher = teachers.find((t) => t.id === MOCK_CURRENT_TEACHER_ID)
@@ -128,6 +157,50 @@ export const teacherHandlers = [
     }
 
     availabilityByTeacherId[id] = parsed.data
+    return HttpResponse.json(parsed.data)
+  }),
+
+  http.get('/api/v1/teachers/:id/availability/override', ({ params }) => {
+    const id = params.id as string
+    const teacher = teachers.find((t) => t.id === id)
+    if (!teacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Teacher not found.' },
+        { status: 404 },
+      )
+    }
+    return HttpResponse.json(availabilityOverrideByTeacherId[id] ?? { overriddenSlots: [] })
+  }),
+
+  http.put('/api/v1/teachers/:id/availability/override', async ({ params, request }) => {
+    const id = params.id as string
+    const teacher = teachers.find((t) => t.id === id)
+    if (!teacher) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Teacher not found.' },
+        { status: 404 },
+      )
+    }
+
+    let raw: unknown
+    try {
+      raw = await request.json()
+    } catch {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_JSON', message: 'Invalid JSON body.' },
+        { status: 400 },
+      )
+    }
+
+    const parsed = teacherAvailabilityOverrideDtoSchema.safeParse(raw)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'INVALID_BODY', message: 'Invalid override data.' },
+        { status: 400 },
+      )
+    }
+
+    availabilityOverrideByTeacherId[id] = parsed.data
     return HttpResponse.json(parsed.data)
   }),
 

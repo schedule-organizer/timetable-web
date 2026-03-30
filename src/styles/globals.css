@@ -103,6 +103,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Portaled modals mount here — sibling after #root, fixed viewport layer, above app shell */
+#modal-root {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  min-height: 100%;
+  min-height: 100dvh;
+  z-index: 2147483646;
+  isolation: isolate;
+  pointer-events: none;
+}
+
 /* Focus ring — UX-DR4, UX-DR17 */
 :focus-visible {
   outline: 2px solid var(--color-focus-ring);
