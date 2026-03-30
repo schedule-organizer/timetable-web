@@ -16,8 +16,11 @@ import {
 import { SatisfactionBanner } from '@/components/domain/satisfaction-banner'
 import { ConstraintSatisfactionSummary } from '@/components/domain/constraint-satisfaction-summary'
 import { ConflictExplainer } from '@/components/domain/conflict-explainer'
+import { SensitivityPanel } from '@/components/domain/sensitivity-panel'
 import { Button } from '@/components/ui/button'
 import { padDayLabels } from '@/lib/cycle-term-utils'
+import { buildRelaxationImpactPreviewLine } from '@/lib/relaxation-impact-preview'
+import type { ConflictExplanationDto, ConstraintRelaxation } from '@/types/engine.types'
 
 function prerequisiteSentence(missing: ReturnType<typeof useGeneratorPrerequisites>['missing']) {
   if (missing.length === 0) return ''
@@ -47,6 +50,7 @@ export default function EnginePage() {
   const [jobId, setJobId] = useState<string | null>(null)
   const [showSatisfactionSummary, setShowSatisfactionSummary] = useState(false)
   const [showConflictExplainer, setShowConflictExplainer] = useState(false)
+  const [selectedConflict, setSelectedConflict] = useState<ConflictExplanationDto | null>(null)
   const runEngine = useRunEngine()
   const { data: job, isPending: jobPending } = useEngineJob(jobId)
   useSyncDraftFromEngineJob(termId, job)
@@ -81,24 +85,55 @@ export default function EnginePage() {
     [cycle?.dayLabels, cycleLength],
   )
 
-  const onGenerate = useCallback(() => {
-    if (!termId || !canRun) return
-    setJobId(null)
-    runEngine.mutate(
-      { termId },
-      {
-        onSuccess: (res) => setJobId(res.jobId),
-      },
-    )
-  }, [termId, canRun, runEngine])
+  const onGenerate = useCallback(
+    (relaxations?: ConstraintRelaxation[]) => {
+      if (!termId || !canRun) return
+      setJobId(null)
+      runEngine.mutate(
+        { termId, relaxations },
+        {
+          onSuccess: (res) => setJobId(res.jobId),
+        },
+      )
+    },
+    [termId, canRun, runEngine],
+  )
 
   const onOpenSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(true), [])
   const onCloseSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(false), [])
   const onOpenConflictExplainer = useCallback(() => setShowConflictExplainer(true), [])
   const onCloseConflictExplainer = useCallback(() => setShowConflictExplainer(false), [])
-  const onRelaxConstraint = useCallback((_conflictId: string) => {
-    // Story 4.4 — opens SensitivityPanel; placeholder for now
-  }, [])
+
+  const onRelaxConstraint = useCallback(
+    (conflictId: string) => {
+      const conflict = job?.conflictReport?.conflicts.find((c) => c.id === conflictId)
+      if (!conflict) return
+      setSelectedConflict(conflict)
+    },
+    [job],
+  )
+
+  const onCloseSensitivityPanel = useCallback(() => setSelectedConflict(null), [])
+
+  const sensitivityImpactLine = useMemo(() => {
+    if (!selectedConflict || cycleLength === 0) return undefined
+    return buildRelaxationImpactPreviewLine(
+      selectedConflict,
+      dayLabels,
+      cycleLength,
+      bell?.periods ?? [],
+    )
+  }, [selectedConflict, dayLabels, cycleLength, bell?.periods])
+
+  const onApplyAndReRun = useCallback(
+    (relaxation: ConstraintRelaxation) => {
+      setSelectedConflict(null)
+      setShowConflictExplainer(false)
+      onGenerate([relaxation])
+    },
+    [onGenerate],
+  )
+
   const onAssignManually = useCallback(() => {
     // Story 5 — navigates to timetable grid; placeholder for now
   }, [])
@@ -136,7 +171,7 @@ export default function EnginePage() {
           </div>
           <Button
             type="button"
-            onClick={onGenerate}
+            onClick={() => onGenerate()}
             disabled={disableGenerate}
             aria-busy={runEngine.isPending || statusPhase === 'running'}
           >
@@ -203,6 +238,16 @@ export default function EnginePage() {
           onClose={onCloseSatisfactionSummary}
         />
       ) : null}
+
+      <SensitivityPanel
+        open={selectedConflict !== null}
+        constraintId={selectedConflict?.constraintId ?? ''}
+        constraintName={selectedConflict?.constraintName ?? ''}
+        conflictExplanation={selectedConflict?.explanation ?? ''}
+        impactPreviewLine={sensitivityImpactLine}
+        onApplyAndReRun={onApplyAndReRun}
+        onClose={onCloseSensitivityPanel}
+      />
     </div>
   )
 }

@@ -1,8 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { X, CheckCircle2, AlertCircle, MinusCircle } from 'lucide-react'
+import { X, CheckCircle2, AlertCircle, MinusCircle, ArrowDownCircle } from 'lucide-react'
 import { ModalPortal } from '@/components/ui/modal-portal'
 import { Button } from '@/components/ui/button'
-import type { ConstraintSatisfactionReport, SoftPreferenceSatisfactionDto, HardConstraintStatusDto } from '@/types/engine.types'
+import type {
+  ConstraintSatisfactionReport,
+  HardConstraintStatusDto,
+  RelaxedConstraintSummary,
+  SoftPreferenceSatisfactionDto,
+} from '@/types/engine.types'
 
 export interface ConstraintSatisfactionSummaryProps {
   report: ConstraintSatisfactionReport
@@ -43,6 +48,24 @@ function SoftPreferenceRow({ pref }: { pref: SoftPreferenceSatisfactionDto }) {
         ].join(' ')}
       >
         {STATUS_LABELS[pref.status]}
+      </span>
+    </li>
+  )
+}
+
+function RelaxedConstraintRow({ item }: { item: RelaxedConstraintSummary }) {
+  return (
+    <li className="flex items-start gap-3 py-2">
+      <ArrowDownCircle
+        className="mt-0.5 size-4 shrink-0 text-amber-500 dark:text-amber-400"
+        aria-hidden
+      />
+      <div className="min-w-0 flex-1">
+        <p className="text-sm text-[--color-text-primary]">{item.constraintName}</p>
+        <p className="mt-0.5 text-xs text-[--color-text-secondary]">{item.handledAs}</p>
+      </div>
+      <span className="mt-0.5 shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900 dark:text-amber-300">
+        Relaxed
       </span>
     </li>
   )
@@ -134,6 +157,24 @@ export function ConstraintSatisfactionSummary({ report, onClose }: ConstraintSat
 
         {/* Body */}
         <div className="overflow-y-auto px-5 py-4" style={{ maxHeight: 'calc(80vh - 4rem)' }}>
+          {/* Relaxed constraints — shown when formerly-hard constraints were downgraded for this run */}
+          {report.relaxedConstraints && report.relaxedConstraints.length > 0 ? (
+            <section aria-label="Relaxed constraints" className="mb-4">
+              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-[--color-text-secondary]">
+                Relaxed for this run
+              </h3>
+              <p className="mb-2 text-xs text-[--color-text-secondary]">
+                These hard constraints were downgraded to soft preferences for this run only. Your
+                saved configuration is unchanged.
+              </p>
+              <ul aria-label="Relaxed constraint list" className="divide-y divide-[--color-border]">
+                {report.relaxedConstraints.map((item) => (
+                  <RelaxedConstraintRow key={item.constraintId} item={item} />
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
           {/* Hard constraints */}
           {report.hardConstraints.length > 0 ? (
             <section aria-label="Hard constraints">

@@ -1,6 +1,6 @@
 # Story 4.4: Constraint Sensitivity Adjustment
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -36,11 +36,11 @@ A Timetabler can work interactively with the generated draft — viewing the ful
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -68,13 +68,51 @@ Build on patterns from `4-3-conflict-detection-and-plain-language-explanation.md
 
 ### Agent Model Used
 
-_(filled by dev agent)_
+claude-sonnet-4-6
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- **API surface mapping:** `POST /api/v1/engine/run` extended with optional `relaxations: [{constraintId, constraintName, weight}]`; `GET /api/v1/engine/jobs/{id}` returns `constraintReport.relaxedConstraints` array when constraints were relaxed for the run.
+- **Zod schemas (`engine.schemas.ts`):** Added `constraintRelaxationSchema`, `relaxedConstraintSummarySchema`; updated `engineRunRequestSchema` with optional `relaxations`; updated `constraintSatisfactionReportSchema` with optional `relaxedConstraints`.
+- **Types (`engine.types.ts`):** Added `ConstraintRelaxation`, `RelaxedConstraintSummary` types inferred from new schemas.
+- **MSW handler (`engine.handlers.ts`):** `JobRecord` now stores relaxations; POST /run stores relaxations on the job; GET job includes `relaxedConstraints` in constraint report; when a job has relaxations, mock engine treats it as success even in failure mode (simulating deadlock resolution).
+- **`SensitivityPanel` component (`src/components/domain/sensitivity-panel.tsx`):** Right-side modal drawer via `ModalPortal`. Hard/soft toggle (radio group), weight slider (1–10, default 5, only shown when Soft), impact preview chip (UX-DR11, shown when Soft with amber styling), note that original config is unchanged. "Apply and re-run" disabled when Hard selected (no change to make), enabled when Soft. Escape closes. Focus management on open. 3 Storybook stories.
+- **`ConstraintSatisfactionSummary` updated:** Shows "Relaxed for this run" section above hard constraints when `report.relaxedConstraints` is present; each item uses amber styling and an `ArrowDownCircle` icon.
+- **`EnginePage.tsx` updated:** `selectedConflict` state tracks which conflict triggered the panel; `onRelaxConstraint` now finds the conflict from `job.conflictReport.conflicts` by id and opens SensitivityPanel; `onApplyAndReRun` closes panel + explainer and calls `runEngine.mutate` with relaxations; `onGenerate` now accepts optional relaxations parameter.
+- **Tests:** 15 new tests in `sensitivity-panel.test.tsx` — render, open/closed state, toggle behaviour, slider visibility/range, impact chip visibility, apply-and-rerun enabled/disabled/payload, cancel/Escape, config-unchanged note. All pass. 0 regressions in engine-related tests.
+
 ### File List
 
+- `src/types/engine.schemas.ts` (modified)
+- `src/types/engine.types.ts` (modified)
+- `src/mocks/handlers/engine.handlers.ts` (modified)
+- `src/components/domain/sensitivity-panel.tsx` (new)
+- `src/components/domain/sensitivity-panel.test.tsx` (new)
+- `src/components/domain/sensitivity-panel.stories.tsx` (new)
+- `src/components/domain/constraint-satisfaction-summary.tsx` (modified)
+- `src/features/engine/pages/EnginePage.tsx` (modified)
+- `src/lib/relaxation-impact-preview.ts` (new)
+- `src/lib/relaxation-impact-preview.test.ts` (new)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (modified)
+
+## Change Log
+
+- 2026-03-31: Story 4.4 — constraint sensitivity adjustment: SensitivityPanel right-drawer, hard/soft toggle, weight slider, impact preview chip, relaxation schemas, MSW relaxation handling, ConstraintSatisfactionSummary relaxed-constraints section, EnginePage wiring.
+- 2026-03-31: Code review follow-up — Zod dedupe; `buildRelaxationImpactPreviewLine` + optional `impactPreviewLine` on SensitivityPanel (UX-DR11); tests for helper and chip with concrete line.
+
+### Review Findings
+
+- [x] [Review][Decision] UX-DR11 impact copy — concrete vs generic — Resolved: `buildRelaxationImpactPreviewLine` derives a concrete line from the first affected slot + teacher/class + day/period labels; `SensitivityPanel` falls back to generic copy when no slots exist.
+
+- [x] [Review][Patch] Deduplicate relaxation shape in Zod — `constraintRelaxationSchema` is defined first; `engineRunRequestSchema` uses `z.array(constraintRelaxationSchema).optional()`.
+
+- [x] [Review][Patch] `SelectedConflict` removed — `EnginePage` holds `ConflictExplanationDto | null` so conflict data is used for impact preview without dead fields.
+
+- [x] [Review][Defer] `onRelaxConstraint` no-op when conflict missing — `EnginePage.tsx` — deferred, pre-existing edge (stale job / race): if `find` returns undefined, the user gets no feedback.
+
+- [x] [Review][Defer] Focus return after closing SensitivityPanel — deferred, pre-existing modal pattern gap: focus moves to Cancel on open but does not restore focus to the control that opened the panel.
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done — Story 4.4 implemented; code review findings addressed.

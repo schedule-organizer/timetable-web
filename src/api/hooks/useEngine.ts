@@ -53,7 +53,9 @@ export function useSyncDraftFromEngineJob(
 export function useRunEngine() {
   return useMutation({
     mutationFn: (body: EngineRunRequest) =>
-      api.post('/api/v1/engine/run', body).then((res) => engineRunResponseSchema.parse(res.data)),
+      api
+        .post('/api/v1/engine/run', body)
+        .then((res) => engineRunResponseSchema.parse(res.data)),
   })
 }
 

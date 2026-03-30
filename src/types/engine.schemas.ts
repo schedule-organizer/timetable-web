@@ -1,8 +1,22 @@
 import { z } from 'zod'
 import { draftScheduleSchema } from '@/types/timetable-draft.schemas'
 
+export const constraintRelaxationSchema = z.object({
+  constraintId: z.string(),
+  constraintName: z.string(),
+  weight: z.number().int().min(1).max(10),
+})
+
 export const engineRunRequestSchema = z.object({
   termId: z.string().min(1),
+  relaxations: z.array(constraintRelaxationSchema).optional(),
+})
+
+export const relaxedConstraintSummarySchema = z.object({
+  constraintId: z.string(),
+  constraintName: z.string(),
+  weight: z.number().int().min(1).max(10),
+  handledAs: z.string(),
 })
 
 export const conflictEntitySchema = z.object({
@@ -64,6 +78,7 @@ export const constraintSatisfactionReportSchema = z.object({
   softNotSatisfied: z.number().int().min(0),
   softPreferences: z.array(softPreferenceSatisfactionDtoSchema),
   hardConstraints: z.array(hardConstraintStatusDtoSchema),
+  relaxedConstraints: z.array(relaxedConstraintSummarySchema).optional(),
 })
 
 export const engineJobDtoSchema = z.object({

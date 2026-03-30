@@ -54,7 +54,7 @@ development_status:
   4-1-schedule-generator-run: done
   4-2-constraint-satisfaction-report: done
   4-3-conflict-detection-and-plain-language-explanation: done
-  4-4-constraint-sensitivity-adjustment: ready-for-dev
+  4-4-constraint-sensitivity-adjustment: done
   epic-4-retrospective: optional
 
   epic-5: backlog

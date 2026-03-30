@@ -7,12 +7,19 @@ import { mockSubjects } from '@/mocks/fixtures/subjects.fixtures'
 import { mockTeachers } from '@/mocks/fixtures/teachers.fixtures'
 import { engineRunRequestSchema } from '@/types/engine.schemas'
 import type { DraftScheduleDto } from '@/types/timetable-draft.types'
-import type { ConflictReportDto, ConstraintSatisfactionReport, EngineJobDto } from '@/types/engine.types'
+import type {
+  ConflictReportDto,
+  ConstraintRelaxation,
+  ConstraintSatisfactionReport,
+  EngineJobDto,
+  RelaxedConstraintSummary,
+} from '@/types/engine.types'
 
 type JobRecord = {
   termId: string
   pollCount: number
   cancelled: boolean
+  relaxations: ConstraintRelaxation[]
 }
 
 const jobs = new Map<string, JobRecord>()
@@ -131,6 +138,17 @@ export const MOCK_CONFLICT_REPORT_DATA: ConflictReportDto = {
   ],
 }
 
+function buildRelaxedConstraintSummaries(
+  relaxations: ConstraintRelaxation[],
+): RelaxedConstraintSummary[] {
+  return relaxations.map((r) => ({
+    constraintId: r.constraintId,
+    constraintName: r.constraintName,
+    weight: r.weight,
+    handledAs: `Treated as soft preference with weight ${r.weight} — schedule may violate this constraint when no fully-valid slot exists.`,
+  }))
+}
+
 export function resetEngineMocks() {
   jobs.clear()
   draftByTerm.clear()
@@ -171,7 +189,12 @@ export const engineHandlers = [
     }
     jobSeq += 1
     const jobId = `engine-job-${jobSeq}`
-    jobs.set(jobId, { termId: parsed.data.termId, pollCount: 0, cancelled: false })
+    jobs.set(jobId, {
+      termId: parsed.data.termId,
+      pollCount: 0,
+      cancelled: false,
+      relaxations: parsed.data.relaxations ?? [],
+    })
     return HttpResponse.json({ jobId })
   }),
 
@@ -203,7 +226,7 @@ export const engineHandlers = [
       return HttpResponse.json(body)
     }
 
-    if (engineMockMode === 'failure') {
+    if (engineMockMode === 'failure' && rec.relaxations.length === 0) {
       const body: EngineJobDto = {
         id,
         status: 'failed',
@@ -215,12 +238,21 @@ export const engineHandlers = [
 
     const draft = buildDraft(rec.termId)
     draftByTerm.set(rec.termId, draft)
+    const relaxedConstraints =
+      rec.relaxations.length > 0
+        ? buildRelaxedConstraintSummaries(rec.relaxations)
+        : undefined
     const body: EngineJobDto = {
       id,
       status: 'succeeded',
-      statusMessage: 'Done',
+      statusMessage: rec.relaxations.length > 0
+        ? 'Done — schedule generated with relaxed constraints.'
+        : 'Done',
       result: draft,
-      constraintReport: MOCK_CONSTRAINT_REPORT,
+      constraintReport: {
+        ...MOCK_CONSTRAINT_REPORT,
+        relaxedConstraints,
+      },
     }
     return HttpResponse.json(body)
   }),

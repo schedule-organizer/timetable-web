@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of 4-4-constraint-sensitivity-adjustment.md (2026-03-31)
+
+- `onRelaxConstraint` silently does nothing if the conflict id is not found on the current job (stale client / race). Low probability while ConflictExplainer and job are in sync; consider user-visible feedback if this surfaces in support.
+
+- SensitivityPanel: focus is moved to Cancel on open but focus is not restored to the control that opened the panel after close — same class of deferred modal polish as other domain modals.
+
 ## Deferred from: code review of 4-2-constraint-satisfaction-report.md (2026-03-31)
 
 - Custom modal (`ConstraintSatisfactionSummary`) lacks focus trap / focus containment beyond initial focus on close — acceptable for now; revisit if WCAG dialog requirements apply to this surface.
