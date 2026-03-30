@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of 4-2-constraint-satisfaction-report.md (2026-03-31)
+
+- Custom modal (`ConstraintSatisfactionSummary`) lacks focus trap / focus containment beyond initial focus on close — acceptable for now; revisit if WCAG dialog requirements apply to this surface.
+
+- No client-side validation that aggregate soft counts (`softFullySatisfied`, etc.) match `softPreferences` length — rely on API contract or add Zod refinements when backend is fixed.
+
 ## Deferred from: code review of 4-1-schedule-generator-run.md (2026-03-31)
 
 - Cancel run UX (`DELETE /api/v1/engine/jobs/{id}`, UI control): explicitly deferred out of 4.1; implement when a story owns long-running job cancellation. `useCancelEngineJob` may stay as a hook for that work.

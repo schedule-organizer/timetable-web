@@ -7,7 +7,7 @@ import { mockSubjects } from '@/mocks/fixtures/subjects.fixtures'
 import { mockTeachers } from '@/mocks/fixtures/teachers.fixtures'
 import { engineRunRequestSchema } from '@/types/engine.schemas'
 import type { DraftScheduleDto } from '@/types/timetable-draft.types'
-import type { EngineJobDto } from '@/types/engine.types'
+import type { ConstraintSatisfactionReport, EngineJobDto } from '@/types/engine.types'
 
 type JobRecord = {
   termId: string
@@ -65,6 +65,33 @@ const EMPTY_DRAFT: DraftScheduleDto = {
   termId: '',
   generatedAt: '1970-01-01T00:00:00.000Z',
   lessons: [],
+}
+
+export const MOCK_CONSTRAINT_REPORT: ConstraintSatisfactionReport = {
+  overallPercentage: 94,
+  softFullySatisfied: 8,
+  softPartiallySatisfied: 2,
+  softNotSatisfied: 1,
+  softPreferences: [
+    { id: 'pref-1', name: 'Teacher preferred free periods', weight: 80, status: 'fully_satisfied' },
+    { id: 'pref-2', name: 'No double-period subjects', weight: 60, status: 'fully_satisfied' },
+    { id: 'pref-3', name: 'Spread subjects across week', weight: 70, status: 'fully_satisfied' },
+    { id: 'pref-4', name: 'Avoid last-period high-difficulty', weight: 50, status: 'fully_satisfied' },
+    { id: 'pref-5', name: 'Teacher morning preference', weight: 40, status: 'fully_satisfied' },
+    { id: 'pref-6', name: 'Room capacity preference', weight: 30, status: 'fully_satisfied' },
+    { id: 'pref-7', name: 'Consecutive free periods', weight: 20, status: 'fully_satisfied' },
+    { id: 'pref-8', name: 'Lunch break protection', weight: 90, status: 'fully_satisfied' },
+    { id: 'pref-9', name: 'Max 3 lessons per subject per day', weight: 75, status: 'partially_satisfied' },
+    { id: 'pref-10', name: 'Balanced workload per day', weight: 65, status: 'partially_satisfied' },
+    { id: 'pref-11', name: 'Preferred room type per subject', weight: 45, status: 'not_satisfied' },
+  ],
+  hardConstraints: [
+    { id: 'hc-1', name: 'No teacher double-booking', satisfied: true },
+    { id: 'hc-2', name: 'No room double-booking', satisfied: true },
+    { id: 'hc-3', name: 'No class double-booking', satisfied: true },
+    { id: 'hc-4', name: 'Teacher forbidden slots respected', satisfied: true },
+    { id: 'hc-5', name: 'Minimum lessons per subject per term', satisfied: true },
+  ],
 }
 
 export function resetEngineMocks() {
@@ -145,6 +172,7 @@ export const engineHandlers = [
       status: 'succeeded',
       statusMessage: 'Done',
       result: draft,
+      constraintReport: MOCK_CONSTRAINT_REPORT,
     }
     return HttpResponse.json(body)
   }),

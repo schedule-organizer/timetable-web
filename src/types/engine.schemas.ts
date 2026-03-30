@@ -13,11 +13,41 @@ export const engineJobStatusSchema = z.enum([
   'cancelled',
 ])
 
+export const softPreferenceSatisfactionStatusSchema = z.enum([
+  'fully_satisfied',
+  'partially_satisfied',
+  'not_satisfied',
+])
+
+export const softPreferenceSatisfactionDtoSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  weight: z.number().min(0).max(100),
+  status: softPreferenceSatisfactionStatusSchema,
+})
+
+export const hardConstraintStatusDtoSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  satisfied: z.boolean(),
+  conflictDescription: z.string().optional(),
+})
+
+export const constraintSatisfactionReportSchema = z.object({
+  overallPercentage: z.number().min(0).max(100),
+  softFullySatisfied: z.number().int().min(0),
+  softPartiallySatisfied: z.number().int().min(0),
+  softNotSatisfied: z.number().int().min(0),
+  softPreferences: z.array(softPreferenceSatisfactionDtoSchema),
+  hardConstraints: z.array(hardConstraintStatusDtoSchema),
+})
+
 export const engineJobDtoSchema = z.object({
   id: z.string(),
   status: engineJobStatusSchema,
   statusMessage: z.string(),
   result: draftScheduleSchema.optional(),
+  constraintReport: constraintSatisfactionReportSchema.optional(),
 })
 
 export const engineRunResponseSchema = z.object({

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useGeneratorPrerequisites } from '@/api/hooks/useGeneratorPrerequisites'
 import {
   useDraftSchedule,
@@ -13,6 +13,8 @@ import {
   GeneratorStatusBar,
   type GeneratorStatusPhase,
 } from '@/components/domain/generator-status-bar'
+import { SatisfactionBanner } from '@/components/domain/satisfaction-banner'
+import { ConstraintSatisfactionSummary } from '@/components/domain/constraint-satisfaction-summary'
 import { Button } from '@/components/ui/button'
 import { padDayLabels } from '@/lib/cycle-term-utils'
 
@@ -42,6 +44,7 @@ export default function EnginePage() {
   const termId = activeTerm?.id ?? null
 
   const [jobId, setJobId] = useState<string | null>(null)
+  const [showSatisfactionSummary, setShowSatisfactionSummary] = useState(false)
   const runEngine = useRunEngine()
   const { data: job, isPending: jobPending } = useEngineJob(jobId)
   useSyncDraftFromEngineJob(termId, job)
@@ -76,7 +79,7 @@ export default function EnginePage() {
     [cycle?.dayLabels, cycleLength],
   )
 
-  const onGenerate = () => {
+  const onGenerate = useCallback(() => {
     if (!termId || !canRun) return
     setJobId(null)
     runEngine.mutate(
@@ -85,7 +88,10 @@ export default function EnginePage() {
         onSuccess: (res) => setJobId(res.jobId),
       },
     )
-  }
+  }, [termId, canRun, runEngine])
+
+  const onOpenSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(true), [])
+  const onCloseSatisfactionSummary = useCallback(() => setShowSatisfactionSummary(false), [])
 
   const disableGenerate =
     prerequisitesLoading ||
@@ -125,6 +131,13 @@ export default function EnginePage() {
           </Button>
         </header>
 
+        {job?.status === 'succeeded' && job.constraintReport ? (
+          <SatisfactionBanner
+            report={job.constraintReport}
+            onViewDetails={onOpenSatisfactionSummary}
+          />
+        ) : null}
+
         <section
           className="min-h-0 flex-1 overflow-auto rounded-xl border border-[--color-border] bg-[--color-surface] p-4"
           aria-label="Draft timetable workspace"
@@ -154,6 +167,13 @@ export default function EnginePage() {
         phase={statusPhase === 'idle' && !statusMessage ? 'idle' : statusPhase}
         message={statusMessage}
       />
+
+      {showSatisfactionSummary && job?.constraintReport ? (
+        <ConstraintSatisfactionSummary
+          report={job.constraintReport}
+          onClose={onCloseSatisfactionSummary}
+        />
+      ) : null}
     </div>
   )
 }
