@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@/test/test-utils'
 import userEvent from '@testing-library/user-event'
-import { TimetableGrid } from './timetable-grid'
+import { TimetableGrid, countUnpinnedSlotsForSolver } from './timetable-grid'
 import type { LessonDto } from '@/types/timetable.types'
 import type { BellPeriod } from '@/types/bell-schedule.types'
 
@@ -73,6 +73,38 @@ const defaultProps = {
 }
 
 describe('TimetableGrid', () => {
+  it('countUnpinnedSlotsForSolver returns total cells minus pinned lessons visible on the grid', () => {
+    expect(
+      countUnpinnedSlotsForSolver(lessons, 'class', null, 2, ['Day A', 'Day B'], periods),
+    ).toBe(7)
+  })
+
+  it('countUnpinnedSlotsForSolver ignores pinned lessons in rows hidden by year-group filter', () => {
+    // Only Year 8 row is shown; pinned lesson-c is Year 7 — not on the grid, so no pinned cells.
+    expect(
+      countUnpinnedSlotsForSolver(lessons, 'class', 'Year 8', 2, ['Day A', 'Day B'], periods),
+    ).toBe(4)
+  })
+
+  it('opens context menu on right-click and calls onPinSlot', async () => {
+    const onPinSlot = vi.fn()
+    const onUnpinSlot = vi.fn()
+    render(
+      <TimetableGrid
+        {...defaultProps}
+        onPinSlot={onPinSlot}
+        onUnpinSlot={onUnpinSlot}
+      />,
+    )
+    const user = userEvent.setup()
+    const grid = screen.getByRole('grid')
+    const firstCell = grid.querySelector('[role="gridcell"]') as HTMLElement
+    await user.pointer({ keys: '[MouseRight>]', target: firstCell })
+    const pinItem = await screen.findByRole('menuitem', { name: 'Pin' })
+    await user.click(pinItem)
+    expect(onPinSlot).toHaveBeenCalledWith('lesson-a')
+  })
+
   it('renders with role="grid"', () => {
     render(<TimetableGrid {...defaultProps} />)
     expect(screen.getByRole('grid')).toBeInTheDocument()

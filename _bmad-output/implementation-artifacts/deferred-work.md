@@ -1,5 +1,13 @@
 # Deferred work
 
+## Deferred from: code review of 5-2-slot-pinning.md (2026-04-01)
+
+- AC2 “re-run the generator” with pinned slots preserved: validated in MSW/mock only (`POST /api/v1/timetables/:id/regenerate-unpinned`); production engine integration and UI remain out of this story’s scope.
+
+- NFR3 (pin state reflected within 500ms): not covered by automated tests or telemetry; add when performance NFRs are enforced app-wide.
+
+- Pin/unpin mutation failures: React Query rolls back optimistic cache but no user-visible error toast; align with timetable error UX when that pattern exists.
+
 ## Deferred from: code review of 5-1-timetable-grid-view (2026-03-31)
 
 - MOCK_TIMETABLE_ID import in TimetablePage — mock-first phase by design; address when real timetable selection flow is built in a future story.

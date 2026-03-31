@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { SlotCell } from '@/components/timetable/slot-cell'
+import { SlotContextMenu } from '@/components/timetable/slot-context-menu'
 import type { BellPeriod } from '@/types/bell-schedule.types'
 import type { GridColumn, GridRow, LessonDto, TimetableView } from '@/types/timetable.types'
 
@@ -12,7 +13,12 @@ export interface TimetableGridProps {
   periods: BellPeriod[]
   yearGroupFilter?: string | null
   isLoading?: boolean
+  /** Space: toggles pin (parent decides pin vs unpin). */
   onSlotPin?: (lessonId: string) => void
+  /** Context menu: explicit pin (not a toggle). */
+  onPinSlot?: (lessonId: string) => void
+  /** Context menu: explicit unpin. */
+  onUnpinSlot?: (lessonId: string) => void
   onSlotOpen?: (lessonId: string) => void
 }
 
@@ -90,6 +96,34 @@ function findLesson(
 
 const SKELETON_ROW_COUNT = 6
 
+/** Grid cells in scope for the solver minus pinned lessons (UX-DR9 / Story 5.2). */
+export function countUnpinnedSlotsForSolver(
+  lessons: LessonDto[],
+  view: TimetableView,
+  yearGroupFilter: string | null | undefined,
+  cycleLengthDays: number,
+  dayLabels: string[],
+  periods: BellPeriod[],
+): number {
+  const columns = buildColumns(cycleLengthDays, dayLabels, periods)
+  const rows =
+    view === 'class'
+      ? buildClassRows(lessons, yearGroupFilter)
+      : view === 'teacher'
+        ? buildTeacherRows(lessons, yearGroupFilter)
+        : buildRoomRows(lessons, yearGroupFilter)
+  if (rows.length === 0 || columns.length === 0) return 0
+  const totalCells = rows.length * columns.length
+  let pinnedCellsInGrid = 0
+  for (const row of rows) {
+    for (const col of columns) {
+      const lesson = findLesson(lessons, view, row.key, col)
+      if (lesson?.isPinned) pinnedCellsInGrid++
+    }
+  }
+  return Math.max(0, totalCells - pinnedCellsInGrid)
+}
+
 export function TimetableGrid({
   lessons,
   view,
@@ -99,6 +133,8 @@ export function TimetableGrid({
   yearGroupFilter,
   isLoading = false,
   onSlotPin,
+  onPinSlot,
+  onUnpinSlot,
   onSlotOpen,
 }: TimetableGridProps) {
   const columns = useMemo(
@@ -115,6 +151,11 @@ export function TimetableGrid({
   // Focused cell state for roving tabIndex
   const [focusedCell, setFocusedCell] = useState<{ row: number; col: number }>({ row: 0, col: 0 })
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null)
+  const [slotContextMenu, setSlotContextMenu] = useState<{
+    lesson: LessonDto
+    x: number
+    y: number
+  } | null>(null)
 
   // Ref grid for imperative focus management
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -201,7 +242,16 @@ export function TimetableGrid({
   useEffect(() => {
     setSelectedCell(null)
     setFocusedCell({ row: 0, col: 0 })
+    setSlotContextMenu(null)
   }, [view, yearGroupFilter])
+
+  const handleSlotContextMenu = useCallback(
+    (_e: React.MouseEvent, lesson: LessonDto) => {
+      if (!onPinSlot || !onUnpinSlot) return
+      setSlotContextMenu({ lesson, x: _e.clientX, y: _e.clientY })
+    },
+    [onPinSlot, onUnpinSlot],
+  )
 
   // Group day headers by day label
   const dayGroups = useMemo(() => {
@@ -364,6 +414,7 @@ export function TimetableGrid({
                     style={{ width: COL_MIN_WIDTH, minWidth: COL_MIN_WIDTH }}
                     onFocus={() => setFocusedCell({ row: rowIdx, col: colIdx })}
                     onKeyDown={(e) => handleCellKeyDown(e, rowIdx, colIdx)}
+                    onSlotContextMenu={onPinSlot && onUnpinSlot ? handleSlotContextMenu : undefined}
                   />
                 )
               })}
@@ -371,6 +422,16 @@ export function TimetableGrid({
           )
         })}
       </div>
+
+      {slotContextMenu && onPinSlot && onUnpinSlot ? (
+        <SlotContextMenu
+          lesson={slotContextMenu.lesson}
+          position={{ x: slotContextMenu.x, y: slotContextMenu.y }}
+          onClose={() => setSlotContextMenu(null)}
+          onPin={() => onPinSlot(slotContextMenu.lesson.id)}
+          onUnpin={() => onUnpinSlot(slotContextMenu.lesson.id)}
+        />
+      ) : null}
     </div>
   )
 }

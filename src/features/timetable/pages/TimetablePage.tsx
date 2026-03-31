@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useBellSchedule } from '@/api/hooks/useBellSchedule'
 import { useCycleSettings } from '@/api/hooks/useCycleSettings'
-import { useTimetableLessons } from '@/api/hooks/useTimetable'
-import { TimetableGrid } from '@/components/timetable/timetable-grid'
+import { usePinLesson, useTimetableLessons, useUnpinLesson } from '@/api/hooks/useTimetable'
+import { GeneratorStatusBar } from '@/components/domain/generator-status-bar'
+import { TimetableGrid, countUnpinnedSlotsForSolver } from '@/components/timetable/timetable-grid'
 import { ViewPivotToolbar } from '@/components/timetable/view-pivot-toolbar'
 import { YearGroupFilter } from '@/components/timetable/year-group-filter'
 import { useTimetableStore } from '@/store/timetableStore'
@@ -29,6 +30,8 @@ export default function TimetablePage() {
   const { data: bell, isError: bellError } = useBellSchedule()
   const { data: cycle, isError: cycleError } = useCycleSettings()
   const { data: timetable, isLoading } = useTimetableLessons(timetableId)
+  const pinLesson = usePinLesson(timetableId)
+  const unpinLesson = useUnpinLesson(timetableId)
 
   const yearGroupParam = searchParams.get('yearGroup')
 
@@ -72,10 +75,29 @@ export default function TimetablePage() {
     [setSearchParams],
   )
 
-  const handleSlotPin = useCallback((lessonId: string) => {
-    // Story 5.2 — slot pinning; placeholder for now
-    void lessonId
-  }, [])
+  const handleToggleSlotPin = useCallback(
+    (lessonId: string) => {
+      const lesson = lessons.find((l) => l.id === lessonId)
+      if (!lesson) return
+      if (lesson.isPinned) unpinLesson.mutate(lessonId)
+      else pinLesson.mutate(lessonId)
+    },
+    [lessons, pinLesson, unpinLesson],
+  )
+
+  const handlePinSlot = useCallback(
+    (lessonId: string) => {
+      pinLesson.mutate(lessonId)
+    },
+    [pinLesson],
+  )
+
+  const handleUnpinSlot = useCallback(
+    (lessonId: string) => {
+      unpinLesson.mutate(lessonId)
+    },
+    [unpinLesson],
+  )
 
   const handleSlotOpen = useCallback((lessonId: string) => {
     // Story 5.3 — manual slot assignment; placeholder for now
@@ -85,6 +107,23 @@ export default function TimetablePage() {
   // Cast store view to the grid's TimetableView (only class/teacher/room supported by grid)
   const gridView: TimetableView =
     activeView === 'teacher' ? 'teacher' : activeView === 'room' ? 'room' : 'class'
+
+  const unpinnedSolveCount = useMemo(() => {
+    if (!bell || !cycle || cycleLength === 0) return 0
+    return countUnpinnedSlotsForSolver(
+      lessons,
+      gridView,
+      validatedYearGroup,
+      cycleLength,
+      dayLabels,
+      bell.periods,
+    )
+  }, [bell, cycle, cycleLength, lessons, gridView, validatedYearGroup, dayLabels])
+
+  const generatorStatusMessage =
+    bell && cycle && cycleLength > 0 && !bellError && !cycleError
+      ? `${unpinnedSolveCount} unpinned slots will be solved`
+      : ''
 
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -105,6 +144,12 @@ export default function TimetablePage() {
         )}
       </div>
 
+      {generatorStatusMessage ? (
+        <div className="mx-4 mt-2">
+          <GeneratorStatusBar phase="idle" message={generatorStatusMessage} />
+        </div>
+      ) : null}
+
       <div
         className="mt-3 flex min-h-0 flex-1 overflow-hidden rounded-t-xl border-t border-x border-[--color-border] bg-[--color-background] mx-4"
         aria-label="Timetable workspace"
@@ -122,7 +167,9 @@ export default function TimetablePage() {
             periods={bell.periods}
             yearGroupFilter={validatedYearGroup}
             isLoading={isLoading}
-            onSlotPin={handleSlotPin}
+            onSlotPin={handleToggleSlotPin}
+            onPinSlot={handlePinSlot}
+            onUnpinSlot={handleUnpinSlot}
             onSlotOpen={handleSlotOpen}
           />
         ) : (

@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@/test/test-utils'
 import userEvent from '@testing-library/user-event'
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
 import { mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
-import { mockTimetableLessonsResponse } from '@/mocks/pages/timetable-page.mock'
+import { getMockTimetableLessonsResponse } from '@/mocks/pages/timetable-page.mock'
 import { useTimetableStore } from '@/store/timetableStore'
 import TimetablePage from './TimetablePage'
 
@@ -14,7 +14,9 @@ vi.mock('@/api/hooks/useCycleSettings', () => ({
   useCycleSettings: () => ({ data: mockCycleSettings }),
 }))
 vi.mock('@/api/hooks/useTimetable', () => ({
-  useTimetableLessons: () => ({ data: mockTimetableLessonsResponse, isLoading: false }),
+  useTimetableLessons: () => ({ data: getMockTimetableLessonsResponse(), isLoading: false }),
+  usePinLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useUnpinLesson: () => ({ mutate: vi.fn(), isPending: false }),
 }))
 
 describe('TimetablePage', () => {
@@ -78,6 +80,11 @@ describe('TimetablePage', () => {
     await waitFor(() => {
       expect(screen.getByText('Alice Brown')).toBeInTheDocument()
     })
+  })
+
+  it('shows unpinned slot count in the generator status strip', () => {
+    render(<TimetablePage />)
+    expect(screen.getByText(/\d+ unpinned slots will be solved/)).toBeInTheDocument()
   })
 
   it('reflects year group filter in URL when filter button is clicked', async () => {

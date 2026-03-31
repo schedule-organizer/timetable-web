@@ -43,6 +43,14 @@ describe('MiniSlot', () => {
     expect(screen.getByTitle('Pinned')).toBeInTheDocument()
   })
 
+  it('applies a 2px blue inset ring on the slot when pinned', () => {
+    const { container } = render(<MiniSlot lesson={{ ...baseLesson, isPinned: true }} />)
+    const root = container.firstChild as HTMLElement
+    expect(root.style.boxShadow).toContain('inset')
+    expect(root.style.boxShadow).toContain('2px')
+    expect(root.style.boxShadow).toContain('#4a78d3')
+  })
+
   it('does not show pin icon when not pinned', () => {
     render(<MiniSlot lesson={baseLesson} />)
     expect(screen.queryByTitle('Pinned')).not.toBeInTheDocument()

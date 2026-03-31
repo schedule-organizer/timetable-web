@@ -88,7 +88,35 @@ export function buildMockTimetableLessons(): LessonDto[] {
   return lessons
 }
 
-export const mockTimetableLessonsResponse: TimetableLessonsResponse = {
-  timetableId: MOCK_TIMETABLE_ID,
-  lessons: buildMockTimetableLessons(),
+let liveLessons: LessonDto[] = buildMockTimetableLessons()
+
+/** Reset mutable mock lessons to the default generated set (call from tests between cases). */
+export function resetMockTimetableLessons(): void {
+  liveLessons = buildMockTimetableLessons()
+}
+
+export function getMockTimetableLessonsResponse(): TimetableLessonsResponse {
+  return {
+    timetableId: MOCK_TIMETABLE_ID,
+    lessons: liveLessons.map((l) => ({ ...l })),
+  }
+}
+
+/** Mock-only: flip pin state for MSW pin/unpin handlers. */
+export function setLessonPinnedInMock(lessonId: string, pinned: boolean): boolean {
+  const idx = liveLessons.findIndex((l) => l.id === lessonId)
+  if (idx === -1) return false
+  liveLessons[idx] = { ...liveLessons[idx], isPinned: pinned }
+  return true
+}
+
+/**
+ * Mock-only: simulates a generator pass that may change unpinned placements only.
+ * Pinned lessons are returned unchanged (used for tests / future partial regen wiring).
+ */
+export function regenerateUnpinnedMockLessons(): void {
+  liveLessons = liveLessons.map((l) => {
+    if (l.isPinned) return l
+    return { ...l, subjectName: `${l.subjectName} (regen)` }
+  })
 }

@@ -10,12 +10,15 @@ export interface SlotCellProps {
   style?: React.CSSProperties
   onFocus: () => void
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void
+  onSlotContextMenu?: (e: React.MouseEvent, lesson: LessonDto) => void
 }
 
 export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
-  function SlotCell({ lesson, ariaLabel, tabIndex, isSelected, style: extStyle, onFocus, onKeyDown }, ref) {
+  function SlotCell(
+    { lesson, ariaLabel, tabIndex, isSelected, style: extStyle, onFocus, onKeyDown, onSlotContextMenu },
+    ref,
+  ) {
     const hasConflict = lesson?.hasConflict ?? false
-    const isPinned = lesson?.isPinned ?? false
 
     return (
       <div
@@ -27,13 +30,19 @@ export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
         data-conflict={hasConflict ? 'true' : undefined}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
+        onContextMenu={
+          lesson && onSlotContextMenu
+            ? (e) => {
+                e.preventDefault()
+                onSlotContextMenu(e, lesson)
+              }
+            : undefined
+        }
         className="relative min-h-[52px] border-b border-r border-[--color-border] p-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4a78d3] focus-visible:ring-inset"
         style={{
           ...extStyle,
           borderTop: hasConflict ? '2px solid #c0392b' : undefined,
           backgroundColor: hasConflict ? '#fef2f2' : undefined,
-          outline: isPinned ? '2px solid #4a78d3' : undefined,
-          outlineOffset: isPinned ? '-1px' : undefined,
         }}
       >
         {lesson ? (

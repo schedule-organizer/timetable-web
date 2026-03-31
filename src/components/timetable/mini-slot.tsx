@@ -34,6 +34,9 @@ export function MiniSlot({ lesson, size = 'sm' }: MiniSlotProps) {
     <div
       className="relative flex min-w-0 items-stretch overflow-hidden rounded"
       title={label}
+      style={{
+        boxShadow: lesson.isPinned ? 'inset 0 0 0 2px #4a78d3' : undefined,
+      }}
     >
       {/* Subject colour bar — left 3px strip */}
       <div
