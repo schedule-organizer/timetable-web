@@ -17,6 +17,10 @@ vi.mock('@/api/hooks/useTimetable', () => ({
   useTimetableLessons: () => ({ data: getMockTimetableLessonsResponse(), isLoading: false }),
   usePinLesson: () => ({ mutate: vi.fn(), isPending: false }),
   useUnpinLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useUpdateLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useDeleteLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useCreateLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useMoveLesson: () => ({ mutate: vi.fn(), isPending: false }),
 }))
 
 describe('TimetablePage', () => {

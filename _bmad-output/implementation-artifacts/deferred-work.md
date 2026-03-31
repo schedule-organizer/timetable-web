@@ -121,3 +121,13 @@
 - [x] [Review][Defer] Password hashing, 24h session inactivity (NFR7/NFR9) — enforced on backend; frontend cannot satisfy alone; track in backend repo / integration tests. — deferred, pre-existing
 
 - [x] [Review][Defer] Same email registering a second institution (AC) — isolation and duplicate-policy are backend concerns; MSW always mints a new user. Confirm with API contract tests when backend exists. — deferred, pre-existing
+
+## Deferred from: code review of 5-3-manual-slot-assignment.md (2026-04-01)
+
+- Optimistic `useUpdateLesson` applies `{ ...l, ...patch } as LessonDto` — denormalized display fields can be wrong until refetch; same class of risk as other optimistic merges.
+
+- `moveLessonInMock` swaps with an occupied target without checking whether the target lesson is pinned — may diverge from future backend rules.
+
+- NFR3 (500ms) is not asserted in tests or telemetry — align when NFRs are enforced app-wide.
+
+- Drag-and-drop move has no keyboard-only equivalent — broader a11y pass.

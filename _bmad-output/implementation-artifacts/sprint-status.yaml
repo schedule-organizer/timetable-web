@@ -60,7 +60,7 @@ development_status:
   epic-5: backlog
   5-1-timetable-grid-view: done
   5-2-slot-pinning: done
-  5-3-manual-slot-assignment: ready-for-dev
+  5-3-manual-slot-assignment: done
   5-4-conflict-detection-on-manual-assignment: ready-for-dev
   5-5-partial-re-generation-on-unpinned-slots: ready-for-dev
   epic-5-retrospective: optional

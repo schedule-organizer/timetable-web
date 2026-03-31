@@ -17,7 +17,11 @@ export default {
     dayLabels: mockCycleSettings.dayLabels,
     periods: mockBellSchedule.periods,
     onSlotPin: fn(),
+    onPinSlot: fn(),
+    onUnpinSlot: fn(),
     onSlotOpen: fn(),
+    onSlotMenu: fn(),
+    onLessonMove: fn(),
   },
 } satisfies Meta<typeof TimetableGrid>
 

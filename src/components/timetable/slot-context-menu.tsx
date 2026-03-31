@@ -3,18 +3,42 @@ import { createPortal } from 'react-dom'
 import type { LessonDto } from '@/types/timetable.types'
 
 export interface SlotContextMenuProps {
-  lesson: LessonDto
+  lesson: LessonDto | null
+  /** When false, Pin/Unpin are disabled (e.g. parent did not pass pin mutation handlers). */
+  pinActionsAvailable: boolean
   position: { x: number; y: number }
   onClose: () => void
+  onAssignLesson: () => void
   onPin: () => void
   onUnpin: () => void
+  onClear: () => void
+  onViewDetail: () => void
+}
+
+function menuItemClass(disabled: boolean): string {
+  const base =
+    'block w-full px-3 py-2 text-left text-sm focus:outline-none focus-visible:bg-[--color-muted]'
+  if (disabled) {
+    return `${base} cursor-not-allowed opacity-50`
+  }
+  return `${base} cursor-pointer hover:bg-[--color-muted]`
 }
 
 /**
- * Lightweight context menu for slot Pin/Unpin (Story 5.2).
- * Uses a fixed-position portal; closes on Escape or outside click.
+ * Context menu for timetable slots (Story 5.3 — UX-DR16: Shift+F10 / right-click).
+ * Options: Assign lesson, Pin (or Unpin), Clear, View detail.
  */
-export function SlotContextMenu({ lesson, position, onClose, onPin, onUnpin }: SlotContextMenuProps) {
+export function SlotContextMenu({
+  lesson,
+  pinActionsAvailable,
+  position,
+  onClose,
+  onAssignLesson,
+  onPin,
+  onUnpin,
+  onClear,
+  onViewDetail,
+}: SlotContextMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -36,43 +60,76 @@ export function SlotContextMenu({ lesson, position, onClose, onPin, onUnpin }: S
     }
   }, [onClose])
 
-  const pinned = lesson.isPinned
+  const hasLesson = lesson !== null
+  const pinned = lesson?.isPinned ?? false
+  const pinDisabled = !hasLesson || !pinActionsAvailable
 
   return createPortal(
     <div
       ref={menuRef}
       role="menu"
       aria-label="Slot actions"
-      className="fixed z-[100] min-w-[140px] rounded-md border border-[--color-border] bg-[--color-surface] py-1 shadow-lg"
+      className="fixed z-[100] min-w-[180px] rounded-md border border-[--color-border] bg-[--color-surface] py-1 shadow-lg"
       style={{ left: position.x, top: position.y }}
     >
-      {!pinned ? (
-        <button
-          type="button"
-          role="menuitem"
-          className="block w-full px-3 py-2 text-left text-sm hover:bg-[--color-muted]"
-          style={{ color: 'var(--color-text-primary)' }}
-          onClick={() => {
-            onPin()
-            onClose()
-          }}
-        >
-          Pin
-        </button>
-      ) : (
-        <button
-          type="button"
-          role="menuitem"
-          className="block w-full px-3 py-2 text-left text-sm hover:bg-[--color-muted]"
-          style={{ color: 'var(--color-text-primary)' }}
-          onClick={() => {
-            onUnpin()
-            onClose()
-          }}
-        >
-          Unpin
-        </button>
-      )}
+      <button
+        type="button"
+        role="menuitem"
+        className={menuItemClass(false)}
+        style={{ color: 'var(--color-text-primary)' }}
+        onClick={() => {
+          onAssignLesson()
+          onClose()
+        }}
+      >
+        Assign lesson
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        aria-disabled={pinDisabled}
+        disabled={pinDisabled}
+        className={menuItemClass(pinDisabled)}
+        style={{ color: 'var(--color-text-primary)' }}
+        onClick={() => {
+          if (pinDisabled) return
+          if (pinned) onUnpin()
+          else onPin()
+          onClose()
+        }}
+      >
+        {hasLesson ? (pinned ? 'Unpin' : 'Pin') : 'Pin'}
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        aria-disabled={!hasLesson}
+        disabled={!hasLesson}
+        className={menuItemClass(!hasLesson)}
+        style={{ color: 'var(--color-text-primary)' }}
+        onClick={() => {
+          if (!hasLesson) return
+          onClear()
+          onClose()
+        }}
+      >
+        Clear
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        aria-disabled={!hasLesson}
+        disabled={!hasLesson}
+        className={menuItemClass(!hasLesson)}
+        style={{ color: 'var(--color-text-primary)' }}
+        onClick={() => {
+          if (!hasLesson) return
+          onViewDetail()
+          onClose()
+        }}
+      >
+        View detail
+      </button>
     </div>,
     document.body,
   )

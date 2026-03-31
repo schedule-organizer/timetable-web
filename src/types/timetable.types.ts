@@ -1,8 +1,17 @@
 import { type z } from 'zod'
-import { lessonDtoSchema, timetableLessonsResponseSchema } from '@/types/timetable.schemas'
+import {
+  createLessonBodySchema,
+  lessonDtoSchema,
+  lessonMoveBodySchema,
+  lessonPatchBodySchema,
+  timetableLessonsResponseSchema,
+} from '@/types/timetable.schemas'
 
 export type LessonDto = z.infer<typeof lessonDtoSchema>
 export type TimetableLessonsResponse = z.infer<typeof timetableLessonsResponseSchema>
+export type LessonPatchBody = z.infer<typeof lessonPatchBodySchema>
+export type CreateLessonBody = z.infer<typeof createLessonBodySchema>
+export type LessonMoveBody = z.infer<typeof lessonMoveBodySchema>
 
 export type TimetableView = 'class' | 'teacher' | 'room'
 

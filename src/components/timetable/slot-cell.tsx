@@ -10,12 +10,25 @@ export interface SlotCellProps {
   style?: React.CSSProperties
   onFocus: () => void
   onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void
-  onSlotContextMenu?: (e: React.MouseEvent, lesson: LessonDto) => void
+  /** Right-click on filled or empty cell (Story 5.3). */
+  onSlotContextMenu?: (e: React.MouseEvent, lesson: LessonDto | null) => void
+  /** Optional replacement for default MiniSlot (e.g. drag handle). */
+  slotContent?: React.ReactNode
 }
 
 export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
   function SlotCell(
-    { lesson, ariaLabel, tabIndex, isSelected, style: extStyle, onFocus, onKeyDown, onSlotContextMenu },
+    {
+      lesson,
+      ariaLabel,
+      tabIndex,
+      isSelected,
+      style: extStyle,
+      onFocus,
+      onKeyDown,
+      onSlotContextMenu,
+      slotContent,
+    },
     ref,
   ) {
     const hasConflict = lesson?.hasConflict ?? false
@@ -31,10 +44,10 @@ export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
         onFocus={onFocus}
         onKeyDown={onKeyDown}
         onContextMenu={
-          lesson && onSlotContextMenu
+          onSlotContextMenu
             ? (e) => {
                 e.preventDefault()
-                onSlotContextMenu(e, lesson)
+                onSlotContextMenu(e, lesson ?? null)
               }
             : undefined
         }
@@ -47,7 +60,7 @@ export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
       >
         {lesson ? (
           <>
-            <MiniSlot lesson={lesson} size="sm" />
+            {slotContent ?? <MiniSlot lesson={lesson} size="sm" />}
             {hasConflict && (
               <span
                 aria-hidden="true"

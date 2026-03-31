@@ -1,9 +1,23 @@
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useDroppable,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragStartEvent,
+} from '@dnd-kit/core'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
+import { DraggableMiniSlot } from '@/components/timetable/draggable-mini-slot'
+import { MiniSlot } from '@/components/timetable/mini-slot'
 import { SlotCell } from '@/components/timetable/slot-cell'
 import { SlotContextMenu } from '@/components/timetable/slot-context-menu'
 import type { BellPeriod } from '@/types/bell-schedule.types'
 import type { GridColumn, GridRow, LessonDto, TimetableView } from '@/types/timetable.types'
+
+export type SlotMenuAction = 'assign' | 'clear' | 'viewDetail'
 
 export interface TimetableGridProps {
   lessons: LessonDto[]
@@ -19,7 +33,17 @@ export interface TimetableGridProps {
   onPinSlot?: (lessonId: string) => void
   /** Context menu: explicit unpin. */
   onUnpinSlot?: (lessonId: string) => void
-  onSlotOpen?: (lessonId: string) => void
+  /** Enter: open slot sheet (filled or empty). */
+  onSlotOpen?: (payload: { lesson: LessonDto | null; rowKey: string; col: GridColumn }) => void
+  /** Context menu: assign / clear / view detail (Story 5.3). */
+  onSlotMenu?: (detail: {
+    action: SlotMenuAction
+    lesson: LessonDto | null
+    rowKey: string
+    col: GridColumn
+  }) => void
+  /** Drag-and-drop move (swap if target occupied; blocked for pinned sources in grid). */
+  onLessonMove?: (detail: { lessonId: string; targetRowKey: string; col: GridColumn }) => void
 }
 
 function buildColumns(cycleLengthDays: number, dayLabels: string[], periods: BellPeriod[]): GridColumn[] {
@@ -96,6 +120,71 @@ function findLesson(
 
 const SKELETON_ROW_COUNT = 6
 
+function TimetableSlotCell({
+  rowIdx,
+  colIdx,
+  lessons,
+  view,
+  row,
+  col,
+  cellRefs,
+  focusedCell,
+  selectedCell,
+  onFocusCell,
+  onKeyDownCell,
+  onSlotContextMenu,
+  COL_MIN_WIDTH,
+}: {
+  rowIdx: number
+  colIdx: number
+  lessons: LessonDto[]
+  view: TimetableView
+  row: GridRow
+  col: GridColumn
+  cellRefs: React.MutableRefObject<Map<string, HTMLDivElement>>
+  focusedCell: { row: number; col: number }
+  selectedCell: { row: number; col: number } | null
+  onFocusCell: (row: number, col: number) => void
+  onKeyDownCell: (e: React.KeyboardEvent<HTMLDivElement>, rowIdx: number, colIdx: number) => void
+  onSlotContextMenu?: (e: React.MouseEvent, lesson: LessonDto | null, rowKey: string, col: GridColumn) => void
+  COL_MIN_WIDTH: number
+}) {
+  const { setNodeRef } = useDroppable({ id: `cell-${rowIdx}-${colIdx}` })
+  const lesson = findLesson(lessons, view, row.key, col)
+  const isFocused = focusedCell.row === rowIdx && focusedCell.col === colIdx
+  const isSelected =
+    selectedCell !== null && selectedCell.row === rowIdx && selectedCell.col === colIdx
+
+  const cellAriaLabel = lesson
+    ? `${row.label} ${col.dayLabel} ${col.periodName} — ${lesson.subjectName} ${lesson.teacherName} ${lesson.roomName}${lesson.isPinned ? ' (pinned)' : ''}${lesson.hasConflict ? ' (conflict)' : ''}`
+    : `${row.label} ${col.dayLabel} ${col.periodName} — Empty`
+
+  const refKey = `${rowIdx}-${colIdx}`
+
+  return (
+    <SlotCell
+      ref={(el) => {
+        setNodeRef(el)
+        if (el) cellRefs.current.set(refKey, el)
+        else cellRefs.current.delete(refKey)
+      }}
+      lesson={lesson}
+      ariaLabel={cellAriaLabel}
+      tabIndex={isFocused ? 0 : -1}
+      isSelected={isSelected}
+      style={{ width: COL_MIN_WIDTH, minWidth: COL_MIN_WIDTH }}
+      onFocus={() => onFocusCell(rowIdx, colIdx)}
+      onKeyDown={(e) => onKeyDownCell(e, rowIdx, colIdx)}
+      onSlotContextMenu={
+        onSlotContextMenu
+          ? (e, le) => onSlotContextMenu(e, le, row.key, col)
+          : undefined
+      }
+      slotContent={lesson ? <DraggableMiniSlot lesson={lesson} /> : undefined}
+    />
+  )
+}
+
 /** Grid cells in scope for the solver minus pinned lessons (UX-DR9 / Story 5.2). */
 export function countUnpinnedSlotsForSolver(
   lessons: LessonDto[],
@@ -136,6 +225,8 @@ export function TimetableGrid({
   onPinSlot,
   onUnpinSlot,
   onSlotOpen,
+  onSlotMenu,
+  onLessonMove,
 }: TimetableGridProps) {
   const columns = useMemo(
     () => buildColumns(cycleLengthDays, dayLabels, periods),
@@ -152,10 +243,18 @@ export function TimetableGrid({
   const [focusedCell, setFocusedCell] = useState<{ row: number; col: number }>({ row: 0, col: 0 })
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null)
   const [slotContextMenu, setSlotContextMenu] = useState<{
-    lesson: LessonDto
+    lesson: LessonDto | null
+    rowKey: string
+    col: GridColumn
     x: number
     y: number
   } | null>(null)
+  const [activeDragId, setActiveDragId] = useState<string | null>(null)
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }))
+
+  /** Menu can open when slot actions exist, with or without pin API (pin items no-op if absent). */
+  const menuEnabled = Boolean((onPinSlot && onUnpinSlot) || onSlotMenu)
 
   // Ref grid for imperative focus management
   const cellRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -214,10 +313,24 @@ export function TimetableGrid({
           const col = columns[colIdx]
           if (row && col) {
             const lesson = findLesson(lessons, view, row.key, col)
-            if (lesson) {
-              setSelectedCell({ row: rowIdx, col: colIdx })
-              onSlotOpen?.(lesson.id)
-            }
+            setSelectedCell({ row: rowIdx, col: colIdx })
+            onSlotOpen?.({ lesson: lesson ?? null, rowKey: row.key, col })
+          }
+          break
+        }
+        case 'F10': {
+          if (e.shiftKey) {
+            e.preventDefault()
+            const row = rows[rowIdx]
+            const col = columns[colIdx]
+            if (!row || !col) break
+            if (!menuEnabled) break
+            const le = findLesson(lessons, view, row.key, col)
+            const el = cellRefs.current.get(`${rowIdx}-${colIdx}`)
+            const rect = el?.getBoundingClientRect()
+            const x = rect ? rect.left + rect.width / 2 : 0
+            const y = rect ? rect.top + rect.height / 2 : 0
+            setSlotContextMenu({ lesson: le ?? null, rowKey: row.key, col, x, y })
           }
           break
         }
@@ -227,7 +340,7 @@ export function TimetableGrid({
           break
       }
     },
-    [rows, columns, lessons, view, onSlotPin, onSlotOpen],
+    [rows, columns, lessons, view, onSlotPin, onSlotOpen, menuEnabled],
   )
 
   // Keep focusedCell in bounds when rows/columns change
@@ -246,12 +359,54 @@ export function TimetableGrid({
   }, [view, yearGroupFilter])
 
   const handleSlotContextMenu = useCallback(
-    (_e: React.MouseEvent, lesson: LessonDto) => {
-      if (!onPinSlot || !onUnpinSlot) return
-      setSlotContextMenu({ lesson, x: _e.clientX, y: _e.clientY })
+    (_e: React.MouseEvent, lesson: LessonDto | null, rowKey: string, col: GridColumn) => {
+      if (!((onPinSlot && onUnpinSlot) || onSlotMenu)) return
+      setSlotContextMenu({ lesson, rowKey, col, x: _e.clientX, y: _e.clientY })
     },
-    [onPinSlot, onUnpinSlot],
+    [onPinSlot, onUnpinSlot, onSlotMenu],
   )
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    setActiveDragId(String(event.active.id))
+  }, [])
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveDragId(null)
+      const { active, over } = event
+      if (!over || !onLessonMove) return
+      const overId = String(over.id)
+      const match = /^cell-(\d+)-(\d+)$/.exec(overId)
+      if (!match) return
+      const targetRowIdx = Number(match[1])
+      const targetColIdx = Number(match[2])
+      const lessonId = String(active.id)
+      const lesson = lessons.find((l) => l.id === lessonId)
+      if (!lesson) return
+      const sourceRowIdx = rows.findIndex((r) => {
+        if (view === 'class') return r.key === lesson.classId
+        if (view === 'teacher') return r.key === lesson.teacherId
+        return r.key === lesson.roomId
+      })
+      const sourceColIdx = columns.findIndex(
+        (c) => c.dayIndex === lesson.cycleDayIndex && c.periodId === lesson.periodId,
+      )
+      if (sourceRowIdx < 0 || sourceColIdx < 0) return
+      if (sourceRowIdx === targetRowIdx && sourceColIdx === targetColIdx) return
+      if (lesson.isPinned) return
+      const targetRow = rows[targetRowIdx]
+      const targetCol = columns[targetColIdx]
+      if (!targetRow || !targetCol) return
+      onLessonMove({ lessonId, targetRowKey: targetRow.key, col: targetCol })
+    },
+    [lessons, view, rows, columns, onLessonMove],
+  )
+
+  const handleDragCancel = useCallback(() => {
+    setActiveDragId(null)
+  }, [])
+
+  const activeDragLesson = activeDragId ? lessons.find((l) => l.id === activeDragId) : undefined
 
   // Group day headers by day label
   const dayGroups = useMemo(() => {
@@ -300,14 +455,20 @@ export function TimetableGrid({
   }
 
   return (
-    <div className="overflow-auto">
-      <div
-        role="grid"
-        aria-label="Timetable"
-        aria-rowcount={rows.length + 2}
-        aria-colcount={columns.length + 1}
-        style={{ minWidth: ROW_LABEL_WIDTH + columns.length * COL_MIN_WIDTH }}
-      >
+    <DndContext
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
+    >
+      <div className="overflow-auto">
+        <div
+          role="grid"
+          aria-label="Timetable"
+          aria-rowcount={rows.length + 2}
+          aria-colcount={columns.length + 1}
+          style={{ minWidth: ROW_LABEL_WIDTH + columns.length * COL_MIN_WIDTH }}
+        >
         {/* Day-group header row */}
         <div role="row" aria-rowindex={1} className="flex sticky top-0 z-[3]">
           {/* Corner cell */}
@@ -388,50 +549,73 @@ export function TimetableGrid({
               </div>
 
               {/* Data cells */}
-              {columns.map((col, colIdx) => {
-                const lesson = findLesson(lessons, view, row.key, col)
-                const isFocused = focusedCell.row === rowIdx && focusedCell.col === colIdx
-                const isSelected =
-                  selectedCell !== null &&
-                  selectedCell.row === rowIdx &&
-                  selectedCell.col === colIdx
-
-                const cellAriaLabel = lesson
-                  ? `${row.label} ${col.dayLabel} ${col.periodName} — ${lesson.subjectName} ${lesson.teacherName} ${lesson.roomName}${lesson.isPinned ? ' (pinned)' : ''}${lesson.hasConflict ? ' (conflict)' : ''}`
-                  : `${row.label} ${col.dayLabel} ${col.periodName} — Empty`
-
-                return (
-                  <SlotCell
-                    key={buildCellKey(view, row.key, col)}
-                    ref={(el) => {
-                      if (el) cellRefs.current.set(`${rowIdx}-${colIdx}`, el)
-                      else cellRefs.current.delete(`${rowIdx}-${colIdx}`)
-                    }}
-                    lesson={lesson}
-                    ariaLabel={cellAriaLabel}
-                    tabIndex={isFocused ? 0 : -1}
-                    isSelected={isSelected}
-                    style={{ width: COL_MIN_WIDTH, minWidth: COL_MIN_WIDTH }}
-                    onFocus={() => setFocusedCell({ row: rowIdx, col: colIdx })}
-                    onKeyDown={(e) => handleCellKeyDown(e, rowIdx, colIdx)}
-                    onSlotContextMenu={onPinSlot && onUnpinSlot ? handleSlotContextMenu : undefined}
-                  />
-                )
-              })}
+              {columns.map((col, colIdx) => (
+                <TimetableSlotCell
+                  key={buildCellKey(view, row.key, col)}
+                  rowIdx={rowIdx}
+                  colIdx={colIdx}
+                  lessons={lessons}
+                  view={view}
+                  row={row}
+                  col={col}
+                  cellRefs={cellRefs}
+                  focusedCell={focusedCell}
+                  selectedCell={selectedCell}
+                  onFocusCell={(r, c) => setFocusedCell({ row: r, col: c })}
+                  onKeyDownCell={handleCellKeyDown}
+                  onSlotContextMenu={menuEnabled ? handleSlotContextMenu : undefined}
+                  COL_MIN_WIDTH={COL_MIN_WIDTH}
+                />
+              ))}
             </div>
           )
         })}
-      </div>
+        </div>
 
-      {slotContextMenu && onPinSlot && onUnpinSlot ? (
-        <SlotContextMenu
-          lesson={slotContextMenu.lesson}
-          position={{ x: slotContextMenu.x, y: slotContextMenu.y }}
-          onClose={() => setSlotContextMenu(null)}
-          onPin={() => onPinSlot(slotContextMenu.lesson.id)}
-          onUnpin={() => onUnpinSlot(slotContextMenu.lesson.id)}
-        />
-      ) : null}
-    </div>
+        {slotContextMenu && menuEnabled ? (
+          <SlotContextMenu
+            lesson={slotContextMenu.lesson}
+            pinActionsAvailable={Boolean(onPinSlot && onUnpinSlot)}
+            position={{ x: slotContextMenu.x, y: slotContextMenu.y }}
+            onClose={() => setSlotContextMenu(null)}
+            onAssignLesson={() =>
+              onSlotMenu?.({
+                action: 'assign',
+                lesson: slotContextMenu.lesson,
+                rowKey: slotContextMenu.rowKey,
+                col: slotContextMenu.col,
+              })
+            }
+            onPin={() => {
+              const id = slotContextMenu.lesson?.id
+              if (id) onPinSlot?.(id)
+            }}
+            onUnpin={() => {
+              const id = slotContextMenu.lesson?.id
+              if (id) onUnpinSlot?.(id)
+            }}
+            onClear={() =>
+              onSlotMenu?.({
+                action: 'clear',
+                lesson: slotContextMenu.lesson,
+                rowKey: slotContextMenu.rowKey,
+                col: slotContextMenu.col,
+              })
+            }
+            onViewDetail={() =>
+              onSlotMenu?.({
+                action: 'viewDetail',
+                lesson: slotContextMenu.lesson,
+                rowKey: slotContextMenu.rowKey,
+                col: slotContextMenu.col,
+              })
+            }
+          />
+        ) : null}
+      </div>
+      <DragOverlay dropAnimation={null}>
+        {activeDragLesson ? <MiniSlot lesson={activeDragLesson} size="sm" /> : null}
+      </DragOverlay>
+    </DndContext>
   )
 }

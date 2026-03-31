@@ -86,14 +86,37 @@ describe('TimetableGrid', () => {
     ).toBe(4)
   })
 
+  it('opens context menu when only onSlotMenu is provided (no pin handlers)', async () => {
+    const onSlotMenu = vi.fn()
+    render(<TimetableGrid {...defaultProps} onSlotMenu={onSlotMenu} />)
+    const user = userEvent.setup()
+    const grid = screen.getByRole('grid')
+    const firstCell = grid.querySelector('[role="gridcell"]') as HTMLElement
+    await user.pointer({ keys: '[MouseRight>]', target: firstCell })
+    expect(await screen.findByRole('menuitem', { name: 'Assign lesson' })).toBeInTheDocument()
+  })
+
+  it('disables Pin when only onSlotMenu is provided and the slot has a lesson', async () => {
+    const onSlotMenu = vi.fn()
+    render(<TimetableGrid {...defaultProps} onSlotMenu={onSlotMenu} />)
+    const user = userEvent.setup()
+    const grid = screen.getByRole('grid')
+    const firstCell = grid.querySelector('[role="gridcell"]') as HTMLElement
+    await user.pointer({ keys: '[MouseRight>]', target: firstCell })
+    const pinItem = await screen.findByRole('menuitem', { name: 'Pin' })
+    expect(pinItem).toBeDisabled()
+  })
+
   it('opens context menu on right-click and calls onPinSlot', async () => {
     const onPinSlot = vi.fn()
     const onUnpinSlot = vi.fn()
+    const onSlotMenu = vi.fn()
     render(
       <TimetableGrid
         {...defaultProps}
         onPinSlot={onPinSlot}
         onUnpinSlot={onUnpinSlot}
+        onSlotMenu={onSlotMenu}
       />,
     )
     const user = userEvent.setup()
@@ -211,7 +234,12 @@ describe('TimetableGrid', () => {
     firstCell?.focus()
 
     await user.keyboard('{Enter}')
-    expect(onSlotOpen).toHaveBeenCalledWith('lesson-a')
+    expect(onSlotOpen).toHaveBeenCalledWith(
+      expect.objectContaining({
+        lesson: expect.objectContaining({ id: 'lesson-a' }),
+        rowKey: 'class-1',
+      }),
+    )
   })
 
   it('moves focus with arrow keys', async () => {

@@ -1,26 +1,53 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import axios from 'axios'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { useBellSchedule } from '@/api/hooks/useBellSchedule'
 import { useCycleSettings } from '@/api/hooks/useCycleSettings'
-import { usePinLesson, useTimetableLessons, useUnpinLesson } from '@/api/hooks/useTimetable'
+import {
+  useCreateLesson,
+  useDeleteLesson,
+  useMoveLesson,
+  usePinLesson,
+  useTimetableLessons,
+  useUnpinLesson,
+  useUpdateLesson,
+} from '@/api/hooks/useTimetable'
 import { GeneratorStatusBar } from '@/components/domain/generator-status-bar'
-import { TimetableGrid, countUnpinnedSlotsForSolver } from '@/components/timetable/timetable-grid'
+import {
+  TimetableGrid,
+  countUnpinnedSlotsForSolver,
+  type SlotMenuAction,
+} from '@/components/timetable/timetable-grid'
 import { ViewPivotToolbar } from '@/components/timetable/view-pivot-toolbar'
 import { YearGroupFilter } from '@/components/timetable/year-group-filter'
+import { SlotEditSheet } from '@/features/timetable/components/slot-edit-sheet'
 import { useTimetableStore } from '@/store/timetableStore'
 import { padDayLabels } from '@/lib/cycle-term-utils'
-import type { TimetableView } from '@/types/timetable.types'
 import { MOCK_TIMETABLE_ID } from '@/mocks/pages/timetable-page.mock'
+import type { GridColumn, LessonDto, TimetableView } from '@/types/timetable.types'
+
+function rowLabelFromLessons(
+  lessons: LessonDto[],
+  view: TimetableView,
+  rowKey: string,
+): string {
+  const sample = lessons.find((l) =>
+    view === 'class' ? l.classId === rowKey : view === 'teacher' ? l.teacherId === rowKey : l.roomId === rowKey,
+  )
+  if (!sample) return rowKey
+  if (view === 'class') return sample.className
+  if (view === 'teacher') return sample.teacherName
+  return sample.roomName
+}
 
 export default function TimetablePage() {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const { activeTimetableId, activeView, setActiveTimetable, setActiveView } = useTimetableStore()
 
-  // During mock-first phase, default to the mock timetable id if none is active
   const timetableId = activeTimetableId ?? MOCK_TIMETABLE_ID
 
-  // Sync mock id into store on mount if none is set
   useEffect(() => {
     if (!activeTimetableId) {
       setActiveTimetable(MOCK_TIMETABLE_ID)
@@ -32,6 +59,10 @@ export default function TimetablePage() {
   const { data: timetable, isLoading } = useTimetableLessons(timetableId)
   const pinLesson = usePinLesson(timetableId)
   const unpinLesson = useUnpinLesson(timetableId)
+  const updateLesson = useUpdateLesson(timetableId)
+  const deleteLesson = useDeleteLesson(timetableId)
+  const createLesson = useCreateLesson(timetableId)
+  const moveLesson = useMoveLesson(timetableId)
 
   const yearGroupParam = searchParams.get('yearGroup')
 
@@ -99,14 +130,87 @@ export default function TimetablePage() {
     [unpinLesson],
   )
 
-  const handleSlotOpen = useCallback((lessonId: string) => {
-    // Story 5.3 — manual slot assignment; placeholder for now
-    void lessonId
-  }, [])
-
-  // Cast store view to the grid's TimetableView (only class/teacher/room supported by grid)
   const gridView: TimetableView =
     activeView === 'teacher' ? 'teacher' : activeView === 'room' ? 'room' : 'class'
+
+  const [slotSheet, setSlotSheet] = useState<null | {
+    mode: 'assign' | 'edit' | 'view'
+    lesson: LessonDto | null
+    rowKey: string
+    rowLabel: string
+    col: GridColumn
+  }>(null)
+
+  const handleSlotOpen = useCallback(
+    (payload: { lesson: LessonDto | null; rowKey: string; col: GridColumn }) => {
+      const rowLabel = rowLabelFromLessons(lessons, gridView, payload.rowKey)
+      setSlotSheet({
+        mode: payload.lesson ? 'edit' : 'assign',
+        lesson: payload.lesson,
+        rowKey: payload.rowKey,
+        rowLabel,
+        col: payload.col,
+      })
+    },
+    [lessons, gridView],
+  )
+
+  const handleSlotMenu = useCallback(
+    (detail: {
+      action: SlotMenuAction
+      lesson: LessonDto | null
+      rowKey: string
+      col: GridColumn
+    }) => {
+      const rowLabel = rowLabelFromLessons(lessons, gridView, detail.rowKey)
+      if (detail.action === 'clear' && detail.lesson) {
+        deleteLesson.mutate(detail.lesson.id)
+        return
+      }
+      if (detail.action === 'assign') {
+        setSlotSheet({
+          mode: detail.lesson ? 'edit' : 'assign',
+          lesson: detail.lesson,
+          rowKey: detail.rowKey,
+          rowLabel,
+          col: detail.col,
+        })
+        return
+      }
+      if (detail.action === 'viewDetail' && detail.lesson) {
+        setSlotSheet({
+          mode: 'view',
+          lesson: detail.lesson,
+          rowKey: detail.rowKey,
+          rowLabel,
+          col: detail.col,
+        })
+      }
+    },
+    [lessons, gridView, deleteLesson],
+  )
+
+  const handleLessonMove = useCallback(
+    (detail: { lessonId: string; targetRowKey: string; col: GridColumn }) => {
+      moveLesson.mutate(
+        {
+          lessonId: detail.lessonId,
+          view: gridView,
+          targetRowKey: detail.targetRowKey,
+          targetDayIndex: detail.col.dayIndex,
+          targetPeriodId: detail.col.periodId,
+        },
+        {
+          onError: (err) => {
+            if (axios.isAxiosError(err) && err.response?.status === 422) {
+              toast.error('Cannot move a pinned lesson. Unpin it first.')
+            }
+          },
+        },
+      )
+    },
+    [gridView, moveLesson],
+  )
 
   const unpinnedSolveCount = useMemo(() => {
     if (!bell || !cycle || cycleLength === 0) return 0
@@ -171,6 +275,8 @@ export default function TimetablePage() {
             onPinSlot={handlePinSlot}
             onUnpinSlot={handleUnpinSlot}
             onSlotOpen={handleSlotOpen}
+            onSlotMenu={handleSlotMenu}
+            onLessonMove={handleLessonMove}
           />
         ) : (
           <TimetableGrid
@@ -183,6 +289,35 @@ export default function TimetablePage() {
           />
         )}
       </div>
+
+      {slotSheet ? (
+        <SlotEditSheet
+          open
+          onOpenChange={(o) => {
+            if (!o) setSlotSheet(null)
+          }}
+          mode={slotSheet.mode}
+          pivotView={gridView}
+          rowKey={slotSheet.rowKey}
+          rowLabel={slotSheet.rowLabel}
+          col={slotSheet.col}
+          lesson={slotSheet.lesson}
+          isSubmitting={createLesson.isPending || updateLesson.isPending}
+          onSaveNew={(body) => {
+            createLesson.mutate(body, {
+              onSuccess: () => setSlotSheet(null),
+            })
+          }}
+          onSaveEdit={(lessonId, patch) => {
+            updateLesson.mutate(
+              { lessonId, patch },
+              {
+                onSuccess: () => setSlotSheet(null),
+              },
+            )
+          }}
+        />
+      ) : null}
     </div>
   )
 }

@@ -1,6 +1,12 @@
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
 import { mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
-import type { LessonDto, TimetableLessonsResponse } from '@/types/timetable.types'
+import type {
+  CreateLessonBody,
+  LessonDto,
+  LessonPatchBody,
+  TimetableLessonsResponse,
+  TimetableView,
+} from '@/types/timetable.types'
 
 export const MOCK_TIMETABLE_ID = 'timetable-mock-1'
 
@@ -12,7 +18,7 @@ const SUBJECT_COLORS: Record<string, string> = {
   'subject-5': '#8b5cf6',
 }
 
-const MOCK_CLASSES = [
+export const MOCK_ASSIGNMENT_CLASSES = [
   { id: 'class-1', name: 'Year 7A', yearGroup: 'Year 7' },
   { id: 'class-2', name: 'Year 7B', yearGroup: 'Year 7' },
   { id: 'class-3', name: 'Year 8A', yearGroup: 'Year 8' },
@@ -21,7 +27,7 @@ const MOCK_CLASSES = [
   { id: 'class-6', name: 'Year 9B', yearGroup: 'Year 9' },
 ]
 
-const MOCK_SUBJECTS = [
+export const MOCK_ASSIGNMENT_SUBJECTS = [
   { id: 'subject-1', name: 'Mathematics' },
   { id: 'subject-2', name: 'English' },
   { id: 'subject-3', name: 'Science' },
@@ -29,14 +35,14 @@ const MOCK_SUBJECTS = [
   { id: 'subject-5', name: 'Art' },
 ]
 
-const MOCK_TEACHERS = [
+export const MOCK_ASSIGNMENT_TEACHERS = [
   { id: 'teacher-1', name: 'Alice Brown' },
   { id: 'teacher-2', name: 'Bob Smith' },
   { id: 'teacher-3', name: 'Carol Jones' },
   { id: 'teacher-4', name: 'David Lee' },
 ]
 
-const MOCK_ROOMS = [
+export const MOCK_ASSIGNMENT_ROOMS = [
   { id: 'room-1', name: 'R101' },
   { id: 'room-2', name: 'R102' },
   { id: 'room-3', name: 'Lab 1' },
@@ -49,7 +55,7 @@ export function buildMockTimetableLessons(): LessonDto[] {
   const { periods } = mockBellSchedule
   let n = 0
 
-  for (const klass of MOCK_CLASSES) {
+  for (const klass of MOCK_ASSIGNMENT_CLASSES) {
     for (let d = 0; d < cycleLengthDays; d++) {
       for (const period of periods) {
         // Leave ~15% of slots empty to simulate a realistic timetable
@@ -57,9 +63,9 @@ export function buildMockTimetableLessons(): LessonDto[] {
           n++
           continue
         }
-        const subject = MOCK_SUBJECTS[n % MOCK_SUBJECTS.length]
-        const teacher = MOCK_TEACHERS[n % MOCK_TEACHERS.length]
-        const room = MOCK_ROOMS[n % MOCK_ROOMS.length]
+        const subject = MOCK_ASSIGNMENT_SUBJECTS[n % MOCK_ASSIGNMENT_SUBJECTS.length]
+        const teacher = MOCK_ASSIGNMENT_TEACHERS[n % MOCK_ASSIGNMENT_TEACHERS.length]
+        const room = MOCK_ASSIGNMENT_ROOMS[n % MOCK_ASSIGNMENT_ROOMS.length]
         const isPinned = n % 11 === 0
         const hasConflict = n % 23 === 0
 
@@ -119,4 +125,121 @@ export function regenerateUnpinnedMockLessons(): void {
     if (l.isPinned) return l
     return { ...l, subjectName: `${l.subjectName} (regen)` }
   })
+}
+
+function findLessonAtCell(
+  view: TimetableView,
+  rowKey: string,
+  dayIndex: number,
+  periodId: string,
+): LessonDto | undefined {
+  return liveLessons.find((l) => {
+    if (l.cycleDayIndex !== dayIndex || l.periodId !== periodId) return false
+    if (view === 'class') return l.classId === rowKey
+    if (view === 'teacher') return l.teacherId === rowKey
+    return l.roomId === rowKey
+  })
+}
+
+function placementForSwap(
+  base: LessonDto,
+  view: TimetableView,
+  dayIndex: number,
+  periodId: string,
+  rowKey: string,
+): Pick<LessonDto, 'cycleDayIndex' | 'periodId' | 'classId' | 'teacherId' | 'roomId'> {
+  return {
+    cycleDayIndex: dayIndex,
+    periodId,
+    classId: view === 'class' ? rowKey : base.classId,
+    teacherId: view === 'teacher' ? rowKey : base.teacherId,
+    roomId: view === 'room' ? rowKey : base.roomId,
+  }
+}
+
+export function resolveLessonDisplayFields(lesson: LessonDto): LessonDto {
+  const c = MOCK_ASSIGNMENT_CLASSES.find((x) => x.id === lesson.classId)
+  const t = MOCK_ASSIGNMENT_TEACHERS.find((x) => x.id === lesson.teacherId)
+  const r = MOCK_ASSIGNMENT_ROOMS.find((x) => x.id === lesson.roomId)
+  const s = MOCK_ASSIGNMENT_SUBJECTS.find((x) => x.id === lesson.subjectId)
+  return {
+    ...lesson,
+    className: c?.name ?? lesson.className,
+    yearGroup: c?.yearGroup ?? lesson.yearGroup,
+    teacherName: t?.name ?? lesson.teacherName,
+    roomName: r?.name ?? lesson.roomName,
+    subjectName: s?.name ?? lesson.subjectName,
+    subjectColorHex: s ? (SUBJECT_COLORS[s.id] ?? '#6b7280') : lesson.subjectColorHex,
+  }
+}
+
+export function patchLessonInMock(lessonId: string, patch: LessonPatchBody): boolean {
+  const idx = liveLessons.findIndex((l) => l.id === lessonId)
+  if (idx === -1) return false
+  const merged = { ...liveLessons[idx], ...patch }
+  liveLessons[idx] = resolveLessonDisplayFields(merged)
+  return true
+}
+
+export function deleteLessonFromMock(lessonId: string): boolean {
+  const idx = liveLessons.findIndex((l) => l.id === lessonId)
+  if (idx === -1) return false
+  liveLessons.splice(idx, 1)
+  return true
+}
+
+export function createLessonInMock(
+  body: CreateLessonBody,
+): { ok: true; lesson: LessonDto } | { ok: false; error: 'occupied' } {
+  const existing = findLessonAtCell('class', body.classId, body.cycleDayIndex, body.periodId)
+  if (existing) return { ok: false, error: 'occupied' }
+
+  const id = `lesson-created-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
+  const base: LessonDto = {
+    id,
+    cycleDayIndex: body.cycleDayIndex,
+    periodId: body.periodId,
+    classId: body.classId,
+    className: '',
+    yearGroup: '',
+    subjectId: body.subjectId,
+    subjectName: '',
+    subjectColorHex: '#6b7280',
+    teacherId: body.teacherId,
+    teacherName: '',
+    roomId: body.roomId,
+    roomName: '',
+    isPinned: false,
+    hasConflict: false,
+  }
+  const lesson = resolveLessonDisplayFields(base)
+  liveLessons.push(lesson)
+  return { ok: true, lesson }
+}
+
+export function moveLessonInMock(
+  lessonId: string,
+  view: TimetableView,
+  targetRowKey: string,
+  col: { dayIndex: number; periodId: string },
+): { ok: true } | { ok: false; error: 'pinned' | 'not_found' } {
+  const idx = liveLessons.findIndex((l) => l.id === lessonId)
+  if (idx === -1) return { ok: false, error: 'not_found' }
+  const L1 = liveLessons[idx]
+  if (L1.isPinned) return { ok: false, error: 'pinned' }
+
+  const L2 = findLessonAtCell(view, targetRowKey, col.dayIndex, col.periodId)
+  const targetPlacement = placementForSwap(L1, view, col.dayIndex, col.periodId, targetRowKey)
+
+  if (L2 && L2.id !== L1.id) {
+    const sourceRowKey =
+      view === 'class' ? L1.classId : view === 'teacher' ? L1.teacherId : L1.roomId
+    const sourcePlacement = placementForSwap(L2, view, L1.cycleDayIndex, L1.periodId, sourceRowKey)
+    const i2 = liveLessons.findIndex((l) => l.id === L2.id)
+    liveLessons[idx] = resolveLessonDisplayFields({ ...L1, ...targetPlacement })
+    liveLessons[i2] = resolveLessonDisplayFields({ ...L2, ...sourcePlacement })
+  } else {
+    liveLessons[idx] = resolveLessonDisplayFields({ ...L1, ...targetPlacement })
+  }
+  return { ok: true }
 }

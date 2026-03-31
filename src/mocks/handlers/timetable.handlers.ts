@@ -1,10 +1,19 @@
 import { http, HttpResponse } from 'msw'
 import {
+  createLessonInMock,
+  deleteLessonFromMock,
   getMockTimetableLessonsResponse,
   MOCK_TIMETABLE_ID,
+  moveLessonInMock,
+  patchLessonInMock,
   regenerateUnpinnedMockLessons,
   setLessonPinnedInMock,
 } from '@/mocks/pages/timetable-page.mock'
+import {
+  createLessonBodySchema,
+  lessonMoveBodySchema,
+  lessonPatchBodySchema,
+} from '@/types/timetable.schemas'
 
 export const timetableHandlers = [
   http.get('/api/v1/timetables/:id/lessons', ({ params }) => {
@@ -37,6 +46,98 @@ export const timetableHandlers = [
       return HttpResponse.json(
         { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
         { status: 404 },
+      )
+    }
+    return new HttpResponse(null, { status: 204 })
+  }),
+
+  http.patch('/api/v1/lessons/:id', async ({ params, request }) => {
+    const lessonId = params.id as string
+    const json: unknown = await request.json()
+    const parsed = lessonPatchBodySchema.safeParse(json)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'VALIDATION_ERROR', message: 'Invalid lesson patch.' },
+        { status: 400 },
+      )
+    }
+    const ok = patchLessonInMock(lessonId, parsed.data)
+    if (!ok) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
+        { status: 404 },
+      )
+    }
+    return new HttpResponse(null, { status: 204 })
+  }),
+
+  http.delete('/api/v1/lessons/:id', ({ params }) => {
+    const lessonId = params.id as string
+    const ok = deleteLessonFromMock(lessonId)
+    if (!ok) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
+        { status: 404 },
+      )
+    }
+    return new HttpResponse(null, { status: 204 })
+  }),
+
+  http.post('/api/v1/timetables/:id/lessons', async ({ params, request }) => {
+    const id = params.id as string
+    if (id !== MOCK_TIMETABLE_ID) {
+      return HttpResponse.json(
+        { status: 404, code: 'NOT_FOUND', message: 'Timetable not found.' },
+        { status: 404 },
+      )
+    }
+    const json: unknown = await request.json()
+    const parsed = createLessonBodySchema.safeParse(json)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'VALIDATION_ERROR', message: 'Invalid create lesson body.' },
+        { status: 400 },
+      )
+    }
+    const result = createLessonInMock(parsed.data)
+    if (!result.ok) {
+      return HttpResponse.json(
+        { status: 409, code: 'SLOT_OCCUPIED', message: 'That slot already has a lesson.' },
+        { status: 409 },
+      )
+    }
+    return HttpResponse.json(result.lesson, { status: 201 })
+  }),
+
+  http.post('/api/v1/lessons/:id/move', async ({ params, request }) => {
+    const lessonId = params.id as string
+    const json: unknown = await request.json()
+    const parsed = lessonMoveBodySchema.safeParse(json)
+    if (!parsed.success) {
+      return HttpResponse.json(
+        { status: 400, code: 'VALIDATION_ERROR', message: 'Invalid move body.' },
+        { status: 400 },
+      )
+    }
+    const { view, targetRowKey, targetDayIndex, targetPeriodId } = parsed.data
+    const result = moveLessonInMock(lessonId, view, targetRowKey, {
+      dayIndex: targetDayIndex,
+      periodId: targetPeriodId,
+    })
+    if (!result.ok) {
+      if (result.error === 'not_found') {
+        return HttpResponse.json(
+          { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
+          { status: 404 },
+        )
+      }
+      return HttpResponse.json(
+        {
+          status: 422,
+          code: 'PINNED_LESSON',
+          message: 'Cannot move a pinned lesson. Unpin it first.',
+        },
+        { status: 422 },
       )
     }
     return new HttpResponse(null, { status: 204 })

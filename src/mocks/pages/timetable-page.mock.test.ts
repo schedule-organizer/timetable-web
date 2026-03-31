@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import {
   buildMockTimetableLessons,
   getMockTimetableLessonsResponse,
+  moveLessonInMock,
   regenerateUnpinnedMockLessons,
   resetMockTimetableLessons,
   setLessonPinnedInMock,
@@ -31,6 +32,16 @@ describe('timetable-page.mock', () => {
 
     const after = getMockTimetableLessonsResponse().lessons.find((l) => l.id === snapshot.id)
     expect(after).toEqual(snapshot)
+  })
+
+  it('moveLessonInMock returns pinned error when moving a pinned lesson', () => {
+    const pinned = getMockTimetableLessonsResponse().lessons.find((l) => l.isPinned)
+    expect(pinned).toBeDefined()
+    const result = moveLessonInMock(pinned!.id, 'class', 'class-2', {
+      dayIndex: 0,
+      periodId: 'period-mock-2',
+    })
+    expect(result).toEqual({ ok: false, error: 'pinned' })
   })
 
   it('regenerateUnpinnedMockLessons mutates unpinned lesson content', () => {
