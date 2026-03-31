@@ -48,23 +48,25 @@ describe('MiniSlot', () => {
     expect(screen.queryByTitle('Pinned')).not.toBeInTheDocument()
   })
 
-  it('includes full detail in aria-label', () => {
+  it('includes full detail in title tooltip', () => {
+    // MiniSlot aria-label was removed (plain div has no role); accessible label lives
+    // on the outer gridcell. The title attribute provides the hover tooltip.
     render(<MiniSlot lesson={baseLesson} />)
-    const el = document.querySelector('[aria-label]')
-    expect(el?.getAttribute('aria-label')).toContain('Mathematics')
-    expect(el?.getAttribute('aria-label')).toContain('Alice Brown')
-    expect(el?.getAttribute('aria-label')).toContain('R101')
+    const el = document.querySelector('[title]')
+    expect(el?.getAttribute('title')).toContain('Mathematics')
+    expect(el?.getAttribute('title')).toContain('Alice Brown')
+    expect(el?.getAttribute('title')).toContain('R101')
   })
 
-  it('includes pinned state in aria-label when pinned', () => {
+  it('includes pinned state in title tooltip when pinned', () => {
     render(<MiniSlot lesson={{ ...baseLesson, isPinned: true }} />)
-    const el = document.querySelector('[aria-label*="pinned"]')
+    const el = document.querySelector('[title*="pinned"]')
     expect(el).toBeInTheDocument()
   })
 
-  it('includes conflict state in aria-label when in conflict', () => {
+  it('includes conflict state in title tooltip when in conflict', () => {
     render(<MiniSlot lesson={{ ...baseLesson, hasConflict: true }} />)
-    const el = document.querySelector('[aria-label*="conflict"]')
+    const el = document.querySelector('[title*="conflict"]')
     expect(el).toBeInTheDocument()
   })
 

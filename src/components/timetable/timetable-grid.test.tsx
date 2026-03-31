@@ -116,7 +116,9 @@ describe('TimetableGrid', () => {
 
   it('announces empty cells', () => {
     render(<TimetableGrid {...defaultProps} />)
-    const emptyCells = screen.getAllByText('Empty')
+    // Empty state is carried in gridcell aria-label, not as visible text
+    const allGridcells = screen.getAllByRole('gridcell')
+    const emptyCells = allGridcells.filter((el) => el.getAttribute('aria-label')?.endsWith('— Empty'))
     expect(emptyCells.length).toBeGreaterThan(0)
   })
 
@@ -128,7 +130,11 @@ describe('TimetableGrid', () => {
 
   it('conflict cell has text indicator (not colour alone)', () => {
     render(<TimetableGrid {...defaultProps} />)
-    expect(screen.getByLabelText('Conflict')).toBeInTheDocument()
+    // The visible "⚠ Conflict" text must appear (aria-hidden so AT reads gridcell label instead)
+    expect(screen.getByText('⚠ Conflict')).toBeInTheDocument()
+    // The gridcell aria-label must also announce conflict state
+    const conflictGridcell = document.querySelector('[data-conflict="true"]') as HTMLElement
+    expect(conflictGridcell?.getAttribute('aria-label')).toMatch(/\(conflict\)/)
   })
 
   it('filters by year group when yearGroupFilter is set', () => {

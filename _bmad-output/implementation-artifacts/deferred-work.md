@@ -24,6 +24,12 @@
 - `buildClassRows` cross-year-group class deduplication — if a lesson's `classId` appears with two different `yearGroup` values in the API response, first-seen `yearGroup` wins as `groupLabel`; data integrity concern for the API.
 - Fallback queryKey `['timetable', 'none', 'lessons']` is an inline literal — cannot be derived from `timetableQueryKeys`; any future cache invalidation by key construction will miss it.
 
+## Deferred from: code review of 5-1-timetable-grid-view (round 3, 2026-03-31)
+
+- `findLesson` drops the second lesson when two lessons share the same `(cycleDayIndex, periodId, classId/teacherId/roomId)` tuple — only the first matched lesson is rendered; the duplicate is invisible. Data-model question: multi-lesson-per-slot needs an API contract decision before a fix can be designed.
+- Empty `subjectName` or `teacherName` (empty string passes `z.string()` schema) produces blank abbreviation/initials in MiniSlot; visible but uninformative. Add `.min(1)` to both schema fields when the API contract is finalised.
+- Fallback queryKey `['timetable', 'none', 'lessons']` in `useTimetableLessons` collides with a real timetable whose ID is the literal string `"none"`. Unlikely in practice; fix by using a null-safe key (e.g. `['timetable', null, 'lessons']`) when cleaning up the mock-first phase.
+
 ## Deferred from: code review of 4-4-constraint-sensitivity-adjustment.md (2026-03-31)
 
 - `onRelaxConstraint` silently does nothing if the conflict id is not found on the current job (stale client / race). Low probability while ConflictExplainer and job are in sync; consider user-visible feedback if this surfaces in support.

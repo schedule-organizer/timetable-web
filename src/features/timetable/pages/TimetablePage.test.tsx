@@ -39,24 +39,28 @@ describe('TimetablePage', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument()
   })
 
-  it('renders year group filter tabs in class view', () => {
+  it('renders year group filter buttons in class view', () => {
     render(<TimetablePage />, { initialEntries: ['/timetable'] })
-    expect(screen.getByRole('tab', { name: 'All' })).toBeInTheDocument()
+    // YearGroupFilter now uses role="group" + aria-pressed buttons (not tablist/tab)
+    expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
   })
 
-  it('renders year group tabs for each group in data', () => {
+  it('renders year group buttons for each group in data', () => {
     render(<TimetablePage />)
-    expect(screen.getByRole('tab', { name: 'Year 7' })).toBeInTheDocument()
-    expect(screen.getByRole('tab', { name: 'Year 8' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Year 7' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Year 8' })).toBeInTheDocument()
   })
 
-  it('hides year group filter when switching to teacher view', async () => {
+  it('shows year group filter in all views (not class-only)', async () => {
     render(<TimetablePage />)
     const user = userEvent.setup()
 
     await user.click(screen.getByRole('button', { name: 'By Teacher' }))
 
-    expect(screen.queryByRole('tab', { name: 'All' })).not.toBeInTheDocument()
+    // Filter is now visible in teacher view too (AC3 fix)
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'All' })).toBeInTheDocument()
+    })
   })
 
   it('shows rows for each class in Full School view', () => {
@@ -76,15 +80,15 @@ describe('TimetablePage', () => {
     })
   })
 
-  it('reflects year group filter in URL when tab is clicked', async () => {
+  it('reflects year group filter in URL when filter button is clicked', async () => {
     const { container } = render(<TimetablePage />, { initialEntries: ['/timetable'] })
     const user = userEvent.setup()
 
-    const yearTab = screen.getByRole('tab', { name: 'Year 7' })
-    await user.click(yearTab)
+    const yearBtn = screen.getByRole('button', { name: 'Year 7' })
+    await user.click(yearBtn)
 
-    // The selected tab should now be Year 7
-    expect(yearTab).toHaveAttribute('aria-selected', 'true')
+    // The selected button should now be pressed
+    expect(yearBtn).toHaveAttribute('aria-pressed', 'true')
     void container
   })
 })

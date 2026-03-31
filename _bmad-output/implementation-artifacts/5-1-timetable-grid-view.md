@@ -1,6 +1,6 @@
 # Story 5.1: Timetable Grid View
 
-Status: in-progress
+Status: done
 
 ## Story
 
@@ -61,7 +61,7 @@ So that I can see the full school timetable at a glance and navigate it efficien
 - [x] [Review][Patch] selectedCell not reset on view/filter change — added `useEffect` to clear `selectedCell` on `view`/`yearGroupFilter` change [src/components/timetable/timetable-grid.tsx]
 - [x] [Review][Patch] gridcell aria-label missing pinned state — included in cell aria-label fix above [src/components/timetable/timetable-grid.tsx]
 - [x] [Review][Patch] yearGroupParam not validated against known year groups — `validatedYearGroup` checks against `yearGroups` array; falls back to `null` if unknown [src/features/timetable/pages/TimetablePage.tsx]
-- [ ] [Review][Patch] moveFocus stale closure on rapid view switch — `handleCellKeyDown` captures old `moveFocus` between state update and effect; requires refactor to use refs; skipped in batch [src/components/timetable/timetable-grid.tsx]
+- [x] [Review][Patch] moveFocus stale closure on rapid view switch — stabilised via `moveFocusRef`; `handleCellKeyDown` reads `moveFocusRef.current()` so it always uses latest bounds; `moveFocus` removed from dep array [src/components/timetable/timetable-grid.tsx]
 - [x] [Review][Patch] cellAriaLabel missing conflict state — added `(conflict)` suffix to cell aria-label [src/components/timetable/timetable-grid.tsx]
 - [x] [Review][Patch] Conflict span not aria-hidden — added `aria-hidden="true"` to `⚠ Conflict` span; gridcell aria-label is authoritative source [src/components/timetable/slot-cell.tsx]
 - [x] [Review][Patch] MiniSlot `aria-label` on plain div has no semantic effect — removed `aria-label` from MiniSlot wrapper div; `title` retained for tooltip [src/components/timetable/mini-slot.tsx]
@@ -80,6 +80,13 @@ So that I can see the full school timetable at a glance and navigate it efficien
 - [x] [Review][Defer] dayLabels empty strings cause blank day-group headers [src/components/timetable/timetable-grid.tsx] — deferred, depends on padDayLabels behaviour
 - [x] [Review][Defer] Skeleton column count capped at 5 — layout shift when real grid has more columns [src/components/timetable/timetable-grid.tsx] — deferred, cosmetic
 - [x] [Review][Defer] bell.periods empty array passes gate — `cycleLength > 0` check does not guard against empty periods [src/features/timetable/pages/TimetablePage.tsx] — deferred, pre-existing
+
+#### Round 3 Findings
+
+- [x] [Review][Patch] Inconsistent year-group filter application — class view filters post-sort (rows with no matching lessons remain as empty-cell rows); teacher/room views filter pre-collection (rows hidden entirely); standardised to pre-collection for all three views [src/components/timetable/timetable-grid.tsx]
+- [x] [Review][Defer] findLesson drops second lesson when two lessons share the same (cycleDayIndex, periodId, classId/teacherId/roomId) slot — conflict duplicates invisible; data-model question requiring API contract decision [src/components/timetable/timetable-grid.tsx] — deferred, data model question
+- [x] [Review][Defer] Empty subjectName or teacherName (empty string passes z.string() schema) produces blank abbreviation/initials in MiniSlot [src/components/timetable/mini-slot.tsx] — deferred, pre-existing API data quality gap
+- [x] [Review][Defer] Fallback queryKey ['timetable','none','lessons'] collides with a real timetableId equal to the string "none" — enabled:false prevents fetch but cache entry could be polluted [src/api/hooks/useTimetable.ts] — deferred, pre-existing
 
 ## Dev Notes
 
@@ -160,6 +167,7 @@ claude-sonnet-4-6
 ## Change Log
 
 - 2026-03-31: Implemented Story 5.1 — Timetable Grid View. Added TimetableGrid component with full keyboard navigation, ARIA grid role, three view pivots (Full School/By Teacher/By Room), year-group filter with URL state, skeleton loading, conflict/pinned visual indicators, and MiniSlot anatomy. 35 new tests; 0 TypeScript errors; no regressions.
+- 2026-03-31: Addressed all code review findings (19/19 patches applied). Key fixes: moveFocus stale closure resolved via moveFocusRef; cell aria-labels include room/pinned/conflict; YearGroupFilter changed to role="group"+aria-pressed; bell/cycle error state; null guard in queryFn; focusedCell reset on view/filter change. Updated 3 test files to match corrected ARIA contracts. 0 TypeScript errors; 35 tests pass; 0 new regressions.
 
 ---
 **Story completion status:** review — Implementation complete

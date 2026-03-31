@@ -36,19 +36,15 @@ function buildColumns(cycleLengthDays: number, dayLabels: string[], periods: Bel
 function buildClassRows(lessons: LessonDto[], yearGroupFilter: string | null | undefined): GridRow[] {
   const seen = new Map<string, GridRow>()
   for (const l of lessons) {
+    if (yearGroupFilter && l.yearGroup !== yearGroupFilter) continue
     if (!seen.has(l.classId)) {
       seen.set(l.classId, { key: l.classId, label: l.className, groupLabel: l.yearGroup })
     }
   }
-  let rows = Array.from(seen.values())
-  rows.sort((a, b) => {
+  return Array.from(seen.values()).sort((a, b) => {
     const g = (a.groupLabel ?? '').localeCompare(b.groupLabel ?? '')
     return g !== 0 ? g : a.label.localeCompare(b.label)
   })
-  if (yearGroupFilter) {
-    rows = rows.filter((r) => r.groupLabel === yearGroupFilter)
-  }
-  return rows
 }
 
 function buildTeacherRows(lessons: LessonDto[], yearGroupFilter: string | null | undefined): GridRow[] {
@@ -135,24 +131,31 @@ export function TimetableGrid({
     [rows.length, columns.length],
   )
 
+  // Stable ref so handleCellKeyDown always calls the latest moveFocus without
+  // becoming stale during rapid view/filter transitions
+  const moveFocusRef = useRef(moveFocus)
+  useEffect(() => {
+    moveFocusRef.current = moveFocus
+  }, [moveFocus])
+
   const handleCellKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>, rowIdx: number, colIdx: number) => {
       switch (e.key) {
         case 'ArrowRight':
           e.preventDefault()
-          moveFocus(rowIdx, colIdx + 1)
+          moveFocusRef.current(rowIdx, colIdx + 1)
           break
         case 'ArrowLeft':
           e.preventDefault()
-          moveFocus(rowIdx, colIdx - 1)
+          moveFocusRef.current(rowIdx, colIdx - 1)
           break
         case 'ArrowDown':
           e.preventDefault()
-          moveFocus(rowIdx + 1, colIdx)
+          moveFocusRef.current(rowIdx + 1, colIdx)
           break
         case 'ArrowUp':
           e.preventDefault()
-          moveFocus(rowIdx - 1, colIdx)
+          moveFocusRef.current(rowIdx - 1, colIdx)
           break
         case ' ': {
           e.preventDefault()
@@ -183,7 +186,7 @@ export function TimetableGrid({
           break
       }
     },
-    [moveFocus, rows, columns, lessons, view, onSlotPin, onSlotOpen],
+    [rows, columns, lessons, view, onSlotPin, onSlotOpen],
   )
 
   // Keep focusedCell in bounds when rows/columns change
