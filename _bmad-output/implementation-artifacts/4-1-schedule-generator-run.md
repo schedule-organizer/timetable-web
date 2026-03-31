@@ -1,6 +1,6 @@
 # Story 4.1: Schedule Generator Run
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -28,11 +28,11 @@ So that a complete draft timetable is produced automatically from my configured 
 
 ## Tasks / Subtasks
 
-- [ ] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
-- [ ] Implement feature module under `src/features/<area>/` per architecture tree.
-- [ ] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
-- [ ] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
-- [ ] Tests: unit/component for core logic; a11y queries by role/label.
+- [x] Map acceptance criteria to API routes and UI surfaces (see Dev Notes).
+- [x] Implement feature module under `src/features/<area>/` per architecture tree.
+- [x] Add/update Zod schemas and `src/types/*.types.ts` for DTOs.
+- [x] React Query hooks in `src/api/hooks/`; mutations invalidate correct query keys.
+- [x] Tests: unit/component for core logic; a11y queries by role/label.
 
 ## Dev Notes
 
@@ -60,13 +60,62 @@ Build on patterns from `3-5-timetabler-availability-overview-and-override.md` (p
 
 ### Agent Model Used
 
-_(filled by dev agent)_
+Composer (Cursor agent)
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Implemented **engine** API surface: `POST /api/v1/engine/run`, `GET/DELETE /api/v1/engine/jobs/:id`, `GET /api/v1/timetable/draft` with Zod-backed DTOs (`engine.*`, `timetable-draft.*`).
+- **MSW** (`engine.handlers.ts`) simulates job polling (progress messages including “Placing 340 lessons…”), success with `DraftScheduleDto`, and per-term draft replacement on re-run.
+- **Engine** page (`/engine`): prerequisite checks, Generate, `GeneratorStatusBar` (non-blocking strip), `DraftTimetablePreview` grid for the active calendar term.
+- React Query: `useRunEngine`, `useEngineJob` (poll while queued/running), `useDraftSchedule`, `useSyncDraftFromEngineJob` (cache sync from job result).
+- `useGeneratorPrerequisites` resolves the active term from academic terms API (no separate term id in Zustand until a term picker exists).
+- Tests: `generator-status-bar.test.tsx`, `draft-timetable-preview.test.tsx` (RTL by role/label). Full-page MSW integration test was not reliable in this repo’s Vitest/MSW + axios stack; behaviour is covered by MSW handlers + unit tests.
+- **Revision (2026-03-31):** `useEngine` parses GET draft, GET job, and POST run responses with `draftScheduleSchema`, `engineJobDtoSchema`, and `engineRunResponseSchema` (aligned with `useTemplates`). Removed unused `activeTermId` / `setActiveTermId` from `timetableStore` until a real caller (e.g. term picker) exists.
+
 ### File List
 
+- `src/types/timetable-draft.schemas.ts`
+- `src/types/timetable-draft.types.ts`
+- `src/types/engine.schemas.ts`
+- `src/types/engine.types.ts`
+- `src/api/hooks/useEngine.ts`
+- `src/api/hooks/useGeneratorPrerequisites.ts`
+- `src/mocks/handlers/engine.handlers.ts`
+- `src/mocks/handlers/index.ts`
+- `src/features/engine/pages/EnginePage.tsx`
+- `src/components/domain/generator-status-bar.tsx`
+- `src/components/domain/generator-status-bar.test.tsx`
+- `src/components/domain/generator-status-bar.stories.tsx`
+- `src/components/domain/draft-timetable-preview.tsx`
+- `src/components/domain/draft-timetable-preview.test.tsx`
+- `src/components/domain/draft-timetable-preview.stories.tsx`
+- `src/store/timetableStore.ts`
+- `src/routes.tsx`
+
+## Change Log
+
+- 2026-03-30: Story 4.1 — schedule generator run, draft timetable preview, MSW engine/draft handlers.
+- 2026-03-31: Revision — Zod parse on engine/draft API responses in `useEngine.ts`; removed unused term id fields from `timetableStore`.
+
+### Review Findings
+
+- [x] [Review][Defer] Cancel run UX — Deferred by product/reviewer: not in Story 4.1 scope. `DELETE /api/v1/engine/jobs/{id}` and `useCancelEngineJob` remain available for a future story; Engine page has no cancel control for now.
+
+- [x] [Review][Decision] `setActiveTermId` on timetable store — **Resolved:** Removed `activeTermId` and `setActiveTermId` from `timetableStore` until a term picker or other feature needs them; active term continues to come from `useGeneratorPrerequisites` / `getActiveTerm`.
+
+- [x] [Review][Patch] Validate engine and draft API responses with Zod in `useEngine.ts` — **Resolved:** `useDraftSchedule`, `useEngineJob`, and `useRunEngine` now `.parse(res.data)` with `draftScheduleSchema`, `engineJobDtoSchema`, and `engineRunResponseSchema`.
+
+- [x] [Review][Defer] NFR1 (draft visible within 30 seconds for large org sizes) — Not measured or covered by automated perf checks; revisit with real backend or E2E when available.
+
+- [x] [Review][Defer] Full-page MSW integration test gap — Already noted in completion notes; risk accepted until the Vitest/MSW/axios stack is stabilized.
+
+- [x] [Review][Defer] Possible brief status bar idle flicker when starting a new run — `onGenerate` sets `jobId` to `null` before the new `jobId` returns; low-impact UX polish.
+
+#### Code review follow-up (2026-03-31)
+
+- [x] [Review][Defer] Engine page error visibility — `useEngineJob`, `useDraftSchedule`, and `useRunEngine` can land in error state (network failure or Zod parse rejection); `EnginePage` does not read `isError` / mutation error, so the user may see an idle or empty grid with no explanation. Consider surfacing errors in the status strip or inline when tightening production hardening.
+
 ---
-**Story completion status:** ready-for-dev — Batch story context generated from epics.md
+**Story completion status:** done

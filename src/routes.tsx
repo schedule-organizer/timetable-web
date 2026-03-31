@@ -25,6 +25,7 @@ const HardConstraintsPage = lazy(() => import('@/features/constraints/pages/Hard
 const SoftPreferencesPage = lazy(() => import('@/features/constraints/pages/SoftPreferencesPage'))
 const SubjectRulesPage = lazy(() => import('@/features/constraints/pages/SubjectRulesPage'))
 const AvailabilityOverviewPage = lazy(() => import('@/features/constraints/pages/AvailabilityOverviewPage'))
+const EnginePage = lazy(() => import('@/features/engine/pages/EnginePage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -182,7 +183,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Engine' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <EnginePage />
           </Suspense>
         ),
       },
