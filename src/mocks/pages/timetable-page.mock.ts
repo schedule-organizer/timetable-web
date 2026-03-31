@@ -4,6 +4,8 @@ import type {
   CreateLessonBody,
   LessonDto,
   LessonPatchBody,
+  SchedulingAlternativeSlot,
+  SchedulingConflictDetails,
   TimetableLessonsResponse,
   TimetableView,
 } from '@/types/timetable.types'
@@ -141,6 +143,129 @@ function findLessonAtCell(
   })
 }
 
+function findBlockingAtSlot(
+  lessons: LessonDto[],
+  excludeId: string | null,
+  proposed: {
+    classId: string
+    teacherId: string
+    roomId: string
+    cycleDayIndex: number
+    periodId: string
+  },
+): { reason: SchedulingConflictDetails['reason']; blockingLessonId: string } | null {
+  const { classId, teacherId, roomId, cycleDayIndex, periodId } = proposed
+  const classBlock = lessons.find(
+    (l) =>
+      (excludeId === null || l.id !== excludeId) &&
+      l.classId === classId &&
+      l.cycleDayIndex === cycleDayIndex &&
+      l.periodId === periodId,
+  )
+  if (classBlock) return { reason: 'CLASS_SLOT_OCCUPIED', blockingLessonId: classBlock.id }
+
+  const teacherBlock = lessons.find(
+    (l) =>
+      (excludeId === null || l.id !== excludeId) &&
+      l.teacherId === teacherId &&
+      l.cycleDayIndex === cycleDayIndex &&
+      l.periodId === periodId,
+  )
+  if (teacherBlock) return { reason: 'TEACHER_DOUBLE_BOOKED', blockingLessonId: teacherBlock.id }
+
+  const roomBlock = lessons.find(
+    (l) =>
+      (excludeId === null || l.id !== excludeId) &&
+      l.roomId === roomId &&
+      l.cycleDayIndex === cycleDayIndex &&
+      l.periodId === periodId,
+  )
+  if (roomBlock) return { reason: 'ROOM_IN_USE', blockingLessonId: roomBlock.id }
+
+  return null
+}
+
+function findAlternativeSlotsStrict(
+  proposed: Pick<LessonDto, 'classId' | 'teacherId' | 'roomId' | 'cycleDayIndex' | 'periodId'>,
+  excludeLessonId: string | null,
+): SchedulingAlternativeSlot[] {
+  const { cycleLengthDays } = mockCycleSettings
+  const dayLabels = mockCycleSettings.dayLabels
+  const periodIds = mockBellSchedule.periods.map((p) => p.id)
+  const out: SchedulingAlternativeSlot[] = []
+
+  for (let d = 0; d < cycleLengthDays; d++) {
+    for (const periodId of periodIds) {
+      if (d === proposed.cycleDayIndex && periodId === proposed.periodId) continue
+      const block = findBlockingAtSlot(liveLessons, excludeLessonId, {
+        classId: proposed.classId,
+        teacherId: proposed.teacherId,
+        roomId: proposed.roomId,
+        cycleDayIndex: d,
+        periodId,
+      })
+      if (block) continue
+      const periodName = mockBellSchedule.periods.find((x) => x.id === periodId)?.name ?? periodId
+      const dayLabel = dayLabels[d] ?? `Day ${d + 1}`
+      out.push({ cycleDayIndex: d, periodId, summary: `${dayLabel} · ${periodName}` })
+      if (out.length >= 3) return out
+    }
+  }
+  return out
+}
+
+function findAlternativeSlotsRelaxed(
+  proposed: Pick<LessonDto, 'classId' | 'cycleDayIndex' | 'periodId'>,
+  excludeLessonId: string | null,
+): SchedulingAlternativeSlot[] {
+  const { cycleLengthDays } = mockCycleSettings
+  const dayLabels = mockCycleSettings.dayLabels
+  const periodIds = mockBellSchedule.periods.map((p) => p.id)
+  const out: SchedulingAlternativeSlot[] = []
+
+  for (let d = 0; d < cycleLengthDays; d++) {
+    for (const periodId of periodIds) {
+      if (d === proposed.cycleDayIndex && periodId === proposed.periodId) continue
+      const occ = findLessonAtCell('class', proposed.classId, d, periodId)
+      if (occ && (excludeLessonId === null || occ.id !== excludeLessonId)) continue
+      const periodName = mockBellSchedule.periods.find((x) => x.id === periodId)?.name ?? periodId
+      const dayLabel = dayLabels[d] ?? `Day ${d + 1}`
+      out.push({ cycleDayIndex: d, periodId, summary: `${dayLabel} · ${periodName} (class free)` })
+      if (out.length >= 3) return out
+    }
+  }
+  return out
+}
+
+function ensureAlternatives(
+  proposed: LessonDto,
+  excludeLessonId: string | null,
+): SchedulingAlternativeSlot[] {
+  const strict = findAlternativeSlotsStrict(proposed, excludeLessonId)
+  if (strict.length > 0) return strict
+  const relaxed = findAlternativeSlotsRelaxed(proposed, excludeLessonId)
+  if (relaxed.length > 0) return relaxed
+  const first = mockBellSchedule.periods[0]
+  const dayLabel = mockCycleSettings.dayLabels[0] ?? 'Day 1'
+  return [
+    {
+      cycleDayIndex: 0,
+      periodId: first.id,
+      summary: `${dayLabel} · ${first.name}`,
+    },
+  ]
+}
+
+export type PatchLessonResult =
+  | { ok: true }
+  | { ok: false; error: 'not_found' }
+  | { ok: false; conflict: SchedulingConflictDetails }
+
+export type CreateLessonResult =
+  | { ok: true; lesson: LessonDto }
+  | { ok: false; error: 'occupied' }
+  | { ok: false; conflict: SchedulingConflictDetails }
+
 function placementForSwap(
   base: LessonDto,
   view: TimetableView,
@@ -173,12 +298,38 @@ export function resolveLessonDisplayFields(lesson: LessonDto): LessonDto {
   }
 }
 
-export function patchLessonInMock(lessonId: string, patch: LessonPatchBody): boolean {
+export function patchLessonInMock(
+  lessonId: string,
+  patch: LessonPatchBody,
+  acceptConflict?: boolean,
+): PatchLessonResult {
   const idx = liveLessons.findIndex((l) => l.id === lessonId)
-  if (idx === -1) return false
-  const merged = { ...liveLessons[idx], ...patch }
-  liveLessons[idx] = resolveLessonDisplayFields(merged)
-  return true
+  if (idx === -1) return { ok: false, error: 'not_found' }
+  const base = liveLessons[idx]
+  const merged: LessonDto = { ...base, ...patch }
+  const block = findBlockingAtSlot(liveLessons, lessonId, {
+    classId: merged.classId,
+    teacherId: merged.teacherId,
+    roomId: merged.roomId,
+    cycleDayIndex: merged.cycleDayIndex,
+    periodId: merged.periodId,
+  })
+
+  if (block && !acceptConflict) {
+    const alternatives = ensureAlternatives(merged, lessonId)
+    return {
+      ok: false,
+      conflict: {
+        reason: block.reason,
+        conflictingLessonId: block.blockingLessonId,
+        alternatives,
+      },
+    }
+  }
+
+  const hasConflict = Boolean(block && acceptConflict)
+  liveLessons[idx] = resolveLessonDisplayFields({ ...merged, hasConflict })
+  return { ok: true }
 }
 
 export function deleteLessonFromMock(lessonId: string): boolean {
@@ -190,7 +341,8 @@ export function deleteLessonFromMock(lessonId: string): boolean {
 
 export function createLessonInMock(
   body: CreateLessonBody,
-): { ok: true; lesson: LessonDto } | { ok: false; error: 'occupied' } {
+  acceptConflict?: boolean,
+): CreateLessonResult {
   const existing = findLessonAtCell('class', body.classId, body.cycleDayIndex, body.periodId)
   if (existing) return { ok: false, error: 'occupied' }
 
@@ -212,7 +364,29 @@ export function createLessonInMock(
     isPinned: false,
     hasConflict: false,
   }
-  const lesson = resolveLessonDisplayFields(base)
+  const merged = resolveLessonDisplayFields(base)
+  const block = findBlockingAtSlot(liveLessons, null, {
+    classId: merged.classId,
+    teacherId: merged.teacherId,
+    roomId: merged.roomId,
+    cycleDayIndex: merged.cycleDayIndex,
+    periodId: merged.periodId,
+  })
+
+  if (block && !acceptConflict) {
+    const alternatives = ensureAlternatives(merged, null)
+    return {
+      ok: false,
+      conflict: {
+        reason: block.reason,
+        conflictingLessonId: block.blockingLessonId,
+        alternatives,
+      },
+    }
+  }
+
+  const hasConflict = Boolean(block && acceptConflict)
+  const lesson = resolveLessonDisplayFields({ ...merged, hasConflict })
   liveLessons.push(lesson)
   return { ok: true, lesson }
 }

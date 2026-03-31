@@ -116,11 +116,22 @@ export function useUpdateLesson(timetableId: string | null) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ lessonId, patch }: { lessonId: string; patch: LessonPatchBody }) => {
+    mutationFn: ({
+      lessonId,
+      patch,
+      acceptConflict,
+    }: {
+      lessonId: string
+      patch: LessonPatchBody
+      acceptConflict?: boolean
+    }) => {
       if (!timetableId) {
         return Promise.reject(new Error('timetableId is required'))
       }
-      return api.patch(`/api/v1/lessons/${lessonId}`, patch)
+      return api.patch(`/api/v1/lessons/${lessonId}`, {
+        ...patch,
+        ...(acceptConflict ? { acceptConflict: true } : {}),
+      })
     },
     onMutate: async ({ lessonId, patch }) => {
       if (!timetableId) return
@@ -192,11 +203,22 @@ export function useCreateLesson(timetableId: string | null) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (body: CreateLessonBody) => {
+    mutationFn: ({
+      body,
+      acceptConflict,
+    }: {
+      body: CreateLessonBody
+      acceptConflict?: boolean
+    }) => {
       if (!timetableId) {
         return Promise.reject(new Error('timetableId is required'))
       }
-      return api.post<LessonDto>(`/api/v1/timetables/${timetableId}/lessons`, body).then((r) => r.data)
+      return api
+        .post<LessonDto>(`/api/v1/timetables/${timetableId}/lessons`, {
+          ...body,
+          ...(acceptConflict ? { acceptConflict: true } : {}),
+        })
+        .then((r) => r.data)
     },
     onSettled: () => {
       if (timetableId) {

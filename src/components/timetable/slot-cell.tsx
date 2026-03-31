@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { AlertTriangle } from 'lucide-react'
 import type { LessonDto } from '@/types/timetable.types'
 import { MiniSlot } from '@/components/timetable/mini-slot'
 
@@ -63,11 +64,12 @@ export const SlotCell = forwardRef<HTMLDivElement, SlotCellProps>(
             {slotContent ?? <MiniSlot lesson={lesson} size="sm" />}
             {hasConflict && (
               <span
-                aria-hidden="true"
-                className="absolute top-0.5 right-0.5 text-[9px] font-semibold leading-none"
+                className="absolute top-0.5 right-0.5 flex items-center gap-0.5 text-[9px] font-semibold leading-none"
                 style={{ color: '#c0392b' }}
+                title="Scheduling conflict"
               >
-                ⚠ Conflict
+                <AlertTriangle className="h-3 w-3 shrink-0" aria-hidden="true" />
+                <span className="sr-only">Conflict</span>
               </span>
             )}
           </>

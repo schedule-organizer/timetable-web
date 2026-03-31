@@ -185,9 +185,9 @@ describe('TimetableGrid', () => {
 
   it('conflict cell has text indicator (not colour alone)', () => {
     render(<TimetableGrid {...defaultProps} />)
-    // The visible "⚠ Conflict" text must appear (aria-hidden so AT reads gridcell label instead)
-    expect(screen.getByText('⚠ Conflict')).toBeInTheDocument()
-    // The gridcell aria-label must also announce conflict state
+    expect(screen.getByTitle('Scheduling conflict')).toBeInTheDocument()
+    expect(screen.getByText('Conflict')).toBeInTheDocument()
+    expect(document.querySelector('[data-conflict="true"] svg')).toBeTruthy()
     const conflictGridcell = document.querySelector('[data-conflict="true"]') as HTMLElement
     expect(conflictGridcell?.getAttribute('aria-label')).toMatch(/\(conflict\)/)
   })

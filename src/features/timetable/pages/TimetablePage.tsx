@@ -21,11 +21,57 @@ import {
 } from '@/components/timetable/timetable-grid'
 import { ViewPivotToolbar } from '@/components/timetable/view-pivot-toolbar'
 import { YearGroupFilter } from '@/components/timetable/year-group-filter'
+import { AssignmentConflictPopover } from '@/features/timetable/components/assignment-conflict-popover'
 import { SlotEditSheet } from '@/features/timetable/components/slot-edit-sheet'
+import { parseSchedulingConflictDetails } from '@/lib/timetable-conflict'
 import { useTimetableStore } from '@/store/timetableStore'
 import { padDayLabels } from '@/lib/cycle-term-utils'
 import { MOCK_TIMETABLE_ID } from '@/mocks/pages/timetable-page.mock'
-import type { GridColumn, LessonDto, TimetableView } from '@/types/timetable.types'
+import type {
+  CreateLessonBody,
+  GridColumn,
+  LessonDto,
+  LessonPatchBody,
+  SchedulingAlternativeSlot,
+  SchedulingConflictDetails,
+  TimetableView,
+} from '@/types/timetable.types'
+
+type PendingAssignmentConflict =
+  | {
+      kind: 'edit'
+      lessonId: string
+      patch: LessonPatchBody
+      details: SchedulingConflictDetails
+    }
+  | {
+      kind: 'create'
+      body: CreateLessonBody
+      details: SchedulingConflictDetails
+    }
+
+/** After `parseSchedulingConflictDetails` returns null — distinguish unreadable 409 from other errors. */
+function toastAfterConflictParseFailure(e: unknown, genericMessage: string): void {
+  if (axios.isAxiosError(e) && e.response?.status === 409) {
+    toast.error('The server reported a scheduling conflict, but details could not be read. Try again.')
+    return
+  }
+  toast.error(genericMessage)
+}
+
+function toastApiErrorMessageOrFallback(e: unknown, fallback: string): void {
+  if (axios.isAxiosError(e)) {
+    const data = e.response?.data
+    if (data && typeof data === 'object' && data !== null && 'message' in data) {
+      const msg = (data as { message: unknown }).message
+      if (typeof msg === 'string' && msg.length > 0) {
+        toast.error(msg)
+        return
+      }
+    }
+  }
+  toast.error(fallback)
+}
 
 function rowLabelFromLessons(
   lessons: LessonDto[],
@@ -141,6 +187,8 @@ export default function TimetablePage() {
     col: GridColumn
   }>(null)
 
+  const [pendingConflict, setPendingConflict] = useState<PendingAssignmentConflict | null>(null)
+
   const handleSlotOpen = useCallback(
     (payload: { lesson: LessonDto | null; rowKey: string; col: GridColumn }) => {
       const rowLabel = rowLabelFromLessons(lessons, gridView, payload.rowKey)
@@ -229,6 +277,125 @@ export default function TimetablePage() {
       ? `${unpinnedSolveCount} unpinned slots will be solved`
       : ''
 
+  const handleSaveEdit = useCallback(
+    async (lessonId: string, patch: LessonPatchBody) => {
+      try {
+        await updateLesson.mutateAsync({ lessonId, patch })
+        setSlotSheet(null)
+        setPendingConflict(null)
+      } catch (e) {
+        const details = parseSchedulingConflictDetails(e)
+        if (details) {
+          setPendingConflict({ kind: 'edit', lessonId, patch, details })
+          return
+        }
+        toastAfterConflictParseFailure(e, 'Could not save changes. Try again.')
+      }
+    },
+    [updateLesson],
+  )
+
+  const handleSaveNew = useCallback(
+    async (body: CreateLessonBody) => {
+      try {
+        await createLesson.mutateAsync({ body })
+        setSlotSheet(null)
+        setPendingConflict(null)
+      } catch (e) {
+        const details = parseSchedulingConflictDetails(e)
+        if (details) {
+          setPendingConflict({ kind: 'create', body, details })
+          return
+        }
+        toastAfterConflictParseFailure(e, 'Could not place lesson. Try again.')
+      }
+    },
+    [createLesson],
+  )
+
+  const handlePickAlternative = useCallback(
+    async (slot: SchedulingAlternativeSlot) => {
+      if (!pendingConflict) return
+      const base = pendingConflict
+      try {
+        if (base.kind === 'edit') {
+          await updateLesson.mutateAsync({
+            lessonId: base.lessonId,
+            patch: {
+              ...base.patch,
+              cycleDayIndex: slot.cycleDayIndex,
+              periodId: slot.periodId,
+            },
+          })
+        } else {
+          await createLesson.mutateAsync({
+            body: {
+              ...base.body,
+              cycleDayIndex: slot.cycleDayIndex,
+              periodId: slot.periodId,
+            },
+          })
+        }
+        setPendingConflict(null)
+        setSlotSheet(null)
+      } catch (e) {
+        const details = parseSchedulingConflictDetails(e)
+        if (details) {
+          if (base.kind === 'edit') {
+            setPendingConflict({
+              kind: 'edit',
+              lessonId: base.lessonId,
+              patch: {
+                ...base.patch,
+                cycleDayIndex: slot.cycleDayIndex,
+                periodId: slot.periodId,
+              },
+              details,
+            })
+          } else {
+            setPendingConflict({
+              kind: 'create',
+              body: {
+                ...base.body,
+                cycleDayIndex: slot.cycleDayIndex,
+                periodId: slot.periodId,
+              },
+              details,
+            })
+          }
+          return
+        }
+        toastAfterConflictParseFailure(e, 'Could not move to that slot. Try another.')
+      }
+    },
+    [pendingConflict, updateLesson, createLesson],
+  )
+
+  const handleKeepConflicting = useCallback(async () => {
+    if (!pendingConflict) return
+    try {
+      if (pendingConflict.kind === 'edit') {
+        await updateLesson.mutateAsync({
+          lessonId: pendingConflict.lessonId,
+          patch: pendingConflict.patch,
+          acceptConflict: true,
+        })
+      } else {
+        await createLesson.mutateAsync({
+          body: pendingConflict.body,
+          acceptConflict: true,
+        })
+      }
+      setPendingConflict(null)
+      setSlotSheet(null)
+    } catch (e) {
+      toastApiErrorMessageOrFallback(e, 'Could not save placement. Try again.')
+    }
+  }, [pendingConflict, updateLesson, createLesson])
+
+  const sheetBusy =
+    createLesson.isPending || updateLesson.isPending || pendingConflict !== null
+
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex flex-col gap-3 px-4 pt-4">
@@ -294,7 +461,10 @@ export default function TimetablePage() {
         <SlotEditSheet
           open
           onOpenChange={(o) => {
-            if (!o) setSlotSheet(null)
+            if (!o) {
+              setSlotSheet(null)
+              setPendingConflict(null)
+            }
           }}
           mode={slotSheet.mode}
           pivotView={gridView}
@@ -302,22 +472,24 @@ export default function TimetablePage() {
           rowLabel={slotSheet.rowLabel}
           col={slotSheet.col}
           lesson={slotSheet.lesson}
-          isSubmitting={createLesson.isPending || updateLesson.isPending}
-          onSaveNew={(body) => {
-            createLesson.mutate(body, {
-              onSuccess: () => setSlotSheet(null),
-            })
-          }}
-          onSaveEdit={(lessonId, patch) => {
-            updateLesson.mutate(
-              { lessonId, patch },
-              {
-                onSuccess: () => setSlotSheet(null),
-              },
-            )
-          }}
+          isSubmitting={sheetBusy}
+          onSaveNew={handleSaveNew}
+          onSaveEdit={handleSaveEdit}
         />
       ) : null}
+
+      <AssignmentConflictPopover
+        open={pendingConflict !== null}
+        details={pendingConflict?.details ?? null}
+        isSubmitting={updateLesson.isPending || createLesson.isPending}
+        onPickAlternative={(slot) => {
+          void handlePickAlternative(slot)
+        }}
+        onKeepConflicting={() => {
+          void handleKeepConflicting()
+        }}
+        onClose={() => setPendingConflict(null)}
+      />
     </div>
   )
 }

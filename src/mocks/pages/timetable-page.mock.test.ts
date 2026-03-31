@@ -3,6 +3,7 @@ import {
   buildMockTimetableLessons,
   getMockTimetableLessonsResponse,
   moveLessonInMock,
+  patchLessonInMock,
   regenerateUnpinnedMockLessons,
   resetMockTimetableLessons,
   setLessonPinnedInMock,
@@ -42,6 +43,49 @@ describe('timetable-page.mock', () => {
       periodId: 'period-mock-2',
     })
     expect(result).toEqual({ ok: false, error: 'pinned' })
+  })
+
+  it('patchLessonInMock returns scheduling conflict when teacher is double-booked', () => {
+    resetMockTimetableLessons()
+    const lessons = getMockTimetableLessonsResponse().lessons
+    const a = lessons.find((l) => l.cycleDayIndex === 0 && l.periodId === 'period-mock-1')
+    const b = lessons.find(
+      (l) =>
+        l.id !== a!.id &&
+        l.cycleDayIndex === 0 &&
+        l.periodId === 'period-mock-1' &&
+        l.teacherId !== a!.teacherId,
+    )
+    expect(a).toBeDefined()
+    expect(b).toBeDefined()
+
+    const result = patchLessonInMock(b!.id, { teacherId: a!.teacherId })
+    expect(result.ok).toBe(false)
+    if (!result.ok && 'conflict' in result) {
+      expect(result.conflict.reason).toBe('TEACHER_DOUBLE_BOOKED')
+      expect(result.conflict.alternatives.length).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it('patchLessonInMock applies conflicting placement when acceptConflict is true', () => {
+    resetMockTimetableLessons()
+    const lessons = getMockTimetableLessonsResponse().lessons
+    const a = lessons.find((l) => l.cycleDayIndex === 0 && l.periodId === 'period-mock-1')
+    const b = lessons.find(
+      (l) =>
+        l.id !== a!.id &&
+        l.cycleDayIndex === 0 &&
+        l.periodId === 'period-mock-1' &&
+        l.teacherId !== a!.teacherId,
+    )
+    expect(a).toBeDefined()
+    expect(b).toBeDefined()
+
+    const result = patchLessonInMock(b!.id, { teacherId: a!.teacherId }, true)
+    expect(result).toEqual({ ok: true })
+    const updated = getMockTimetableLessonsResponse().lessons.find((l) => l.id === b!.id)
+    expect(updated?.teacherId).toBe(a!.teacherId)
+    expect(updated?.hasConflict).toBe(true)
   })
 
   it('regenerateUnpinnedMockLessons mutates unpinned lesson content', () => {

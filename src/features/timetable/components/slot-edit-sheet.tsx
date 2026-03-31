@@ -38,8 +38,8 @@ export interface SlotEditSheetProps {
   col: GridColumn
   lesson: LessonDto | null
   isSubmitting: boolean
-  onSaveNew: (body: CreateLessonBody) => void
-  onSaveEdit: (lessonId: string, patch: LessonPatchBody) => void
+  onSaveNew: (body: CreateLessonBody) => void | Promise<void>
+  onSaveEdit: (lessonId: string, patch: LessonPatchBody) => void | Promise<void>
 }
 
 function defaultValuesForLesson(
@@ -93,7 +93,7 @@ export function SlotEditSheet({
     }
   }, [open, lesson, pivotView, rowKey, form])
 
-  const onSubmit = form.handleSubmit((values) => {
+  const onSubmit = form.handleSubmit(async (values) => {
     if (readOnly) return
     const base: CreateLessonBody = {
       cycleDayIndex: col.dayIndex,
@@ -110,9 +110,9 @@ export function SlotEditSheet({
         teacherId: values.teacherId,
         roomId: values.roomId,
       }
-      onSaveEdit(lesson.id, patch)
+      await onSaveEdit(lesson.id, patch)
     } else {
-      onSaveNew(base)
+      await onSaveNew(base)
     }
   })
 

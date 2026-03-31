@@ -10,9 +10,9 @@ import {
   setLessonPinnedInMock,
 } from '@/mocks/pages/timetable-page.mock'
 import {
-  createLessonBodySchema,
+  createLessonApiBodySchema,
   lessonMoveBodySchema,
-  lessonPatchBodySchema,
+  lessonPatchApiBodySchema,
 } from '@/types/timetable.schemas'
 
 export const timetableHandlers = [
@@ -54,18 +54,30 @@ export const timetableHandlers = [
   http.patch('/api/v1/lessons/:id', async ({ params, request }) => {
     const lessonId = params.id as string
     const json: unknown = await request.json()
-    const parsed = lessonPatchBodySchema.safeParse(json)
+    const parsed = lessonPatchApiBodySchema.safeParse(json)
     if (!parsed.success) {
       return HttpResponse.json(
         { status: 400, code: 'VALIDATION_ERROR', message: 'Invalid lesson patch.' },
         { status: 400 },
       )
     }
-    const ok = patchLessonInMock(lessonId, parsed.data)
-    if (!ok) {
+    const { acceptConflict, ...patch } = parsed.data
+    const result = patchLessonInMock(lessonId, patch, acceptConflict)
+    if (!result.ok) {
+      if (result.error === 'not_found') {
+        return HttpResponse.json(
+          { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
+          { status: 404 },
+        )
+      }
       return HttpResponse.json(
-        { status: 404, code: 'NOT_FOUND', message: 'Lesson not found.' },
-        { status: 404 },
+        {
+          status: 409,
+          code: 'SCHEDULING_CONFLICT',
+          message: 'This placement conflicts with an existing lesson.',
+          details: result.conflict,
+        },
+        { status: 409 },
       )
     }
     return new HttpResponse(null, { status: 204 })
@@ -92,17 +104,29 @@ export const timetableHandlers = [
       )
     }
     const json: unknown = await request.json()
-    const parsed = createLessonBodySchema.safeParse(json)
+    const parsed = createLessonApiBodySchema.safeParse(json)
     if (!parsed.success) {
       return HttpResponse.json(
         { status: 400, code: 'VALIDATION_ERROR', message: 'Invalid create lesson body.' },
         { status: 400 },
       )
     }
-    const result = createLessonInMock(parsed.data)
+    const { acceptConflict, ...body } = parsed.data
+    const result = createLessonInMock(body, acceptConflict)
     if (!result.ok) {
+      if (result.error === 'occupied') {
+        return HttpResponse.json(
+          { status: 409, code: 'SLOT_OCCUPIED', message: 'That slot already has a lesson.' },
+          { status: 409 },
+        )
+      }
       return HttpResponse.json(
-        { status: 409, code: 'SLOT_OCCUPIED', message: 'That slot already has a lesson.' },
+        {
+          status: 409,
+          code: 'SCHEDULING_CONFLICT',
+          message: 'This placement conflicts with an existing lesson.',
+          details: result.conflict,
+        },
         { status: 409 },
       )
     }

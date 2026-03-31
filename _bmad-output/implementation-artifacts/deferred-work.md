@@ -1,5 +1,11 @@
 # Deferred work
 
+## Deferred from: code review of story 5-4-conflict-detection-on-manual-assignment.md (2026-04-01)
+
+- Drag-and-drop `moveLesson` does not surface the SCHEDULING_CONFLICT popover; only slot sheet create/edit flows do. Revisit if product defines drag as manual assignment with the same conflict UX.
+
+- ConflictExplainer flagging when the generator re-runs for lessons with `hasConflict` from manual “keep conflicting placement” is not wired on TimetablePage; depends on engine job output and explainer integration in a later epic/story.
+
 ## Deferred from: code review of 5-2-slot-pinning.md (2026-04-01)
 
 - AC2 “re-run the generator” with pinned slots preserved: validated in MSW/mock only (`POST /api/v1/timetables/:id/regenerate-unpinned`); production engine integration and UI remain out of this story’s scope.
