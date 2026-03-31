@@ -1,5 +1,29 @@
 # Deferred work
 
+## Deferred from: code review of 5-1-timetable-grid-view (2026-03-31)
+
+- MOCK_TIMETABLE_ID import in TimetablePage — mock-first phase by design; address when real timetable selection flow is built in a future story.
+- findLesson O(n) scan per cell — no indexed lookup; acceptable at current scale but will degrade with large lesson sets; consider a `Map<key, LessonDto>` pre-built in useMemo.
+- subjectColorHex accepts any string, no hex format validation — add `z.string().regex(/^#[0-9a-fA-F]{3,6}$/)` when hardening schemas against the real API.
+- setActiveTimetable race on re-mount — effect overwrites real timetableId with mock id if navigate-away-and-back before store hydrates; revisit when real timetable selection is wired.
+- yearGroupParam persists in URL when switching to teacher/room pivot — stale filter silently reactivates on switch-back to class view; consider clearing param on view change.
+- `sticky top-[29px]` hardcoded pixel height assumption for period header row — will break if day-group header height changes; use a CSS variable or measured ref.
+- cellRefs Map may accumulate stale refs on view switch — low risk while React reconciler unmounts old cells; revisit if focus bugs surface.
+- cycleDayIndex has no max bound in schema — lesson with out-of-range day index silently dropped by findLesson; add `.max(MAX_CYCLE_DAYS)` when domain constraint is finalised.
+- Two lessons with same classId but different className — first-seen label wins silently; data integrity is API's responsibility but may warrant a warning.
+- buildMockTimetableLessons called at module evaluation time — depends on peer mock module init order; safe today but fragile if mocks are reorganised.
+- dayLabels empty strings cause blank day-group headers — depends on padDayLabels behaviour; verify when real cycle data is wired.
+- Skeleton column count capped at 5 — minor layout shift when real grid has more columns; update cap to use actual column count when bell/cycle data is available.
+- bell.periods empty array passes TimetablePage gate — `cycleLength > 0` does not guard against empty periods; add `bell.periods.length > 0` to the gate condition.
+
+## Deferred from: code review of 5-1-timetable-grid-view (re-review, 2026-03-31)
+
+- Pinned+focused cell double border — `outline` inline style (pin ring) and `focus-visible:ring` (box-shadow, focus indicator) coexist on pinned+focused `SlotCell`; produces two concentric blue frames; cosmetic only since both are same colour.
+- `cycleLengthDays: 0` returned from API (not a fetch error) silently renders infinite skeleton with no error message; add an explicit data-validity check alongside the error check.
+- Space key no AT feedback on empty cell — `e.preventDefault()` consumes the event (prevents scroll) but no announcement is made when Space is pressed on an empty gridcell; consider `aria-live` announcement.
+- `buildClassRows` cross-year-group class deduplication — if a lesson's `classId` appears with two different `yearGroup` values in the API response, first-seen `yearGroup` wins as `groupLabel`; data integrity concern for the API.
+- Fallback queryKey `['timetable', 'none', 'lessons']` is an inline literal — cannot be derived from `timetableQueryKeys`; any future cache invalidation by key construction will miss it.
+
 ## Deferred from: code review of 4-4-constraint-sensitivity-adjustment.md (2026-03-31)
 
 - `onRelaxConstraint` silently does nothing if the conflict id is not found on the current job (stale client / race). Low probability while ConflictExplainer and job are in sync; consider user-visible feedback if this surfaces in support.

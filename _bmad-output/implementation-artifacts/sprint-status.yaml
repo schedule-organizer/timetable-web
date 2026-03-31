@@ -1,5 +1,5 @@
 # generated: batch create-story
-# last_updated: 2026-03-31
+# last_updated: 2026-03-31 (post-review)
 # project: timetable-web
 # project_key: NOKEY
 # tracking_system: file-system
@@ -47,7 +47,7 @@ development_status:
   3-2-soft-preference-configuration-with-weights: done
   3-3-subject-level-scheduling-rules: done
   3-4-teacher-availability-submission-availability-grid: done
-  3-5-timetabler-availability-overview-and-override: review
+  3-5-timetabler-availability-overview-and-override: done
   epic-3-retrospective: optional
 
   epic-4: backlog
@@ -58,7 +58,7 @@ development_status:
   epic-4-retrospective: optional
 
   epic-5: backlog
-  5-1-timetable-grid-view: ready-for-dev
+  5-1-timetable-grid-view: in-progress
   5-2-slot-pinning: ready-for-dev
   5-3-manual-slot-assignment: ready-for-dev
   5-4-conflict-detection-on-manual-assignment: ready-for-dev
