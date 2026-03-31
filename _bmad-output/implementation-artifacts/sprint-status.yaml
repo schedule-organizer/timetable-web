@@ -1,5 +1,5 @@
 # generated: batch create-story
-# last_updated: 2026-04-01T22:47:00Z
+# last_updated: 2026-04-01T23:30:00Z
 # project: timetable-web
 # project_key: NOKEY
 # tracking_system: file-system
@@ -62,7 +62,7 @@ development_status:
   5-2-slot-pinning: done
   5-3-manual-slot-assignment: done
   5-4-conflict-detection-on-manual-assignment: done
-  5-5-partial-re-generation-on-unpinned-slots: ready-for-dev
+  5-5-partial-re-generation-on-unpinned-slots: done
   epic-5-retrospective: optional
 
   epic-6: backlog

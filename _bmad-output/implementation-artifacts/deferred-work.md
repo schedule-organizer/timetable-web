@@ -137,3 +137,9 @@
 - NFR3 (500ms) is not asserted in tests or telemetry — align when NFRs are enforced app-wide.
 
 - Drag-and-drop move has no keyboard-only equivalent — broader a11y pass.
+
+## Deferred from: code review of 5-5-partial-re-generation-on-unpinned-slots.md (2026-04-01)
+
+- Success path satisfaction data uses static `MOCK_CONSTRAINT_REPORT` from mocks — not derived from post-regen lesson set; acceptable until real engine returns live reports.
+
+- `timetable-page.mock.ts` imports `MOCK_CONSTRAINT_REPORT` from `engine.handlers` — cross-module mock coupling; revisit if handlers and page mocks are reorganised.

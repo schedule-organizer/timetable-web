@@ -4,6 +4,7 @@ import {
   lessonDtoSchema,
   lessonMoveBodySchema,
   lessonPatchBodySchema,
+  regenerateUnpinnedSuccessResponseSchema,
   schedulingAlternativeSlotSchema,
   schedulingConflictDetailsSchema,
   timetableLessonsResponseSchema,
@@ -11,6 +12,7 @@ import {
 
 export type LessonDto = z.infer<typeof lessonDtoSchema>
 export type TimetableLessonsResponse = z.infer<typeof timetableLessonsResponseSchema>
+export type RegenerateUnpinnedSuccessResponse = z.infer<typeof regenerateUnpinnedSuccessResponseSchema>
 export type LessonPatchBody = z.infer<typeof lessonPatchBodySchema>
 export type CreateLessonBody = z.infer<typeof createLessonBodySchema>
 export type LessonMoveBody = z.infer<typeof lessonMoveBodySchema>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useBellSchedule } from '@/api/hooks/useBellSchedule'
 import { useCycleSettings } from '@/api/hooks/useCycleSettings'
@@ -9,11 +9,15 @@ import {
   useDeleteLesson,
   useMoveLesson,
   usePinLesson,
+  useRegenerateUnpinned,
   useTimetableLessons,
   useUnpinLesson,
   useUpdateLesson,
 } from '@/api/hooks/useTimetable'
-import { GeneratorStatusBar } from '@/components/domain/generator-status-bar'
+import { ConflictExplainer } from '@/components/domain/conflict-explainer'
+import { ConstraintSatisfactionSummary } from '@/components/domain/constraint-satisfaction-summary'
+import { GeneratorStatusBar, type GeneratorStatusPhase } from '@/components/domain/generator-status-bar'
+import { SatisfactionBanner } from '@/components/domain/satisfaction-banner'
 import {
   TimetableGrid,
   countUnpinnedSlotsForSolver,
@@ -24,6 +28,8 @@ import { YearGroupFilter } from '@/components/timetable/year-group-filter'
 import { AssignmentConflictPopover } from '@/features/timetable/components/assignment-conflict-popover'
 import { SlotEditSheet } from '@/features/timetable/components/slot-edit-sheet'
 import { parseSchedulingConflictDetails } from '@/lib/timetable-conflict'
+import { parsePartialRegenUnsatisfiedDetails } from '@/lib/timetable-regenerate'
+import type { ConflictReportDto, ConstraintSatisfactionReport } from '@/types/engine.types'
 import { useTimetableStore } from '@/store/timetableStore'
 import { padDayLabels } from '@/lib/cycle-term-utils'
 import { MOCK_TIMETABLE_ID } from '@/mocks/pages/timetable-page.mock'
@@ -109,6 +115,8 @@ export default function TimetablePage() {
   const deleteLesson = useDeleteLesson(timetableId)
   const createLesson = useCreateLesson(timetableId)
   const moveLesson = useMoveLesson(timetableId)
+  const regenerateUnpinned = useRegenerateUnpinned(timetableId)
+  const navigate = useNavigate()
 
   const yearGroupParam = searchParams.get('yearGroup')
 
@@ -188,6 +196,13 @@ export default function TimetablePage() {
   }>(null)
 
   const [pendingConflict, setPendingConflict] = useState<PendingAssignmentConflict | null>(null)
+
+  const [regenTerminalPhase, setRegenTerminalPhase] = useState<'idle' | 'succeeded' | 'failed'>('idle')
+  const [lastSatisfactionReport, setLastSatisfactionReport] =
+    useState<ConstraintSatisfactionReport | null>(null)
+  const [regenConflictReport, setRegenConflictReport] = useState<ConflictReportDto | null>(null)
+  const [showRegenConflictExplainer, setShowRegenConflictExplainer] = useState(false)
+  const [showSatisfactionSummary, setShowSatisfactionSummary] = useState(false)
 
   const handleSlotOpen = useCallback(
     (payload: { lesson: LessonDto | null; rowKey: string; col: GridColumn }) => {
@@ -272,10 +287,88 @@ export default function TimetablePage() {
     )
   }, [bell, cycle, cycleLength, lessons, gridView, validatedYearGroup, dayLabels])
 
-  const generatorStatusMessage =
-    bell && cycle && cycleLength > 0 && !bellError && !cycleError
-      ? `${unpinnedSolveCount} unpinned slots will be solved`
-      : ''
+  const regenStatusPhase: GeneratorStatusPhase = useMemo(() => {
+    if (regenerateUnpinned.isPending) return 'running'
+    if (regenTerminalPhase === 'succeeded') return 'succeeded'
+    if (regenTerminalPhase === 'failed') return 'failed'
+    return 'idle'
+  }, [regenerateUnpinned.isPending, regenTerminalPhase])
+
+  const generatorStatusMessage = useMemo(() => {
+    if (!bell || !cycle || cycleLength === 0 || bellError || cycleError) return ''
+    if (regenerateUnpinned.isPending) return 'Re-running unpinned slots…'
+    if (regenTerminalPhase === 'succeeded') return 'Re-run complete — unpinned slots updated.'
+    if (regenTerminalPhase === 'failed') {
+      return 'Could not satisfy the remaining unpinned slots.'
+    }
+    return `${unpinnedSolveCount} unpinned slots will be solved`
+  }, [
+    bell,
+    cycle,
+    cycleLength,
+    bellError,
+    cycleError,
+    unpinnedSolveCount,
+    regenerateUnpinned.isPending,
+    regenTerminalPhase,
+  ])
+
+  useEffect(() => {
+    if (regenTerminalPhase !== 'succeeded') return
+    const t = window.setTimeout(() => setRegenTerminalPhase('idle'), 4000)
+    return () => window.clearTimeout(t)
+  }, [regenTerminalPhase])
+
+  const handleRegenerateUnpinned = useCallback(() => {
+    setShowRegenConflictExplainer(false)
+    regenerateUnpinned.mutate(undefined, {
+      onSuccess: (data) => {
+        setLastSatisfactionReport(data.satisfactionReport)
+        setRegenTerminalPhase('succeeded')
+        setRegenConflictReport(null)
+        setShowRegenConflictExplainer(false)
+      },
+      onError: (e) => {
+        const report = parsePartialRegenUnsatisfiedDetails(e)
+        setRegenConflictReport(report)
+        setRegenTerminalPhase('failed')
+        setShowRegenConflictExplainer(report !== null)
+        if (!report) {
+          toast.error('Could not re-run unpinned slots. Try again.')
+        }
+      },
+    })
+  }, [regenerateUnpinned])
+
+  const allSlotsPinnedForRegen = unpinnedSolveCount === 0
+
+  const regenPrimaryAction = useMemo(() => {
+    if (!bell || !cycle || cycleLength === 0 || bellError || cycleError) return undefined
+    const busy = regenerateUnpinned.isPending || regenTerminalPhase === 'succeeded'
+    const disabledTooltip = allSlotsPinnedForRegen
+      ? 'All slots are pinned — unpin slots to re-run'
+      : regenerateUnpinned.isPending
+        ? 'Re-running unpinned slots…'
+        : regenTerminalPhase === 'succeeded'
+          ? 'Re-run complete — you can run again in a moment.'
+          : undefined
+    return {
+      label: 'Re-run unpinned',
+      onClick: handleRegenerateUnpinned,
+      disabled: allSlotsPinnedForRegen || busy,
+      disabledTooltip,
+    }
+  }, [
+    bell,
+    cycle,
+    cycleLength,
+    bellError,
+    cycleError,
+    allSlotsPinnedForRegen,
+    regenerateUnpinned.isPending,
+    regenTerminalPhase,
+    handleRegenerateUnpinned,
+  ])
 
   const handleSaveEdit = useCallback(
     async (lessonId: string, patch: LessonPatchBody) => {
@@ -415,9 +508,27 @@ export default function TimetablePage() {
         )}
       </div>
 
-      {generatorStatusMessage ? (
+      {lastSatisfactionReport ? (
         <div className="mx-4 mt-2">
-          <GeneratorStatusBar phase="idle" message={generatorStatusMessage} />
+          <SatisfactionBanner
+            report={lastSatisfactionReport}
+            onViewDetails={() => setShowSatisfactionSummary(true)}
+          />
+        </div>
+      ) : null}
+
+      {generatorStatusMessage || regenPrimaryAction ? (
+        <div className="mx-4 mt-2">
+          <GeneratorStatusBar
+            phase={regenStatusPhase}
+            message={generatorStatusMessage}
+            primaryAction={regenPrimaryAction}
+            onViewConflicts={
+              regenTerminalPhase === 'failed' && regenConflictReport
+                ? () => setShowRegenConflictExplainer(true)
+                : undefined
+            }
+          />
         </div>
       ) : null}
 
@@ -425,7 +536,26 @@ export default function TimetablePage() {
         className="mt-3 flex min-h-0 flex-1 overflow-hidden rounded-t-xl border-t border-x border-[--color-border] bg-[--color-background] mx-4"
         aria-label="Timetable workspace"
       >
-        {bellError || cycleError ? (
+        {showRegenConflictExplainer && regenConflictReport && bell && cycle && cycleLength > 0 ? (
+          <div className="min-h-0 flex-1 overflow-auto p-4">
+            <ConflictExplainer
+              conflictReport={regenConflictReport}
+              cycleLengthDays={cycleLength}
+              dayLabels={dayLabels}
+              periods={bell.periods}
+              onRelaxConstraint={() => {
+                setShowRegenConflictExplainer(false)
+                navigate('/engine')
+              }}
+              onAssignManually={() => setShowRegenConflictExplainer(false)}
+              onEditSourceData={() => {
+                setShowRegenConflictExplainer(false)
+                navigate('/settings')
+              }}
+              onClose={() => setShowRegenConflictExplainer(false)}
+            />
+          </div>
+        ) : bellError || cycleError ? (
           <p className="p-4 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Failed to load schedule configuration. Please refresh.
           </p>
@@ -456,6 +586,13 @@ export default function TimetablePage() {
           />
         )}
       </div>
+
+      {showSatisfactionSummary && lastSatisfactionReport ? (
+        <ConstraintSatisfactionSummary
+          report={lastSatisfactionReport}
+          onClose={() => setShowSatisfactionSummary(false)}
+        />
+      ) : null}
 
       {slotSheet ? (
         <SlotEditSheet

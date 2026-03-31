@@ -1,11 +1,27 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+import axios from 'axios'
 import { render, screen, waitFor } from '@/test/test-utils'
 import userEvent from '@testing-library/user-event'
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
 import { mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
 import { getMockTimetableLessonsResponse } from '@/mocks/pages/timetable-page.mock'
 import { useTimetableStore } from '@/store/timetableStore'
+import type { ConstraintSatisfactionReport } from '@/types/engine.types'
 import TimetablePage from './TimetablePage'
+
+const regenSuccessReport: ConstraintSatisfactionReport = {
+  overallPercentage: 94,
+  softFullySatisfied: 8,
+  softPartiallySatisfied: 2,
+  softNotSatisfied: 1,
+  softPreferences: [],
+  hardConstraints: [],
+}
+
+const timetableRegenMocks = vi.hoisted(() => ({
+  regenerateMutate: vi.fn(),
+  regenerateIsPending: false,
+}))
 
 vi.mock('@/api/hooks/useBellSchedule', () => ({
   useBellSchedule: () => ({ data: mockBellSchedule }),
@@ -29,12 +45,19 @@ vi.mock('@/api/hooks/useTimetable', () => ({
     isPending: false,
   }),
   useMoveLesson: () => ({ mutate: vi.fn(), isPending: false }),
+  useRegenerateUnpinned: () => ({
+    mutate: timetableRegenMocks.regenerateMutate,
+    mutateAsync: vi.fn(),
+    isPending: timetableRegenMocks.regenerateIsPending,
+  }),
 }))
 
 describe('TimetablePage', () => {
   beforeEach(() => {
     // Reset Zustand store between tests to prevent state leaking
     useTimetableStore.setState({ activeTimetableId: null, activeView: 'class' })
+    timetableRegenMocks.regenerateIsPending = false
+    timetableRegenMocks.regenerateMutate.mockReset()
   })
   it('renders page heading', () => {
     render(<TimetablePage />)
@@ -97,6 +120,71 @@ describe('TimetablePage', () => {
   it('shows unpinned slot count in the generator status strip', () => {
     render(<TimetablePage />)
     expect(screen.getByText(/\d+ unpinned slots will be solved/)).toBeInTheDocument()
+  })
+
+  it('renders Re-run unpinned and shows satisfaction banner after success', async () => {
+    const user = userEvent.setup()
+    timetableRegenMocks.regenerateMutate.mockImplementation((_v, opts) => {
+      opts?.onSuccess?.({ satisfactionReport: regenSuccessReport })
+    })
+    render(<TimetablePage />)
+    await user.click(screen.getByRole('button', { name: 'Re-run unpinned' }))
+    expect(await screen.findByRole('status', { name: /schedule satisfaction/i })).toBeInTheDocument()
+    expect(screen.getByText(/94%/)).toBeInTheDocument()
+  })
+
+  it('shows conflict explainer when regenerate fails with 422 conflict details', async () => {
+    const user = userEvent.setup()
+    timetableRegenMocks.regenerateMutate.mockImplementation((_v, opts) => {
+      const err = new axios.AxiosError('unsatisfied')
+      err.response = {
+        status: 422,
+        data: {
+          details: {
+            conflictReport: {
+              conflicts: [
+                {
+                  id: 'c1',
+                  constraintId: 'x',
+                  constraintName: 'Test constraint',
+                  explanation: 'Unpinned portion failed.',
+                  affectedTeachers: [],
+                  affectedClasses: [],
+                  affectedSlots: [{ cycleDayIndex: 0, periodId: mockBellSchedule.periods[0]?.id ?? 'p1' }],
+                },
+              ],
+            },
+          },
+        },
+      } as typeof err.response
+      opts?.onError?.(err)
+    })
+    render(<TimetablePage />)
+    await user.click(screen.getByRole('button', { name: 'Re-run unpinned' }))
+    expect(
+      await screen.findByRole('region', { name: /conflict explainer/i }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /schedule generation failed/i })).toBeInTheDocument()
+  })
+
+  it('disables re-run and sets title while regeneration is pending', () => {
+    timetableRegenMocks.regenerateIsPending = true
+    render(<TimetablePage />)
+    const btn = screen.getByRole('button', { name: 'Re-run unpinned' })
+    expect(btn).toBeDisabled()
+    expect(btn).toHaveAttribute('title', 'Re-running unpinned slots…')
+  })
+
+  it('disables re-run with cooldown title after success until reset', async () => {
+    const user = userEvent.setup()
+    timetableRegenMocks.regenerateMutate.mockImplementation((_v, opts) => {
+      opts?.onSuccess?.({ satisfactionReport: regenSuccessReport })
+    })
+    render(<TimetablePage />)
+    await user.click(screen.getByRole('button', { name: 'Re-run unpinned' }))
+    const btn = await screen.findByRole('button', { name: 'Re-run unpinned' })
+    expect(btn).toBeDisabled()
+    expect(btn).toHaveAttribute('title', 'Re-run complete — you can run again in a moment.')
   })
 
   it('reflects year group filter in URL when filter button is clicked', async () => {

@@ -1,6 +1,15 @@
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export type GeneratorStatusPhase = 'idle' | 'running' | 'succeeded' | 'failed' | 'cancelled'
+
+export interface GeneratorStatusBarPrimaryAction {
+  label: string
+  onClick: () => void
+  disabled?: boolean
+  /** Shown as native `title` when `disabled` is true (e.g. tooltip). */
+  disabledTooltip?: string
+}
 
 export interface GeneratorStatusBarProps {
   phase: GeneratorStatusPhase
@@ -8,14 +17,21 @@ export interface GeneratorStatusBarProps {
   message: string
   /** Called when the user clicks "View conflicts" in the failed state (UX-DR9). */
   onViewConflicts?: () => void
+  /** Optional primary action (e.g. partial re-run on unpinned slots). */
+  primaryAction?: GeneratorStatusBarPrimaryAction
 }
 
 /**
  * Non-blocking status strip for long-running engine work (UX-DR9).
  * Uses a polite live region so assistive tech announces progress updates.
  */
-export function GeneratorStatusBar({ phase, message, onViewConflicts }: GeneratorStatusBarProps) {
-  if (phase === 'idle' && !message) {
+export function GeneratorStatusBar({
+  phase,
+  message,
+  onViewConflicts,
+  primaryAction,
+}: GeneratorStatusBarProps) {
+  if (phase === 'idle' && !message && !primaryAction) {
     return null
   }
 
@@ -50,24 +66,39 @@ export function GeneratorStatusBar({ phase, message, onViewConflicts }: Generato
       ) : null}
       <span
         className={[
+          'min-w-0 flex-1',
           success ? 'font-medium text-green-700 dark:text-green-400' : '',
           failed ? 'text-red-700 dark:text-red-400' : '',
         ]
           .filter(Boolean)
-          .join(' ') || undefined}
+          .join(' ')}
       >
         {message}
       </span>
-      {failed && onViewConflicts ? (
-        <button
-          type="button"
-          onClick={onViewConflicts}
-          className="ml-auto text-xs font-medium text-red-600 underline underline-offset-2 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-          aria-label="View conflict details"
-        >
-          View conflicts
-        </button>
-      ) : null}
+      <div className="ml-auto flex shrink-0 items-center gap-2">
+        {primaryAction ? (
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            disabled={primaryAction.disabled}
+            title={primaryAction.disabled ? primaryAction.disabledTooltip : undefined}
+            onClick={primaryAction.onClick}
+          >
+            {primaryAction.label}
+          </Button>
+        ) : null}
+        {failed && onViewConflicts ? (
+          <button
+            type="button"
+            onClick={onViewConflicts}
+            className="text-xs font-medium text-red-600 underline underline-offset-2 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+            aria-label="View conflict details"
+          >
+            View conflicts
+          </button>
+        ) : null}
+      </div>
     </div>
   )
 }

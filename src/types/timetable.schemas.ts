@@ -1,4 +1,8 @@
 import { z } from 'zod'
+import {
+  conflictReportDtoSchema,
+  constraintSatisfactionReportSchema,
+} from '@/types/engine.schemas'
 
 export const lessonDtoSchema = z.object({
   id: z.string(),
@@ -82,3 +86,13 @@ export const lessonPatchApiBodySchema = lessonPatchBodySchema.merge(
 export const createLessonApiBodySchema = createLessonBodySchema.merge(
   z.object({ acceptConflict: z.boolean().optional() }),
 )
+
+/** POST /api/v1/timetables/{id}/regenerate-unpinned — success body (mock + future API). */
+export const regenerateUnpinnedSuccessResponseSchema = z.object({
+  satisfactionReport: constraintSatisfactionReportSchema,
+})
+
+/** 422 body `details` when partial re-gen cannot satisfy unpinned slots. */
+export const partialRegenUnsatisfiedDetailsSchema = z.object({
+  conflictReport: conflictReportDtoSchema,
+})

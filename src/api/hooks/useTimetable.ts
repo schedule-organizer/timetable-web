@@ -1,11 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/axios'
-import { timetableLessonsResponseSchema } from '@/types/timetable.schemas'
+import {
+  regenerateUnpinnedSuccessResponseSchema,
+  timetableLessonsResponseSchema,
+} from '@/types/timetable.schemas'
 import type {
   CreateLessonBody,
   LessonDto,
   LessonMoveBody,
   LessonPatchBody,
+  RegenerateUnpinnedSuccessResponse,
   TimetableLessonsResponse,
 } from '@/types/timetable.types'
 
@@ -239,6 +243,29 @@ export function useMoveLesson(timetableId: string | null) {
       return api.post(`/api/v1/lessons/${lessonId}/move`, body)
     },
     onSettled: () => {
+      if (timetableId) {
+        void queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lessons(timetableId) })
+      }
+    },
+  })
+}
+
+export function useRegenerateUnpinned(timetableId: string | null) {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (): Promise<RegenerateUnpinnedSuccessResponse> => {
+      if (!timetableId) {
+        return Promise.reject(new Error('timetableId is required'))
+      }
+      const res = await api.post<unknown>(`/api/v1/timetables/${timetableId}/regenerate-unpinned`)
+      const parsed = regenerateUnpinnedSuccessResponseSchema.safeParse(res.data)
+      if (!parsed.success) {
+        return Promise.reject(new Error('Invalid regenerate-unpinned response from server.'))
+      }
+      return parsed.data
+    },
+    onSuccess: () => {
       if (timetableId) {
         void queryClient.invalidateQueries({ queryKey: timetableQueryKeys.lessons(timetableId) })
       }

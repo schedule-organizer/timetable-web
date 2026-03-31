@@ -1,8 +1,10 @@
 import { http, HttpResponse } from 'msw'
 import {
+  buildMockPartialRegenFailureReport,
   createLessonInMock,
   deleteLessonFromMock,
   getMockTimetableLessonsResponse,
+  getRegenerateUnpinnedMockMode,
   MOCK_TIMETABLE_ID,
   moveLessonInMock,
   patchLessonInMock,
@@ -168,8 +170,9 @@ export const timetableHandlers = [
   }),
 
   /**
-   * Mock-only: simulates re-run on unpinned slots only (pinned placements unchanged).
-   * Not part of the public API contract; used for dev/tests until engine integration lands.
+   * Partial re-generation: unpinned slots only; pinned and manual placements unchanged.
+   * Success: 200 + satisfaction report for the full timetable (pinned + unpinned).
+   * Failure: 422 + details.conflictReport scoped to unsatisfied unpinned portion only.
    */
   http.post('/api/v1/timetables/:id/regenerate-unpinned', ({ params }) => {
     const id = params.id as string
@@ -179,7 +182,18 @@ export const timetableHandlers = [
         { status: 404 },
       )
     }
-    regenerateUnpinnedMockLessons()
-    return new HttpResponse(null, { status: 204 })
+    if (getRegenerateUnpinnedMockMode() === 'failure') {
+      return HttpResponse.json(
+        {
+          status: 422,
+          code: 'PARTIAL_REGEN_UNSATISFIED',
+          message: 'Could not satisfy the remaining unpinned slots.',
+          details: { conflictReport: buildMockPartialRegenFailureReport() },
+        },
+        { status: 422 },
+      )
+    }
+    const satisfactionReport = regenerateUnpinnedMockLessons()
+    return HttpResponse.json({ satisfactionReport })
   }),
 ]

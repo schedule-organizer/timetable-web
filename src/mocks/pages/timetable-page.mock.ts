@@ -1,5 +1,7 @@
 import { mockBellSchedule } from '@/mocks/pages/bell-schedule-page.mock'
 import { mockCycleSettings } from '@/mocks/pages/cycle-settings-page.mock'
+import { MOCK_CONSTRAINT_REPORT } from '@/mocks/handlers/engine.handlers'
+import type { ConflictReportDto, ConstraintSatisfactionReport } from '@/types/engine.types'
 import type {
   CreateLessonBody,
   LessonDto,
@@ -98,6 +100,17 @@ export function buildMockTimetableLessons(): LessonDto[] {
 
 let liveLessons: LessonDto[] = buildMockTimetableLessons()
 
+let regenerateUnpinnedMockMode: 'success' | 'failure' = 'success'
+
+/** Toggle MSW outcome for POST /timetables/:id/regenerate-unpinned (tests only). */
+export function setRegenerateUnpinnedMockMode(mode: 'success' | 'failure'): void {
+  regenerateUnpinnedMockMode = mode
+}
+
+export function getRegenerateUnpinnedMockMode(): 'success' | 'failure' {
+  return regenerateUnpinnedMockMode
+}
+
 /** Reset mutable mock lessons to the default generated set (call from tests between cases). */
 export function resetMockTimetableLessons(): void {
   liveLessons = buildMockTimetableLessons()
@@ -120,13 +133,52 @@ export function setLessonPinnedInMock(lessonId: string, pinned: boolean): boolea
 
 /**
  * Mock-only: simulates a generator pass that may change unpinned placements only.
- * Pinned lessons are returned unchanged (used for tests / future partial regen wiring).
+ * Pinned lessons are returned unchanged. Satisfaction reflects the full timetable (pinned + unpinned).
  */
-export function regenerateUnpinnedMockLessons(): void {
+export function regenerateUnpinnedMockLessons(): ConstraintSatisfactionReport {
   liveLessons = liveLessons.map((l) => {
     if (l.isPinned) return l
     return { ...l, subjectName: `${l.subjectName} (regen)` }
   })
+  return MOCK_CONSTRAINT_REPORT
+}
+
+/**
+ * Conflict report scoped to unpinned placements that could not be satisfied (mock failure path).
+ */
+export function buildMockPartialRegenFailureReport(): ConflictReportDto {
+  const unpinned = liveLessons.find((l) => !l.isPinned)
+  const firstPeriodId = mockBellSchedule.periods[0]?.id ?? 'period-mock-1'
+  const slots =
+    unpinned !== undefined
+      ? [
+          { cycleDayIndex: unpinned.cycleDayIndex, periodId: unpinned.periodId },
+          {
+            cycleDayIndex: Math.min(
+              unpinned.cycleDayIndex + 1,
+              Math.max(0, mockCycleSettings.cycleLengthDays - 1),
+            ),
+            periodId: unpinned.periodId,
+          },
+        ]
+      : [{ cycleDayIndex: 0, periodId: firstPeriodId }]
+
+  return {
+    conflicts: [
+      {
+        id: 'partial-regen-unpinned-scope',
+        constraintId: 'unpinned-placements',
+        constraintName: 'Unpinned slot assignments',
+        explanation:
+          'The solver could not assign the remaining unpinned lessons without clashing with pinned or manually approved slots.',
+        affectedTeachers:
+          unpinned !== undefined ? [{ id: unpinned.teacherId, name: unpinned.teacherName }] : [],
+        affectedClasses:
+          unpinned !== undefined ? [{ id: unpinned.classId, name: unpinned.className }] : [],
+        affectedSlots: slots,
+      },
+    ],
+  }
 }
 
 function findLessonAtCell(

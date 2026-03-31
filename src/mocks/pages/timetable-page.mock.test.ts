@@ -7,11 +7,13 @@ import {
   regenerateUnpinnedMockLessons,
   resetMockTimetableLessons,
   setLessonPinnedInMock,
+  setRegenerateUnpinnedMockMode,
 } from './timetable-page.mock'
 
 describe('timetable-page.mock', () => {
   beforeEach(() => {
     resetMockTimetableLessons()
+    setRegenerateUnpinnedMockMode('success')
   })
 
   it('setLessonPinnedInMock toggles pin state returned by getMockTimetableLessonsResponse', () => {
