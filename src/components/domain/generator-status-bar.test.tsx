@@ -63,4 +63,34 @@ describe('GeneratorStatusBar', () => {
     )
     expect(screen.queryByRole('button', { name: /view conflict details/i })).not.toBeInTheDocument()
   })
+
+  it('renders primary action when provided', () => {
+    const onRun = vi.fn()
+    render(
+      <GeneratorStatusBar
+        phase="idle"
+        message="3 unpinned slots will be solved"
+        primaryAction={{ label: 'Re-run unpinned', onClick: onRun }}
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Re-run unpinned' })).toBeInTheDocument()
+  })
+
+  it('disables primary action and sets title when disabledTooltip provided', () => {
+    render(
+      <GeneratorStatusBar
+        phase="idle"
+        message="0 unpinned slots will be solved"
+        primaryAction={{
+          label: 'Re-run unpinned',
+          onClick: vi.fn(),
+          disabled: true,
+          disabledTooltip: 'All slots are pinned — unpin slots to re-run',
+        }}
+      />,
+    )
+    const btn = screen.getByRole('button', { name: 'Re-run unpinned' })
+    expect(btn).toBeDisabled()
+    expect(btn).toHaveAttribute('title', 'All slots are pinned — unpin slots to re-run')
+  })
 })

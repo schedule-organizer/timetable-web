@@ -26,6 +26,7 @@ const SoftPreferencesPage = lazy(() => import('@/features/constraints/pages/Soft
 const SubjectRulesPage = lazy(() => import('@/features/constraints/pages/SubjectRulesPage'))
 const AvailabilityOverviewPage = lazy(() => import('@/features/constraints/pages/AvailabilityOverviewPage'))
 const EnginePage = lazy(() => import('@/features/engine/pages/EnginePage'))
+const TimetablePage = lazy(() => import('@/features/timetable/pages/TimetablePage'))
 
 export const router = createBrowserRouter([
   // Public auth routes
@@ -76,7 +77,7 @@ export const router = createBrowserRouter([
         handle: { title: 'Timetable' },
         element: (
           <Suspense fallback={<RouteFallback />}>
-            <PlaceholderPage />
+            <TimetablePage />
           </Suspense>
         ),
       },
