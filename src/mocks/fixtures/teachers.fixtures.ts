@@ -1,5 +1,9 @@
 import type { TeacherDto } from '@/types/teacher.types'
 
+// Seed teaching roster for mock mode. `subjectQualifications` reference names in
+// subjects.fixtures.ts so the roster lines up with the subject catalog and engine.
+// NOTE: teacher-roster-1 (Alice Chen) is relied on by TeacherListPage tests and by
+// the teacher-availability seed — keep it first.
 export const mockTeachers: TeacherDto[] = [
   {
     id: 'teacher-roster-1',
@@ -22,5 +26,82 @@ export const mockTeachers: TeacherDto[] = [
     status: 'ACTIVE',
     createdAt: '2026-03-21T11:00:00Z',
     updatedAt: '2026-03-21T11:00:00Z',
+  },
+  {
+    id: 'teacher-roster-3',
+    firstName: 'Diana',
+    lastName: 'Flores',
+    email: 'diana@school.edu',
+    phone: '+44 20 7946 0002',
+    subjectQualifications: ['Chemistry', 'Biology'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T11:10:00Z',
+    updatedAt: '2026-03-21T11:10:00Z',
+  },
+  {
+    id: 'teacher-roster-4',
+    firstName: 'Evan',
+    lastName: 'Wright',
+    email: 'evan@school.edu',
+    phone: '+44 20 7946 0003',
+    subjectQualifications: ['English'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T11:20:00Z',
+    updatedAt: '2026-03-21T11:20:00Z',
+  },
+  {
+    id: 'teacher-roster-5',
+    firstName: 'Fatima',
+    lastName: 'Noor',
+    email: 'fatima@school.edu',
+    phone: '+44 20 7946 0004',
+    subjectQualifications: ['Geography', 'History'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T11:30:00Z',
+    updatedAt: '2026-03-21T11:30:00Z',
+  },
+  {
+    id: 'teacher-roster-6',
+    firstName: 'George',
+    lastName: 'Mensah',
+    email: 'george@school.edu',
+    phone: '+44 20 7946 0005',
+    subjectQualifications: ['Physical Education'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T11:40:00Z',
+    updatedAt: '2026-03-21T11:40:00Z',
+  },
+  {
+    id: 'teacher-roster-7',
+    firstName: 'Hannah',
+    lastName: 'Park',
+    email: 'hannah@school.edu',
+    phone: null,
+    subjectQualifications: ['Art', 'Music'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T11:50:00Z',
+    updatedAt: '2026-03-21T11:50:00Z',
+  },
+  {
+    id: 'teacher-roster-8',
+    firstName: 'Ian',
+    lastName: 'Docherty',
+    email: 'ian@school.edu',
+    phone: '+44 20 7946 0007',
+    subjectQualifications: ['Mathematics', 'Physics'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T12:00:00Z',
+    updatedAt: '2026-03-21T12:00:00Z',
+  },
+  {
+    id: 'teacher-roster-9',
+    firstName: 'Julia',
+    lastName: 'Romano',
+    email: 'julia@school.edu',
+    phone: '+44 20 7946 0008',
+    subjectQualifications: ['Biology', 'Chemistry'],
+    status: 'ACTIVE',
+    createdAt: '2026-03-21T12:10:00Z',
+    updatedAt: '2026-03-21T12:10:00Z',
   },
 ]

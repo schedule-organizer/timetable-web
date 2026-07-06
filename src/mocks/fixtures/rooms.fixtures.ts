@@ -1,5 +1,7 @@
 import type { RoomDto } from '@/types/room.types'
 
+// Seed room catalog for mock mode. Mix of CLASSROOM/LAB/SPORTS_HALL and a range
+// of capacities so room-capacity constraints and the room picker have variety.
 export const mockRooms: RoomDto[] = [
   {
     id: 'room-1',
@@ -27,5 +29,50 @@ export const mockRooms: RoomDto[] = [
     status: 'ACTIVE',
     createdAt: '2026-03-23T11:00:00Z',
     updatedAt: '2026-03-23T11:00:00Z',
+  },
+  {
+    id: 'room-4',
+    name: 'Room 102',
+    capacity: 32,
+    roomType: 'CLASSROOM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-23T11:10:00Z',
+    updatedAt: '2026-03-23T11:10:00Z',
+  },
+  {
+    id: 'room-5',
+    name: 'Room 103',
+    capacity: 28,
+    roomType: 'CLASSROOM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-23T11:20:00Z',
+    updatedAt: '2026-03-23T11:20:00Z',
+  },
+  {
+    id: 'room-6',
+    name: 'Science Lab B',
+    capacity: 24,
+    roomType: 'LAB',
+    status: 'ACTIVE',
+    createdAt: '2026-03-23T11:30:00Z',
+    updatedAt: '2026-03-23T11:30:00Z',
+  },
+  {
+    id: 'room-7',
+    name: 'Art Studio',
+    capacity: 25,
+    roomType: 'CLASSROOM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-23T11:40:00Z',
+    updatedAt: '2026-03-23T11:40:00Z',
+  },
+  {
+    id: 'room-8',
+    name: 'Sports Hall B',
+    capacity: 150,
+    roomType: 'SPORTS_HALL',
+    status: 'ACTIVE',
+    createdAt: '2026-03-23T11:50:00Z',
+    updatedAt: '2026-03-23T11:50:00Z',
   },
 ]

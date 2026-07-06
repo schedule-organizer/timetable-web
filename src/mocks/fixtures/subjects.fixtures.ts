@@ -1,5 +1,7 @@
 import type { SubjectDto } from '@/types/subject.types'
 
+// Seed subject catalog for mock mode. The mix of HIGH/MEDIUM/LOW difficulty
+// lets the engine and subject-rule pages exercise difficulty-based rules.
 export const mockSubjects: SubjectDto[] = [
   {
     id: 'subject-1',
@@ -16,5 +18,69 @@ export const mockSubjects: SubjectDto[] = [
     status: 'ACTIVE',
     createdAt: '2026-03-22T10:00:00Z',
     updatedAt: '2026-03-22T10:00:00Z',
+  },
+  {
+    id: 'subject-3',
+    name: 'Mathematics',
+    difficulty: 'HIGH',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:05:00Z',
+    updatedAt: '2026-03-22T10:05:00Z',
+  },
+  {
+    id: 'subject-4',
+    name: 'English',
+    difficulty: 'MEDIUM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:10:00Z',
+    updatedAt: '2026-03-22T10:10:00Z',
+  },
+  {
+    id: 'subject-5',
+    name: 'Chemistry',
+    difficulty: 'HIGH',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:15:00Z',
+    updatedAt: '2026-03-22T10:15:00Z',
+  },
+  {
+    id: 'subject-6',
+    name: 'Biology',
+    difficulty: 'MEDIUM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:20:00Z',
+    updatedAt: '2026-03-22T10:20:00Z',
+  },
+  {
+    id: 'subject-7',
+    name: 'History',
+    difficulty: 'MEDIUM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:25:00Z',
+    updatedAt: '2026-03-22T10:25:00Z',
+  },
+  {
+    id: 'subject-8',
+    name: 'Geography',
+    difficulty: 'MEDIUM',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:30:00Z',
+    updatedAt: '2026-03-22T10:30:00Z',
+  },
+  {
+    id: 'subject-9',
+    name: 'Physical Education',
+    difficulty: 'LOW',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:35:00Z',
+    updatedAt: '2026-03-22T10:35:00Z',
+  },
+  {
+    id: 'subject-10',
+    name: 'Music',
+    difficulty: 'LOW',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:40:00Z',
+    updatedAt: '2026-03-22T10:40:00Z',
   },
 ]

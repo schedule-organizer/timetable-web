@@ -16,19 +16,36 @@ let idCounter = 0
 let availabilityByTeacherId: Record<string, TeacherAvailabilityDto> = {}
 let availabilityOverrideByTeacherId: Record<string, TeacherAvailabilityOverrideDto> = {}
 
-// Seed Alice Chen (teacher-roster-1) with submitted availability: Day A periods 1-2 unavailable, Day C period 3 preferred.
+// Seed Alice Chen (teacher-roster-1): Day A periods 1-2 unavailable, plus preferred slots.
 const SEED_ALICE_AVAILABILITY: TeacherAvailabilityDto = {
   unavailable: [
     { cycleDayIndex: 0, periodId: 'period-mock-1' },
     { cycleDayIndex: 0, periodId: 'period-mock-2' },
+    { cycleDayIndex: 4, periodId: 'period-mock-6' },
   ],
-  preferred: [{ cycleDayIndex: 2, periodId: 'period-mock-3' }],
+  preferred: [
+    { cycleDayIndex: 2, periodId: 'period-mock-3' },
+    { cycleDayIndex: 1, periodId: 'period-mock-1' },
+  ],
+}
+
+// Seed Diana Flores (teacher-roster-3) so the availability overview shows more
+// than one submitted teacher.
+const SEED_DIANA_AVAILABILITY: TeacherAvailabilityDto = {
+  unavailable: [
+    { cycleDayIndex: 3, periodId: 'period-mock-5' },
+    { cycleDayIndex: 3, periodId: 'period-mock-6' },
+  ],
+  preferred: [{ cycleDayIndex: 0, periodId: 'period-mock-2' }],
 }
 
 export function resetTeacherMocks() {
   teachers = mockTeachers.map((teacher) => ({ ...teacher }))
   idCounter = teachers.length
-  availabilityByTeacherId = { 'teacher-roster-1': SEED_ALICE_AVAILABILITY }
+  availabilityByTeacherId = {
+    'teacher-roster-1': SEED_ALICE_AVAILABILITY,
+    'teacher-roster-3': SEED_DIANA_AVAILABILITY,
+  }
   availabilityOverrideByTeacherId = {}
 }
 

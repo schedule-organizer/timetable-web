@@ -1,6 +1,9 @@
 import type { UserWithRoles } from '@/types/rbac.types'
 import type { SubscriptionLimits } from '@/types/rbac.types'
 
+// Seed institution users for role management in mock mode. Emails match the
+// login seed accounts (see auth.fixtures.ts) so signing in as any of them lands
+// on a user that already appears in the role-management table.
 export const mockUsers: UserWithRoles[] = [
   {
     id: 'user-1',
@@ -37,18 +40,27 @@ export const mockUsers: UserWithRoles[] = [
     roles: ['TEACHER', 'MODERATOR'],
     createdAt: '2026-01-16T12:00:00Z',
   },
+  {
+    id: 'user-6',
+    email: 'diana@school.edu',
+    fullName: 'Diana Flores',
+    roles: ['TEACHER'],
+    createdAt: '2026-01-17T09:00:00Z',
+  },
 ]
 
+// PROFESSIONAL tier so the seeded roster (3 terms, 9 teachers, 8 classes) sits
+// comfortably within limits. Usage reflects the seeded fixture counts.
 export const mockSubscriptionLimits: SubscriptionLimits = {
-  tier: 'STARTER',
+  tier: 'PROFESSIONAL',
   limits: {
-    maxClasses: 20,
-    maxTeachers: 30,
-    maxTerms: 2,
+    maxClasses: 100,
+    maxTeachers: 200,
+    maxTerms: null,
   },
   usage: {
     classes: 8,
-    teachers: 5,
-    terms: 1,
+    teachers: 9,
+    terms: 3,
   },
 }

@@ -1,5 +1,7 @@
 import type { SubjectRuleDto } from '@/types/subject-rule.types'
 
+// Seed subject rules for mock mode — a mix of hard and soft (weighted) rules
+// with satisfaction rates so the subject-rules page renders both types.
 export const mockSubjectRules: SubjectRuleDto[] = [
   {
     id: 'subject-rule-1',
@@ -31,5 +33,16 @@ export const mockSubjectRules: SubjectRuleDto[] = [
     satisfactionRate: 60,
     createdAt: '2026-03-22T10:00:00.000Z',
     updatedAt: '2026-03-22T10:00:00.000Z',
+  },
+  {
+    id: 'subject-rule-4',
+    name: 'Double periods for science labs',
+    description: 'Chemistry and Biology practicals should be scheduled as consecutive periods.',
+    constraintType: 'soft',
+    weight: 6,
+    enabled: true,
+    satisfactionRate: 72,
+    createdAt: '2026-03-22T10:10:00.000Z',
+    updatedAt: '2026-03-22T10:10:00.000Z',
   },
 ]

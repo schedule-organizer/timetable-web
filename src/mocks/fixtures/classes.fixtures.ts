@@ -1,5 +1,7 @@
 import type { ClassDto } from '@/types/class.types'
 
+// Seed class roster for mock mode, spanning Years 7–11 so the timetable grid,
+// class management, and engine have a realistic number of classes to place.
 export const mockClasses: ClassDto[] = [
   {
     id: 'class-roster-1',
@@ -16,5 +18,53 @@ export const mockClasses: ClassDto[] = [
     status: 'ACTIVE',
     createdAt: '2026-03-22T10:15:00Z',
     updatedAt: '2026-03-22T10:15:00Z',
+  },
+  {
+    id: 'class-roster-3',
+    name: 'Year 7 Mathematics',
+    yearGroup: 'Year 7',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:20:00Z',
+    updatedAt: '2026-03-22T10:20:00Z',
+  },
+  {
+    id: 'class-roster-4',
+    name: 'Year 9 English',
+    yearGroup: 'Year 9',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:25:00Z',
+    updatedAt: '2026-03-22T10:25:00Z',
+  },
+  {
+    id: 'class-roster-5',
+    name: 'Year 10 Biology',
+    yearGroup: 'Year 10',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:30:00Z',
+    updatedAt: '2026-03-22T10:30:00Z',
+  },
+  {
+    id: 'class-roster-6',
+    name: 'Year 10 Chemistry',
+    yearGroup: 'Year 10',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:35:00Z',
+    updatedAt: '2026-03-22T10:35:00Z',
+  },
+  {
+    id: 'class-roster-7',
+    name: 'Year 11 History',
+    yearGroup: 'Year 11',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:40:00Z',
+    updatedAt: '2026-03-22T10:40:00Z',
+  },
+  {
+    id: 'class-roster-8',
+    name: 'Year 9 Geography',
+    yearGroup: 'Year 9',
+    status: 'ACTIVE',
+    createdAt: '2026-03-22T10:45:00Z',
+    updatedAt: '2026-03-22T10:45:00Z',
   },
 ]
